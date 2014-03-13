@@ -1,0 +1,503 @@
+\ProvidesPackage{beamerthemeEmptty3}[2009/12/09 ver 0.1]
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+
+\RequirePackage{ifthen}
+
+%\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{amsmath,amssymb,fancyvrb,wasysym}
+\usepackage{figlatex}% Pour inclure les pstex_t
+\usepackage{multicol}
+\RequirePackage{tikz}
+\usetikzlibrary{decorations.pathmorphing,backgrounds,positioning,fit,arrows,shapes.geometric}
+
+\usepackage{verbatim}
+\usepackage{moreverb}
+\usepackage{fancyvrb}
+
+\graphicspath{{fig/}}
+
+\setbeamersize{text margin left=3mm,text margin right=3mm}
+\setbeamertemplate{section in toc}[ball unnumbered]
+
+%%%
+%%% Macro pour mode prof
+%%%
+\newboolean{version@prof}
+\setboolean{version@prof}{false}
+
+\DeclareOption{prof}{       \setboolean{version@prof}{true} }
+\DeclareOption{enseignant}{ \setboolean{version@prof}{true} }
+\ProcessOptions
+
+%\newboolean{version@handout}
+%\ifx\beamer@currentmode handout%
+%  \setboolean{version@handout}{true}%
+%\else%
+%  \setboolean{version@handout}{false}%
+%\fi%
+
+\newcommand{\ifhandout}[1]{\only<0| handout:1>{#1}}
+\gdef\ifprof{\ifthenelse{\boolean{version@prof}}}
+
+\ifprof{\typeout{Warning: Version prof}}{\typeout{Warning: Version eleves}}
+
+%\ifthenelse{\boolean{version@prof}}%
+\ifprof%
+ {\csname beamer@notesaction@show\endcsname}%
+ {\csname beamer@notesaction@hide\endcsname}%
+
+\defbeamertemplate*{background canvas}{emptty}{%
+  \ifprof{%
+%  \ifthenelse{\boolean{version@prof}}{%
+    \begin{minipage}{\paperwidth}
+      \color{red!8}%
+      \null\vspace{9mm}%
+      \resizebox{\paperwidth}{!}{\rotatebox{30.0}{\Huge VERSION PROFS}}%
+    \end{minipage}
+  }{}
+}
+
+%%%
+%%% Réduit la taille des tab dans les descriptions (Alvin powa)
+%%%
+\usedescriptionitemofwidthas{bl}
+
+%%%
+%%% Resserre le titre des blocks avec leur corps
+%%%
+\defbeamertemplate*{block begin}{emptty}
+{
+  \par\vskip\medskipamount%
+  \begin{beamercolorbox}[colsep*=.75ex]{block title}
+    \usebeamerfont*{block title}\insertblocktitle\vspace{-.2\baselineskip}% Just added this vskip
+  \end{beamercolorbox}%
+  {\parskip0pt\par}%
+  \ifbeamercolorempty[bg]{block title}
+  {}
+  {\ifbeamercolorempty[bg]{block body}{}{\nointerlineskip\vskip-0.5pt}}%
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[colsep*=.75ex,vmode]{block body}%
+    \ifbeamercolorempty[bg]{block body}{\vskip-.25ex}{\vskip-.75ex}\vbox{}%
+}
+%\beamertemplateroundedblocks
+
+%%%
+%%% No navigation, thanks
+%%%
+\usenavigationsymbolstemplate{}
+
+%%%
+%%% Redéfinition des entetes pour souligner le titre
+%%%
+\setbeamertemplate{frametitle}{%
+  \ifbeamer@plainframe%
+  \else%
+    \vskip0.1em%
+    {\leftskip-\beamer@leftmargin\advance\leftskip by0.3cm%
+      \rightskip-\beamer@rightmargin plus1fil\advance\rightskip by0.3cm\leavevmode
+      {\color{beamerstructure}
+      \Large\bfseries{\underline{\insertframetitle}}}\par}%
+  \fi%
+}
+
+%%
+%% Redéfinition des pieds de page
+%%
+% Premiere miniboite: le nom de l'auteur
+\newcommand{\footlineAuthor}{
+  \usebeamerfont{author in head/foot}\insertshortauthor~~\insertshortinstitute%
+}
+
+% Deuxieme miniboite: Titre du cours. C'est un lien vers le label{Plan} (a definir)
+\newcommand{\footlineTitle}{
+  \usebeamerfont{title in head/foot}\hyperlink{Plan}{\shorttitle}%
+}
+
+% Troisieme miniboite: titre du chapitre (précédé de "Chap <nb>" si <nb>!=0)
+\newcommand{\footlineSubTitle}{
+  \hspace*{1em}%
+  \usebeamerfont{date in head/foot}%
+  \ifnum\c@part>0{Chap \insertromanpartnumber{} : }\fi%
+  \insertshortpart{}%
+}
+
+% Quatrième miniboite: numéros de page
+\newcommand{\footlineNumber}{
+  \usebeamerfont{date in head/foot}%
+  \mode<handout>{(\insertframenumber{}/\inserttotalframenumber)}%
+  \mode<handout:0>{%
+    \tikz{\filldraw[fill=blue!10,draw=blue!40] %
+               (0pt,2.5pt) -- (2.5pt,5pt) -- (2.5pt,0pt) -- cycle;%
+    }%
+    ~~\insertframenumber{}/\inserttotalframenumber~~%
+    \tikz{\filldraw[fill=blue!10,draw=blue!40] %
+              (0pt,0pt) -- +(0pt,5pt) -- +(2.5pt,2.5pt) -- cycle; %
+    }%
+  \hyperlinkframeendprev{\beamer@linkspace{5pt}}%
+  \hyperlinkframestart{\beamer@linkspace{5pt}}%
+  \hyperlinkframeend{\beamer@linkspace{7pt}}%
+  \hyperlinkframestartnext{\beamer@linkspace{7pt}}%
+  }% handout:0
+}
+
+\defbeamertemplate*{footline}{emptty}{
+  \leavevmode%
+  \hbox{%
+% Premiere miniboite: le nom de l'auteur
+  \begin{beamercolorbox}[wd=.12\paperwidth,ht=2.25ex,dp=1ex,left]{author in head/foot}%
+    \footlineAuthor%
+  \end{beamercolorbox}%
+% Deuxieme miniboite: Titre du cours. C'est un lien vers le label{Plan} (a definir)
+  \begin{beamercolorbox}[wd=.49\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \footlineTitle%
+  \hspace*{1em}%
+  \end{beamercolorbox}%
+% Troisieme miniboite: titre du chapitre (précédé de "Chap <nb>" si <nb>!=0)
+  \begin{beamercolorbox}[wd=.31\paperwidth,ht=2.25ex,dp=1ex,left]{date in head/foot}%
+    \footlineSubTitle%
+  \end{beamercolorbox}%
+% Quatrième miniboite: numéros de page
+  \begin{beamercolorbox}[wd=.08\paperwidth,ht=2.25ex,dp=1ex,left]{date in head/foot}%
+    \footlineNumber%
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+%%
+%% Redéfinition des pages introduisant les parties
+%%
+\defbeamertemplate*{part page}{emptty}[1][colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
+{
+%  \begin{centering}
+%    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\chapname}
+%    \vskip1em\par
+%    \begin{beamercolorbox}[sep=8pt,center,#1]{part title}
+%      \usebeamerfont{part title}\insertpart\par
+%    \end{beamercolorbox}
+%  \end{centering}
+%  \begin{multicols}{2}%
+%    \tableofcontents%
+%  \end{multicols}%
+}
+
+
+%%
+%% Moi aussi je veux faire des grosses baballes avec un numéro dedans
+%%
+\newcommand{\numberedball}[1]{%
+{\leavevmode\leftskip=2.75ex%
+  \llap{%
+    \normalsize%
+    \begin{pgfpicture}{-1ex}{-0.7ex}{1ex}{1ex}
+      \pgftext{\beamer@usesphere{section number projected}{tocsphere}}
+      \pgftext{%
+        \usebeamerfont*{section number projected}%
+        \usebeamercolor{section number projected}%
+        \color{fg!90!bg}%
+        {\scriptsize #1}}
+    \end{pgfpicture}%
+    \kern1.25ex}%
+}}
+
+\newcommand{\green}[1]{{\color{green!50!black}#1}}
+\newcommand{\black}[1]{{\color{black} #1}}
+\definecolor{darkgreen}{rgb}{0,.7,0}
+\definecolor{darkred}{rgb}{.7,0,0}
+
+\newcommand{\Smiley}{{\color{darkgreen}\smiley}}
+\newcommand{\Frownie}{{\color{darkred}\frownie}}
+\newcommand{\bottomcite}[1]{\fbox{\vbox{\footnotesize #1}}}
+
+\def\mypartpage{%
+  \setbeamercolor{normal text}{bg=red!5}%
+  \frame<trans:0>{\thispagestyle{empty}\label{Part\thepart}%
+  \begin{centering}%
+    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\chapname}%
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{part title}%
+      \usebeamerfont{part title}\insertpart\par%
+    \end{beamercolorbox}%
+  \end{centering}%
+  \tableofcontents%
+  }\setbeamercolor{normal text}{bg=red!0}%
+}
+\def\mypartpageEN{%
+  \setbeamercolor{normal text}{bg=red!5}%
+  \frame<trans:0>{\thispagestyle{empty}\label{Part\thepart}%
+  \begin{centering}%
+    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}Chapter \thepart}%
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{part title}%
+      \usebeamerfont{part title}\insertpart\par%
+    \end{beamercolorbox}%
+  \end{centering}%
+  \tableofcontents%
+  }\setbeamercolor{normal text}{bg=red!0}%
+}
+\def\mypartpagebi{%
+  \setbeamercolor{normal text}{bg=red!5}%
+  \frame<trans:0>{\thispagestyle{empty}\label{Part\thepart}\begin{centering}%
+    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\chapname}%
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{part title}%
+      \usebeamerfont{part title}\insertpart\par%
+    \end{beamercolorbox}%
+  \end{centering}%
+  \begin{multicols}{2}%
+    \tableofcontents%
+  \end{multicols}%
+  }  \setbeamercolor{normal text}{bg=red!0}%
+}
+
+\newcommand{\sectionpagetitle}{\chapname}
+\def\sectionpage{%
+  \setbeamercolor{normal text}{bg=red!5}%
+  \frame<trans:0>{\thispagestyle{empty}\begin{centering}%
+    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\sectionpagetitle}
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{part title}%
+      \usebeamerfont{part title}\insertpart\par%
+    \end{beamercolorbox}%
+  \end{centering}%
+  \tableofcontents[current]%
+  }\setbeamercolor{normal text}{bg=red!0}%
+}
+
+\def\subsectionpage{%
+  \setbeamercolor{normal text}{bg=red!5}%
+  \frame<trans:0>{\thispagestyle{empty}\begin{centering}%
+    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\sectionpagetitle}
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{part title}%
+      \usebeamerfont{part title}\insertpart\par%
+    \end{beamercolorbox}%
+  \end{centering}%
+  \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/show/shaded]%
+  }\setbeamercolor{normal text}{bg=red!0}%
+}
+
+\def\sectionpagedeux{%
+  \setbeamercolor{normal text}{bg=red!5}%
+  \frame<trans:0>{\thispagestyle{empty}\begin{centering}%
+    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\chapname}%
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{part title}%
+      \usebeamerfont{part title}\insertpart\par%
+    \end{beamercolorbox}%
+  \end{centering}%
+%  \vspace{-\baselineskip}
+  \begin{multicols}{2}%
+    \tableofcontents[current]
+  \end{multicols}%
+ } \setbeamercolor{normal text}{bg=red!0}%
+}
+
+%%%
+%%% Une jolie couleur pour des jolies boites de code
+%%%
+\newcommand{\Concept}[1]{\hfill\alert{\textbf{\Large #1}}\hfill}
+\newcommand{\concept}[1]{\hfill\alert{\large #1}\hfill}
+
+\setbeamercolor{lightstruct}{fg=black,bg=structure.fg!20}
+\setbeamercolor{medstruct}{fg=black,bg=structure.fg!30}
+
+\newenvironment{boitecode}[1]{
+  \begin{beamerboxesrounded}[shadow=true,lower=lightstruct,upper=medstruct]{#1}
+    \scriptsize
+    \begin{semiverbatim}
+}{   \end{semiverbatim}\vspace{-2\baselineskip}
+  \end{beamerboxesrounded}
+}
+\newenvironment{boitecodeNV}[1]{
+  \begin{beamerboxesrounded}[shadow=true,lower=lightstruct,upper=medstruct]{#1}
+    \scriptsize  \tt
+}{
+  \end{beamerboxesrounded}
+}
+
+
+\setbeamercolor{lightex}{fg=black,bg=example text.fg!20}
+\setbeamercolor{medex}{fg=black,bg=example text.fg!30}
+\newenvironment{boiteshell}[1]{
+  \begin{beamerboxesrounded}[shadow=true,lower=lightex,upper=medex]{#1}
+    \scriptsize
+    \begin{semiverbatim}
+}{   \end{semiverbatim}\vspace{-1\baselineskip}
+  \end{beamerboxesrounded}
+}
+
+%%
+%% Boite de citation. 
+%%   Prend un argument optionnel: l'auteur (qui est placé comme y faut si présent)
+%%
+\setbeamercolor{myquote}{fg=black,bg=yellow!9}
+\newenvironment{boitequote}[1]{\def\quoteauteur{#1}
+  \begin{columns}
+    \begin{column}{.8\textwidth}
+      \begin{beamerboxesrounded}[shadow=true,lower=myquote]{}\it\hspace{.5em}
+}{\ifthenelse{\equal{\quoteauteur}{}}{}{\\\null \hfill -- {\rm \quoteauteur}}
+      \end{beamerboxesrounded}
+    \end{column}
+  \end{columns}
+}
+
+%%%
+%%% Slide a trou (exercices) et version prof
+%%%
+\setbeamercolor{exo}{fg=black,bg=example text.fg!10}
+\setbeamercolor{titre exo}{fg=black,bg=example text.fg!20}
+\newenvironment{framexo}[1]%
+  {%
+    \setbeamercolor{normal text}{exo} %
+    \begin{frame}\frametitle{#1 %
+                             \ifprof{(réponses)}{(\`a compl\'eter)}%
+                             }%
+  }{%
+    \end{frame}%
+    \setbeamercolor{normal text}{bg=red!0}%
+  }
+\newcommand{\reponse}[1]{\ifprof{\textit{#1}}{}}
+\newenvironment{exo}[1]
+  {\begin{beamerboxesrounded}[shadow=true,lower=exo,upper=titre exo]{Exercice : #1}}
+  {\end{beamerboxesrounded}}
+
+
+\newcommand{\trounb}[1]{%
+  \ifprof{\fbox{#1}}{%
+    \only<handout>{\null\phantom{#1}}%
+    \only<handout:0>{\visible<+->{#1}}%
+  }%
+}
+\newcommand{\Trounb}[1]{%
+  \ifprof{\fbox{#1}}{%
+    \only<handout>{\null\phantom{#1}}%
+    \only<handout:0>{\visible<2>{#1}}%
+  }%
+}
+\newcommand{\trou}[1]{%
+  \ifprof{}{\ifnum \c@beamerpauses <2 \stepcounter{beamerpauses}\fi}%
+    \only<handout>{~\phantom{#1}}%
+    \only<handout:0>{\colorbox{magenta!40}{\ifprof{}{\visible<+->}{#1}}}%
+}
+\newcommand{\Trou}[1]{%
+  \ifprof{}{\ifnum \c@beamerpauses <2 \stepcounter{beamerpauses}\fi}%
+    \only<handout>{\null\phantom{#1}}%
+    \only<handout:0>{\colorbox{magenta!40}{\ifprof{}{\visible<2>}{#1}}}%
+}
+
+\setbeamercolor{todo}{fg=black,bg=red!35}
+\ifprof{%
+  \newenvironment{frameTODO}%
+    { \advance\c@framenumber by -1%
+      \setbeamercolor{normal text}{bg=alerted text.fg!10} %
+      \begin{frame}\frametitle{\alert{TODO}}
+    }{%
+      \end{frame}%
+      \setbeamercolor{normal text}{bg=red!0}%
+    }
+}{%
+  \let\frameTODO=\comment \let\endframeTODOCoupe=\endcomment%
+}
+\newcommand{\todo}[1]{\ifprof{%
+    \begin{beamerboxesrounded}[shadow=true,lower=todo]{}%
+      \textbf{TODO:} #1%
+  \end{beamerboxesrounded}}{}%
+}
+%%%
+%%% Nom de partie en minuscule (vol à babel puis modification)
+%%%
+\newcommand{\chapname}{{\ifcase\value{part}\or Premier\or Deuxi\`eme\or
+   Troisi\`eme\or Quatri\`eme\or Cinqui\`eme\or Sixi\`eme\or
+   Depti\`eme\or Huiti\`eme\or Neuvi\`eme\or Dixi\`eme\or Onzi\`eme\or
+   Douzi\`eme\or Treizi\`eme\or Quatorzi\`eme\or Quinzi\`eme\or
+   Seizi\`eme\or Dix-septi\`eme\or Dix-huiti\`eme\or Dix-neuvi\`eme\or
+   Vingti\`eme\fi}\space chapitre}%
+\newcommand{\chapnamelow}{{\ifcase\value{part}\or premier\or deuxi\`eme\or
+   troisi\`eme\or quatri\`eme\or cinqui\`eme\or sixi\`eme\or
+   depti\`eme\or huiti\`eme\or neuvi\`eme\or dixi\`eme\or onzi\`eme\or
+   douzi\`eme\or treizi\`eme\or quatorzi\`eme\or quinzi\`eme\or
+   seizi\`eme\or dix-septi\`eme\or dix-huiti\`eme\or dix-neuvi\`eme\or
+   vingti\`eme\fi}\space chapitre}%
+
+%%% Mon slicing manuel
+\let\Coupe=\comment \let\endCoupe=\endcomment
+%\renewenvironment{Coupe}{   }{   }
+
+%%% Corrige un bug dans beamer: faut mettre ca avant chaque frame[fragile] 
+%%% pour corriger le numéro de page
+% \newcommand{\fixfr}{\advance\c@framenumber by -1}
+% Plus besoin: le bug a ete corrige dans beamer.
+
+%%%
+%%% Des logos
+%%%
+\graphicspath{{/usr/share/texmf/tex/latex/beamer/themes/emptty}}
+%\IfFileExists{logoesial.eps}{}{\PackageError{beamer-emptty}%
+%  {The file logoesial.eps could not be found. Your installation is borken.}}
+%\IfFileExists{logoUHP_original.eps}{}{\PackageError{beamer-emptty}%
+%  {The file logoesial.eps could not be found. Your installation is borken.}}
+%\DeclareRobustCommand*{\ESIALPicture}{\includegraphics*[width=0.1\textwidth]{logoesial.eps}}
+%\DeclareRobustCommand*{\UHPPicture}{\includegraphics*[width=0.15\textwidth]{logoUHP_original.eps}}
+
+
+% Figures pleine page : 122mm x 80mm
+\newcommand{\code}[1]{\structure{\texttt{#1}}}
+
+%%%
+%%% Mess with table of content
+%%%
+\setcounter{tocdepth}{3}
+\hypersetup{bookmarksdepth=5}%,bookmarksopenlevel=2}
+\hypersetup{linkbordercolor={blue}}
+
+%%
+%% define a subsubsection style in toc [-> patch beamer on the fly]
+%%
+\def\beamer@toc@subsubsectionstyle#1{\beamer@toc@ssprocess\beamer@toc@csss\beamer@toc@osss\beamer@toc@oosss\beamer@toc@ooosss#1////}
+\define@key{beamertoc}{subsubsectionstyle}{\beamer@toc@subsubsectionstyle{#1}}
+\def\beamer@toc@ssprocess#1#2#3#4#5/#6/#7/#8/{%
+  \beamer@ifempty{#6}%
+  {\def#1{#5}\def#2{#5}\def#3{#5}\def#4{#5}}
+  {\beamer@ifempty{#7}
+    {\def#1{#5}\def#2{#6}\def#3{#6}\def#4{#6}\@gobble}
+    {\beamer@ifempty{#8}
+      {\def#1{#5}\def#2{#6}\def#3{#7}\def#4{#7}\@gobbletwo}
+      {\def#1{#5}\def#2{#6}\def#3{#7}\def#4{#8}\expandafter\@gobble\@gobbletwo}}}% no gobblethree?
+}
+\def\beamer@toc@csss{show}%
+\def\beamer@toc@osss{show}%
+\def\beamer@toc@oosss{show}%
+\def\beamer@toc@ooosss{show}%
+
+% this is a redefinition
+\long\def\beamer@subsubsectionintoc#1#2#3#4#5#6#7{%
+  \ifnum\c@tocdepth>2%
+  \ifnum#1=\beamer@showpartnumber%
+  {
+    \beamer@saveanother%
+    \gdef\beamer@todo{}%
+    \beamer@slideinframe=#2\relax%
+    \expandafter\only\beamer@tocsections{\gdef\beamer@todo{%
+      \ifbeamer@pausesubsections\pause\fi%
+      \beamer@tempcount=#6%
+      \advance\beamer@tempcount by\beamer@sectionadjust%
+      \edef\inserttocsectionnumber{\the\beamer@tempcount}%
+      \def\inserttocsubsectionnumber{#3}%
+      \def\inserttocsubsubsectionnumber{#4}%
+      \def\inserttocsubsubsection{\hyperlink{Navigation#5}{#7}}%
+      \beamer@tocifnothide{\ifnum\c@section=#2\beamer@toc@oss\else\beamer@toc@ooss\fi}%
+      {%
+        \def\beamer@breakhere{\\}%              
+        \beamer@tocact{\ifnum\c@section=#2\ifnum\c@subsection=#3\ifnum\c@subsubsection=#4\beamer@toc@csss\else\beamer@toc@osss\fi\else\beamer@toc@oosss\fi\else\beamer@toc@ooosss\fi}
+        {subsubsection in toc}%
+      }%
+    }}%
+    \beamer@restoreanother%
+  }
+  \beamer@todo%
+  \fi\fi%
+}
+
+
+%%% Local Variables:
+%%% coding: utf-8

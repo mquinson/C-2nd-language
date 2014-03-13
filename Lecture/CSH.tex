@@ -1,0 +1,94 @@
+% ; whizzy -pdf .
+%                                      
+%\documentclass[10pt,prof,draft]{beamer}    % Version de travail, avec tout dessus
+%\documentclass[10pt,prof]{beamer}    % Version de travail, avec tout dessus
+%\documentclass[10pt,handout]{beamer}% Version a imprimer, sans reponses ni contenu des trous
+\documentclass[10pt]{beamer}        % Version a projeter, sans reponse avec contenu trous
+
+% HOWTO: 
+%  \trou{contenu des trous}
+%  \ifprof{a ne jamais montrer aux etudiants (reponses?)}
+%         {ce qu'ils doivent voir a la place (un trou pour ecrire)}
+%  \only<beamer>{texte present que sur les slides de question (rarement utile)}
+%  \only<handout>{todo}
+  
+%\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
+
+\usepackage{beamerthemeEmptty3}
+
+%\setbeamercovered{highly dynamic}
+\setbeamertemplate{navigation symbols}[]
+%\setbeamertemplate{section in toc}[ball unnumbered]
+\setbeamertemplate{frametitle continuation}[from second][(suite)]
+
+\usepackage{tikz,calc,ifthen}
+\usetikzlibrary{decorations.pathmorphing,backgrounds,positioning,fit,arrows}
+%placements,
+
+\renewcommand{\sectionpagetitle}{Chapter \thepart}
+
+\newcommand{\toc}{\mypartpageEN}
+\newcommand{\subtoc}{\sectionpage}
+\newcommand{\subsubtoc}{%
+  \frame{%
+    \frametitle{\hyperlink{end}{\agendatitle}}
+    \tableofcontents[sectionstyle=show/shaded,%
+                     subsectionstyle=show/shaded/shaded,%
+                     subsubsectionstyle=show/hide/hide]
+  }
+}
+
+
+%% drawSlice: dessine un pie-chart. 
+%% Utilisé dans l'introduction
+%%
+\newcommand{\drawSlice}[5]{
+  \pgfmathparse{0.5*#1+0.5*#2}
+  \let\midangle\pgfmathresult
+  
+  % slice
+  \draw[thick,fill=#5!30] (0,0) -- (#1:1) arc (#1:#2:1) -- cycle;
+  
+  % outer label
+  \node[label=\midangle:#4] at (\midangle:1) {};
+  
+  % inner label
+  \pgfmathparse{min((#2-#1-10)/110*(-0.3),0)}
+  \let\temp\pgfmathresult
+  \pgfmathparse{max(\temp,-0.5) + 0.8}
+  \let\innerpos\pgfmathresult
+  \node at (\midangle:\innerpos) {#3};
+}
+
+
+%%% Debut des hostilites
+%%%
+
+\newcommand{\n}{\textbackslash n}
+\newcommand{\API}[1]{\colorbox{blue!25}{#1}}
+
+\def\logoesial{\includegraphics[height=2\baselineskip]{logo_esial_couleur.eps}}
+\def\logoUHP{\includegraphics[height=1.5\baselineskip]{img/logo_nu.pdf}}
+\def\shorttitle{Mastering your Linux: C / Shell (2013-2014)}
+
+\title{Mastering your Linux: \\
+  C and Shell Programming }
+\author[\logoUHP~~~~~~Martin Quinson]{Martin Quinson \normalsize{$<$martin.quinson@loria.fr$>$}}
+\institute[]{\'Ecole Sup\'erieure d'Informatique et Applications de Lorraine -- 1$^\text{ère}$ ann\'ee}
+\date{2013-2014}
+
+\renewenvironment{Coupe}{}{}
+
+\graphicspath{{fig/}{img/}}
+
+\begin{document}
+
+\frame{\thispagestyle{empty}\titlepage}
+\include{0_presentation}
+\include{1_Introduction}
+\include{2_C_as_second_language}
+\include{3_C_memory}
+%\include{4_modular_C}
+\end{document}

@@ -1,0 +1,1152 @@
+\part{C as Second Language}\toc
+\section{Syntax of the C language}
+\subsection{C Quick Reference}
+\begin{Coupe}
+ 
+\begin{frame}{We said that C and Java are quite similar}
+  \begin{block}{Similarities between C and Java}
+    \begin{itemize}
+    \item \structure{Operators}
+      \begin{itemize}
+      \item \structure{Arithmetic} (+,-,*,/,\% ;  ++,- -,*=,\ldots);
+        \structure{Bitwise} (\&,$|$,\^{},!,$<<$,$>>$)
+      \item \structure{Relational} ($<$,$>$,$<$=,$>$=,==,!=);
+      \structure{Logical} \&\&, $||$, !, (a?b:c)
+      \end{itemize}
+    \item \structure{Keywords and Language Constructs}\vspace{-.5\baselineskip}
+      \begin{columns}
+        \begin{column}{.5\linewidth}
+          \begin{itemize}
+          \item \texttt{if( )\{ \} else \{ \}}
+          \item \texttt{while( )\{ \}}
+          \item \texttt{switch( ) \{ case 0: ... \}}
+          \end{itemize}
+        \end{column}
+        \begin{column}{.45\linewidth}
+          \begin{itemize}
+          \item \texttt{for(i=0; i<100; i++)\{ \}}
+          \item \texttt{do \{ \} while( )}
+          \item \texttt{break}, \texttt{continue}, \texttt{return}
+          \end{itemize}
+        \end{column}
+      \end{columns}\smallskip
+    \item \structure{Basic (primitive) types:} void, int, short, long; float,
+      double; char.\\ {\small No boolean, use int instead  (0=False; anything
+        else=True)}
+
+    \item \structure{Function declarations:} \texttt{\small int fact(int a)\{return a==0 ? 1 : a*fact(a-1);\}}
+    \end{itemize}
+  \end{block}\vspace{-\baselineskip}
+
+  \begin{block}{Differences between C and Java}
+    \begin{itemize}
+    \item \structure{No exception:} usually rely on int error code instead 
+      {\small(and usually a pain)}
+    \item \structure{No class/package/interface:} code modularity different
+      {\small(not compiler-enforced)}
+    \item \structure{No garbage collector:} alloc and free manually needed
+      memory {\small(incredible pain)}
+    \item \structure{Terse standard library:} reimplement your datastructures
+      {\small(but tons of extra libs)}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Paradigm difference between C and Java}
+  \concept{The syntax is not everything. Java and C are really different}
+
+  \begin{block}{Paradigm shift seen from the C side}
+    \begin{itemize}
+    \item \structure{Object-Oriented Programming} Paradigm
+      \begin{itemize}
+      \item Decide which classes you need
+      \item Provide a full set of operations for each class
+      \item Make commonality explicit by using inheritance
+      \end{itemize}
+
+    \item \structure{Procedural Programming} Paradigm
+      \begin{itemize}
+      \item Decide which procedures and data structures you want
+      \item Use the best algorithms
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+
+
+  \begin{block}<2->{Reality is a bit different}
+    \begin{itemize}
+    \item Nothing forces you to any sort of organization in C. You're free of
+      the worst
+    \item[] \textit{Oh, I am a C programmer and I'm okay. \\
+        I muck with indices and structs all day. \\
+        And when it works, I shout hoo-ray. \\
+        Oh, I am a C programmer and I'm okay.}
+    \item (but you're free of the best, too, even if ``good style in C'' is a
+      relative notion)
+    \end{itemize}
+  \end{block}
+  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[squeeze]{C Quick Reference}
+  \alert{We won't get into details here. References are for later use, not for beginners}
+
+  \begin{block}{Complete list of keywords (in ANSI C)}
+    \begin{itemize}\vspace{-.2\baselineskip}
+    \item \structure{Storage specifiers:} {\small\tt auto register static extern typedef}
+    \item \structure{Type specifiers:} {\small\tt char double enum float int long short
+      signed struct union unsigned void} (+{\small\tt sizeof}, which is an operator on types)
+    \item \structure{Type quantifiers:} {\small\tt const volatile}
+    \item \structure{Controls:} {\small\tt break case continue default do else
+      for goto if return switch while}
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+
+  \begin{block}{Operators Precedence (and Associativity)}
+    \begin{enumerate}\vspace{-.2\baselineskip}
+    \item \structure{Functions calls,  subscripting and selection:} ()     []
+      -$>$  . \hfill $\rightarrow$
+    \item \structure{Not:} ! \textasciitilde\ \structure{Inc/Dec:} ++    $-\,-$  
+      \structure{Unary} - \structure{Cast} (type) \structure{Indir./address}  *
+      \& sizeof \hfill $\leftarrow$
+    \item \structure{Math operators:} * / \% \hspace{13mm} \structure{4. Other
+        math operators:} + -(binary)\hfill $\rightarrow$
+    \item[5.] \structure{Bitwise shifts:} $<<$    $>>$ \hspace{13mm}
+      \structure{6. Relational operators:}  $<$    $<=$      $>$   $>=$
+      \hfill $\rightarrow$
+    \item[7.] \structure{Equality:} == != ~~\structure{8. Bitwise AND:} \&
+      ~~\structure{9. Bw XOR:} \^{} ~~\structure{10. Bw OR:} \textbar
+      \hfill $\rightarrow$
+    \item[11.] \structure{Logical AND:} \&\& ~~\structure{12. Logical OR:} \textbar\textbar
+        \hfill $\rightarrow$
+    \item[13.] \structure{Ternary Operator} ?: ~~ (condition ? exprIfTrue : exprIfFalse)
+      \hfill $\leftarrow$
+    \item[14.] \structure{Assignments with operator:}
+       =    +=      -=   *=  /=   \%=  \&=   \^{}=  \textbar=   $<<=$   $>>=$
+      \hfill $\leftarrow$
+    \item[15.] \structure{Sequencing expressions:} , (comma)
+      \hfill $\rightarrow$
+    \end{enumerate}
+  \end{block}\vspace{-.2\baselineskip}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{C base types}
+  \begin{block}{C and the types}
+    \begin{itemize}
+    \item The C language is (really) weakly typed (wrt CAML for example)
+    \item C types look like Java ones at the first glance, but include some
+      \ldots surprises
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{What defines a type in computer languages?}
+    \begin{itemize}
+    \item \structure{Value domain:} what can be encoded in that type
+    \item \structure{Operators:} what can be done with values of that type
+    \end{itemize}
+  \end{block}\vspace{-.6\baselineskip}
+
+  \begin{block}<2->{Existing types in the C language}
+    \begin{itemize}
+    \item \textbf{\large\structure{void:}} \structure{Domain:} $\emptyset$ (none);
+      \structure{Operators:} none\\
+      Placeholder for type where there is no value (type of return when no return)
+    \item \textbf{\large\structure{int:}} \structure{Domain:} integers;
+      \structure{Operators:} All numerical, logical and bitwise ones\\
+      \structure{Variants:}  short/long and also signed/unsigned
+    \item \textbf{\large\structure{float}} and
+      \textbf{\large\structure{double:}}
+      floating point numbers (IEEE754 compliant, no variant)
+    \item \textbf{\large\structure{char:}} \structure{Domain:} chars such as
+      'a', '1', '\$' and some less common ones\\
+      \structure{Operators:} numerical, logical and bitwise
+      ones. \structure{Variants:} signed/unsigned\\
+      Yep, chars are ``small numbers'' in C
+
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Beware, type sizes are not known in C}\vspace{-.5\baselineskip}
+  \resizebox{\linewidth}{!}{
+    \begin{tabular}{|c|c|c|l}\cline{1-3}
+      \structure{Type}   &\structure{Java}&\structure{C}&\\\cline{1-3}
+      \structure{char}   &16 bits&8 bits& \\
+      \structure{short}  &16 bits&16 bits& \\
+      \structure{int}    &32 bits&16, 32 or 64 bits&(``most natural size for architecture'')\\
+      \structure{long}   &64 bits&32 or 64 bits\\
+      \structure{float}  &32 bits&32 bits\\
+      \structure{double} &64 bits&64 bits\\\cline{1-3}
+      \structure{boolean}& 1 bit &--&No such thing in C, use int (or bit fields)\\
+      \structure{byte}   & 8 bits&--&Doesn't exist, use char\\
+      \structure{long long}&--   &64 bits&This type is not standard/unofficial\\
+      \structure{long double}&-- &80, 96 or 128 bits&this one either\\\cline{1-3}
+    \end{tabular}}
+
+  \begin{block}{Type domains also naturally vary}\medskip
+  \resizebox{\linewidth}{!}{
+    \begin{tabular}{|c|c@{=}c|c@{=}c|}\hline
+      \structure{Type size}
+      &\multicolumn{2}{c|}{\structure{Range when signed}}
+      &\multicolumn{2}{c|}{\structure{Range when unsigned}}\\\hline
+      8 bits &$[-2^7;2^7[$    &$[-128;128[$        & $[0;2^8[$   &$[0;256]$\\
+      16 bits&$[-2^{15};2^{15}[$&$[-32\,768;32\,768[$& $[0;2^{16}[$&$[0;65\,535]$\\
+      32 bits&$[-2^{31};2^{31}[$&$[-2\,147\,483\,647;2\,147\,483\,648]$&
+                               $[0;2^{32}[$&$[0;4\,294\,967\,295]$\\ 
+      64 bits&\multicolumn{2}{c|}{$[-9\,223\,372\,036\,854\,775\,807;9\,223\,372\,036\,854\,775\,808]$}&
+              \multicolumn{2}{c|}{$[0;18\,446\,744\,073\,709\,551\,615]$}\\\hline
+    \end{tabular}}
+  \end{block}
+  
+  \bigskip
+  \concept{Use \texttt{sizeof()} when you need to know a type size on current
+    machine}
+
+  (and the limits.h file)
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Type Constructors}\subtoc 
+\begin{frame}{Type Constructors}
+  \begin{block}{How to keep together related data grouped in C?}
+    \begin{itemize}
+    \item \structure{Arrays} (similar to Java) ordered list of elements\\
+      {\small\structure{Ex:} Values of the fibonacci suite; Temperature over the time;
+      Data to sort \ldots}
+    \item \structure{Structures:} like java objects without methods, or SQL
+      reccords\\
+      {\small\structure{Ex:} A car; A student; A group of students; A school \ldots}
+    \item \structure{Enumerations} group of related values (exists also in
+      Java, but rarely used)\\
+      {\small\structure{Ex:} Colors; Cards in a deck; Direction
+      (north/south/east/west)\ldots}
+      \medskip
+    \item \structure{Unions:} Like structures, but stores everything at the
+      same memory location\\ 
+      {\small Advanced stuff, useful for strange memory tricks (data conversion)}
+    \item \structure{Bit fields:} arrays of bits. Advanced stuff allowing
+      direct access to memory\\
+      {\small Useful to encode several booleans in a compact way}
+    \end{itemize}
+  \end{block}
+  \begin{block}{Let's detail the basic ones}
+    \begin{itemize}
+    \item Aka, Arrays, structures and enumerations.
+    \item Unions and bit fields are kinda advanced C-fu
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Arrays in C}
+
+  \begin{block}{Similarity to Java}
+    \begin{itemize}
+    \item \structure{Defining:} \fbox{\texttt{int T[5]}} defines 5 integers, noted T[0], T[1], T[2],
+      T[3] and T[4]
+    \item \structure{Initialization:} \fbox{\texttt{int T[5] =
+          \{10,20,30,40,50\};}} does what you expect\\
+      For the record, in Java, you'd write \texttt{\small int[] T = new int[] \{10,20,30,40,50\};}
+    \item \structure{No global operators:} \fbox{\texttt{Ta==Tb}} and
+      \fbox{\texttt{Ta+Tb}} \ldots\ does not do what you think
+    \end{itemize}
+  \end{block}\vspace{-.4\baselineskip}
+
+  \begin{block}{C arrays specificities from Java ones} 
+    \begin{itemize}
+    \item You must write \fbox{\texttt{int T[5]}} because \fbox{\texttt{int[5]
+          T}} is forbidden\\
+      To understand a C (or Java) complex type, you must read from right to
+      left
+    \item You cannot retrieve the \structure{size of an array}: \fbox{\texttt{T.length()}}
+      does not exist\\
+      You must store the array size alongside to the array, in an integer
+    \item \structure{Dynamically sized arrays} are not allowed in C [without dynamic
+      memory]
+      \begin{itemize}
+      \item Array sizes must be known at compilation time
+      \item \fbox{\texttt{int T[] = new int[a];}} is just impossible (in ANSI C)
+      \end{itemize}
+    \item There is \alert{no} \structure{bound checking} on arrays in C 
+      {\small(and C memory is a big magma)}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Strings in C}
+  \begin{block}{Unfortunately, there is no standard type in C to describe strings\ldots}
+    \begin{itemize}
+    \item Instead, the C idiomatic is to use \alert{arrays of chars}
+    \item In turn, arrays are unpleasant because they do not contain their own
+      length
+    \item So \textbf{\alert{by convention}} every C string should be
+      zero-terminated\\
+      {\small i.e. the last value in the array is the special char '$\backslash$0'
+        (different from '0')}
+    \item Beware, to store a string of 5 letters, you need 6 positions:
+      \medskip
+      \begin{columns}
+        \begin{column}{.35\linewidth}
+          \begin{boitecode}{}
+char str[6]="hello";            
+
+          \end{boitecode}
+        \end{column}
+        \begin{column}{.6\linewidth}
+          \includegraphics{c_layout_string.fig}
+        \end{column}
+      \end{columns}
+    \item Useful functions for such strings:
+      {\small\texttt{strlen()}, \texttt{strcpy()}, \texttt{strcmp()}, \ldots}
+      \medskip
+    \item But you are free to not follow that convention if you prefer to do 
+      otherwise\\
+      (you just have to do it all by yourself then)
+    \item If the size is given elsewhere, you can use \fbox{\texttt{char *str;}}
+      for \fbox{\texttt{char str[5];}}\\
+      {({\sc much} more to come on that little * sign)}
+    \item Don't mix the char \fbox{\texttt{'a'}} with the string \fbox{\texttt{"a"}}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Structures in C}
+  \vspace{-.8\baselineskip}
+  \begin{block}{This is a fundamental construction in C}
+    \begin{itemize}
+    \item Group differing aspects of a given concept, just like Java objects\\
+      {\small\structure{Vocabulary:} We speak of \textbf{structure members} and
+        \textbf{object fields}}
+    \item But they (usually) don't contain the associated methods/functions
+    \end{itemize}
+  \end{block}\vspace{-.4\baselineskip}
+  \begin{columns}
+    \begin{column}{.35\linewidth} 
+  \begin{boitecode}{Definition example}
+struct point \{
+  double x;
+  double y;
+  int rank;
+\}; // beware of the trailing ;
+  \end{boitecode}     
+    \end{column}
+    \begin{column}{.56\linewidth} 
+  \begin{boitecode}{Usage example}
+struct point p1; // the type name is ``struct point''
+p1.x = 4.2; 
+p1.y = 3.14;
+p1.rank = 1;
+struct point p2 = \{ 4.2, 3.14, 2 \};
+  \end{boitecode}     
+    \end{column}
+  \end{columns}\vspace{-.6\baselineskip}
+  \begin{columns}
+    \begin{column}{.55\linewidth}
+  \begin{boitecode}{Structures as parameter and return values}
+struct point translate(struct point p, 
+                       double dx, double dy) \{
+  struct point res = p;
+  res.x += dx;
+  res.y += dy;
+  return res;
+\}
+  \end{boitecode}               
+    \end{column}
+    \begin{column}{.37\linewidth}
+      \begin{boitecode}{Declare and use at once}
+struct point \{
+  int x;
+\} p1,p2; // variables of that type
+      \end{boitecode}
+      \vspace{-.8\baselineskip}
+      \begin{boitecode}{}
+struct \{ // Anonymous structure 
+  int x;
+\} p1,p2; // variables of that type
+      \end{boitecode}
+    \end{column}
+
+  \end{columns}\vspace{-.7\baselineskip}
+  \begin{itemize}
+  \item Parameter and return values are \textit{copied} 
+    {\small (no border effect; inherent inefficiency)}
+  \item \structure{Remarks:} Members can be \texttt{struct}s too;
+  No global operators (such as ==) 
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Enumerations in C}
+  \begin{block}{Basics}
+    \begin{itemize}
+    \item They are used to group \textbf{values} of the same lexical scope
+    \item A variable of type \textit{color} can take a value within
+      \{blue, red, white, yellow\}
+    \end{itemize}
+  \end{block}
+  \begin{columns}
+    \begin{column}{.33\linewidth} 
+  \begin{boitecode}{Definition example}
+enum color \{
+  blue, red, white, yellow
+\}; // beware of the trailing ;
+  \end{boitecode}     
+    \end{column}
+    \begin{column}{.6\linewidth} 
+  \begin{boitecode}{Usage example}
+enum color bikesheld; // the type name is ``enum color''
+bikesheld = white;
+
+  \end{boitecode}     
+    \end{column}
+  \end{columns}\vspace{-.4\baselineskip}
+  \begin{boitecode}{Enumerations can be used as parameter and return values}
+enum color make_white(enum color c) \{
+  return white; // Yes, this function is useless as is...
+\}
+  \end{boitecode}
+
+    \begin{itemize}
+    \item \structure{Main advantage}: there is a compilation error if you forget a value in a switch\\
+      {\small(instead of silently ignoring the whole block when the case
+        occurs, which is a pain)}
+    \item Every arithmetic and logical operators can be used (white+1$\leadsto$yellow)
+    \end{itemize}
+%  \end{block}\vspace{-\baselineskip}
+  \begin{block}{Java enums}
+    \begin{itemize}
+    \item They exist in Java, too. Much more powerful and complicated. Rarely used.
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Memory layout of C type constructors}
+  \begin{block}{Impossible to master C without understanding the memory layout}
+    \begin{itemize}
+    \item (This is because memory is a kind of unsorted magma in C)
+    \item \alert{\textbf{First absolute rule:}} successive elements are stored in order in memory
+    \end{itemize}
+    \begin{columns}
+      \begin{column}{.3\linewidth}
+        \begin{boitecode}{}
+struct point \{
+  double x;
+  double y;
+  int rank;    \};                  
+        \end{boitecode}
+      \end{column}
+      \begin{column}{.6\linewidth}
+        \includegraphics{fig/c_layout_struct.fig}
+      \end{column}
+    \end{columns}
+
+    \begin{columns}
+      \begin{column}{.3\linewidth}
+        \begin{boitecode}{}
+int T[6]; 
+        \end{boitecode}
+      \end{column}
+      \begin{column}[t]{.6\linewidth}
+        \includegraphics{fig/c_layout_tab.fig}
+      \end{column}
+    \end{columns}
+    
+%    \visible<2->{ Animation+fragile=Beamer bug
+    \begin{itemize}
+    \item But the compiler is free to add \alert{padding space} to respect alignment constraints
+    \begin{columns}
+      \begin{column}{.3\linewidth}
+        \begin{boitecode}{}
+struct point \{
+  double x;
+  int rank;                  
+  double y;    
+\};
+        \end{boitecode}
+      \end{column}
+      \begin{column}{.6\linewidth}
+        \includegraphics{fig/c_layout_struct2.fig}
+      \end{column}
+    \end{columns}
+  \item Compiler-dependent/processor-dependent, so you can hardly rely on it\ldots
+    \end{itemize}
+%    }
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile,squeeze]{Type aliasing in C}
+  \begin{block}{Motivation}\vspace{-.3\baselineskip}
+    \begin{itemize}
+    \item Type names quickly become quite long: \texttt{enum color},
+    \item Variable \texttt{square} being an array of four points:
+      \texttt{struct point square[4]}
+    \item[$\Rightarrow$] Keyword \fbox{\texttt{typedef}} used to declare
+      \textbf{type aliases}
+    \end{itemize}
+  \end{block}\vspace{-\baselineskip}
+  \begin{block}{Usage}\vspace{-.3\baselineskip}
+    \begin{itemize}
+    \item \structure{Reading a \texttt{typedef}}: ``the last word is an alias for
+      everything else on the line''
+    \end{itemize}
+  \begin{columns}
+    \begin{column}{.45\linewidth}
+      \begin{boitecode}{Basic example}
+struct point \{
+  double x;
+  double y;
+\};
+\alert{typedef struct point \textbf{\textrm{point\_t}};}
+...
+point_t p;
+p.x = 4.2;
+p.y = 3.14;
+      \end{boitecode}
+    \end{column}
+    \begin{column}{.45\linewidth}\vspace{-.7\baselineskip}
+      \begin{boitecode}{All-in-one example}
+\alert{typedef struct point \{
+  double x, y;
+\} \textbf{\textrm{point\_t}};}
+      \end{boitecode}\vspace{-.8\baselineskip}
+
+      \begin{boitecode}{Complex example}
+\alert{typedef point_t \textbf{\textrm{square\_t}}[4];}
+square_t s;     s[0].x=3.14;
+      \end{boitecode}
+    \end{column}
+  \end{columns}
+  \end{block}\vspace{-.7\baselineskip}
+  \begin{itemize}
+  \item \texttt{typedef}s are mandatory to organize your code\ldots
+  \item \ldots but can easily be misused to make your code messy and
+    unreadable\\
+    {\small (just like about every C idiomatic constructs)}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Lexical Structure}\subtoc
+\begin{frame}[fragile,squeeze]{Lexical Structure of a Typical Program}
+  \begin{itemize}
+  \item \structure{Header inclusions:} Load the prototypes of function that you
+    want to use
+    \vspace{-.5\baselineskip}
+  \begin{columns}
+    \begin{column}{.6\linewidth}
+      \begin{itemize}
+      \item Lines begin with \texttt{\#include}
+      \item Loaded files are called \textbf{headers}
+      \item \fbox{\texttt{\scriptsize\#include $<$file$>$}} for system-wide headers
+      \item \fbox{\texttt{\scriptsize\#include "file"}} for project-wide headers
+      \end{itemize}
+    \end{column}
+    \begin{column}{.39\linewidth}
+      \begin{boitecode}{}
+#include <stdlib.h>        
+#include <stdio.h>        
+#include "my_prototypes.h"
+
+      \end{boitecode}
+    \end{column}
+  \end{columns}\medskip
+\item \structure{Preprocessor directives; types defs;
+    globals\&constants; function prototypes} \vspace{-.6\baselineskip} 
+  \begin{columns}
+    \begin{column}{.6\linewidth}
+      \begin{itemize}\vspace{-.8\baselineskip}
+      \item \texttt{typedef}s as seen before
+      \item \texttt{const} are just like final in Java
+      \item Globals visible from the whole program
+      \item Prototypes tell the compiler about functions
+      \end{itemize}
+    \end{column}
+    \begin{column}{.39\linewidth}
+      \medskip
+      \begin{boitecode}{}
+#define MAX 42
+const int size = 5;
+int ranking = 3;
+int array[MAX];
+void compute_ranking(int from);
+
+      \end{boitecode}
+    \end{column}
+  \end{columns}
+
+\item \structure{Function definitions, including the \texttt{main()} function}
+  \vspace{-.4\baselineskip}
+  \begin{columns}
+    \begin{column}{.6\linewidth}
+      \begin{itemize}\vspace{-.8\baselineskip}
+      \item There must be one unique \texttt{main()} function
+      \item Program entry point: started first
+      \item \textit{Should} return {\scriptsize\texttt{EXIT\_SUCCESS}} or
+        {\scriptsize\texttt{EXIT\_FAILURE}}
+      \item Several prototypes exist, this one is classical
+      \end{itemize}
+    \end{column}
+    \begin{column}{.39\linewidth}
+      \medskip
+      \begin{boitecode}{}
+void main(int argc,char *argv[])\{
+  /* My code here */
+  return EXIT_SUCCESS;
+\}
+
+      \end{boitecode}
+    \end{column}
+  \end{columns}\item The program can spread over several files (more to come on this)
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Source Formatting Best Practices}
+  \begin{block}{Identifier naming schema}
+    \begin{itemize}
+    \item There is a religion war between \texttt{\small this\_naming\_schema} and
+      \texttt{\small thisNamingSchema}
+    \item I personally  use the first one in C, and the second one in Java
+    \item Pick your own, and {\sc Stick to it!}
+    \end{itemize}
+  \end{block}      \vspace{-.7\baselineskip}
+
+  \begin{block}{Indenting}
+    \begin{itemize}
+    \item There is another religion war between these two styles (and others)
+      \begin{columns}
+        \begin{column}{.45\linewidth}
+          \begin{boitecode}{}
+if (cond) \{
+  /* body */
+\}            
+
+          \end{boitecode}
+        \end{column}
+        \begin{column}{.45\linewidth}
+          \begin{boitecode}{}
+if (cond)
+  \{
+    /* body */
+  \}
+
+          \end{boitecode}
+        \end{column}
+      \end{columns}
+      \vspace{-.7\baselineskip}
+    \item I personally use the first one (more compact), but YMMV:
+    \item As long as you DO indent your code consistently, that's fine with me
+    \end{itemize}
+  \end{block}\vspace{-.7\baselineskip}
+  \begin{block}{Spacing {\normalsize\color{black}(no real flame war here, boring)}}
+    \begin{itemize}
+    \item No spaces around these: \texttt{-$>$  .  []  !} ~
+      \textasciitilde\ ~ ++ ~ - - ~ \& ~ unary * and -
+    \item One space around these: = += ?: + $<$ \&\& and binary operators
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Interactions with the Environment}\toc
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Input/Output: Terminal and Files}
+\begin{frame}{Terminal I/O}
+  \begin{block}{Interactions with the external world in C and Java}
+    \begin{itemize}
+    \item \structure{Java:} easy to build a GUI and painful to interact through the console
+    \item \structure{C:} the contrary (GUI require external libs such as Gnome,
+      KDE, ncurse)
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Standard Communication Channels}
+    \begin{itemize}
+    \item \structure{Standard input} (stdin): keyboard, unless it got redirected
+    \item \structure{Standard output} (stdout): screen, unless it got redirected
+    \item \structure{Standard error} (stderr): screen, unless it got redirected
+    \item Example of redirection: \fbox{\texttt{prog $<$ in\_file $>$
+          out\_file 2>err\_file}}
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Single character I/O}
+    \begin{itemize}
+    \item \structure{\texttt{int getchar()}}: returns the next character from
+      input \\(or EOF in case of End Of File, this constant is defined in stdio.h)
+    \item \structure{\texttt{int putchar(int c)}}: writes \texttt{c} to output
+    \item Yes these function consider chars as ints. Sorry.
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Multiple Characters Terminal I/O}
+  \begin{block}{Motivation}
+    \begin{itemize}
+    \item Single char I/O works, but that's a real pain. We want the equivalent
+      of 
+
+      \fbox{\texttt{System.out.println("hello "+name+". How are you today?");}}
+    \item No \fbox{\texttt{tostring()}} magic functions nor magic \fbox{+} string
+      concatenation in C
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Interacting with the terminal in C}
+    \begin{itemize}
+    \item Actually there is two major interfaces for that in C
+    \item \structure{Low-level API} (\texttt{write()} / \texttt{read()}):
+      better performance \textit{when used correctly}
+    \item \structure{High-level API} (\texttt{printf()} / \texttt{scanf()}):
+      easier to use; \alert{way to go this year}
+    \item You need to load \texttt{stdio.h} to use all these functions
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Writing to the \texttt{stdout} with the \texttt{printf} function}
+  \vspace{-.7\baselineskip}
+  \begin{block}{Naive usage}\vspace{-.2\baselineskip}
+    \begin{itemize}
+    \item Write the fixed string "hello" to the terminal: \fbox{\texttt{printf("hello")}}
+    \item Write that string and return to the line beginning:
+      \fbox{\texttt{printf("hello$\backslash$n")}} 
+    \end{itemize}
+  \end{block}\vspace{-.8\baselineskip}
+  \begin{block}<2->{Basic usage}\vspace{-.2\baselineskip}
+    \begin{itemize}
+    \item To output variables, put place holders in the format string:\\
+      \fbox{\texttt{int x=3; printf("value:~\alert{\%d}$\backslash$n",x)}}
+    \item Use several place holders to display several variables:
+      \fbox{\texttt{int x=3; int y=2; printf("x:~\alert{\%d}; y:~\alert{\%d}$\backslash$n",x,y)}}
+    \item The kind of place holder gives the type of variable to display
+      \begin{center}
+        \begin{tabular}{|c|l|}\hline
+          \%d&integer (decimal)\\\hline
+          \%f&floating point number\\\hline
+          \%c&char\\\hline
+          \%s&string (nul-terminated char array)\\\hline\hline
+          \%\%&the \% char\\\hline
+        \end{tabular}~~~~~~
+      \end{center}
+    \item If you use the wrong conversion specifier, strange things will happen \\
+      {\small including a brutal ending of your program -- SEGFAULT}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Advanced \texttt{printf} usage}
+  \begin{block}{Other conversion specifiers} 
+      \begin{center}
+        \begin{tabular}{|c|l|}\hline
+          \%u&unsigned integer\\\hline
+          \%ld&long integer\\\hline
+          \%lu&long unsigned integer\\\hline
+          \%o&integer to display in octal\\\hline
+          \%x&integer to display in hexadecimal\\\hline
+          \%e&floating point number to display in scientific notation\\\hline
+        \end{tabular}~~~~~~
+      \end{center}
+  \end{block}
+
+  \begin{block}{Formating directive modifiers} 
+    \begin{itemize}
+    \item You can specify that you want to see at least 3 digits:
+      \texttt{printf("\%3d",x);}
+    \item Or that you want exactly 2 digits after the dot: \texttt{printf("\%.2d",x);}
+    \item Or both at the same time: \texttt{printf("\%3.2f",x);}
+    \item Or that the output must be 0-padded: \texttt{printf("\%03.2f",x);}
+      $\leadsto$ 003.14
+    \item Or that you want to see at most 3 chars: \texttt{printf("\%.3s",str);}
+
+    \end{itemize}
+  \end{block}
+
+  \concept{Many other options exist, full list in \fbox{\texttt{man 3 printf}}}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Reading from \texttt{stdin} with the \texttt{scanf} function}
+  \begin{block}{Works quite similarly to \texttt{printf}, but\ldots}
+    \begin{itemize}
+    \item \structure{Read an integer:} \fbox{\texttt{int x; scanf("\%d", \alert{\&}x);}}
+    \item \structure{Read a double:} \fbox{\texttt{double d; scanf("\%f", \alert{\&}d);}}
+    \item \structure{Read a char:} \fbox{\texttt{char c; scanf("\%c", \alert{\&}c);}}
+    \item \structure{Read a string:} \fbox{\texttt{char str[120]; scanf("\%c", str);}}
+    \item \structure{Read two things:} \fbox{\texttt{int x;char c;
+          scanf("\%d\%c", \alert{\&}x, \alert{\&}c);}}
+    \end{itemize}
+  \end{block}
+  \begin{block}{So\ldots}
+    \begin{itemize}
+    \item You need to add a little \& to the variable\ldots
+    \item \ldots unless when the variable is a string (we'll explain later why)
+    \item Format string can contain other chars than converters: they
+      \textbf{must} be in input
+    \item A space in format will match any amount of white chars 
+      {\small(spaces, $\backslash$n, tabs)}
+    \item Note that scanf returns the amount of chars it managed to read\\
+      {\small Useful for error checking: what if that's not an integer but
+        something else?}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{File I/O}
+  \#include $<$stdio.h$>$
+  \begin{block}{printf/scanf functions have nice friends for that}
+    \begin{itemize}
+    \item Writing to \texttt{stderr}:
+      \fbox{\texttt{\alert{f}printf(stderr,"warning\n")}}
+      \begin{itemize}
+      \item \texttt{fprintf} works just like printf, taking a file handler as first
+        argument
+      \item Likewise \texttt{fscanf} is just like \texttt{scanf}, with a
+        handler as first argument
+      \end{itemize}
+
+    \item Declaring a file handler (a variable describing a file): 
+      \fbox{\texttt{\alert{FILE*} handler;}}
+    \item Opening a file for reading \fbox{\texttt{handler = \alert{fopen}("myfile",\alert{"r"});}}
+    \item Opening a file for writing \fbox{\texttt{handler = fopen("myfile",\alert{"w"});}}
+    \item Opening a file in read/write mode \fbox{\texttt{handler = fopen("myfile",\alert{"r+"});}}
+    \item Checking that the opening went well: \fbox{\texttt{if (handler==NULL)
+          \{problem\}}}
+    \item Checking whether we reached the end of file \fbox{\texttt{if (\alert{feof}(handler))
+          \{done\}}}
+    \item Closing a file:  \fbox{\texttt{\alert{fclose}(handler);}} 
+    \end{itemize}
+  \end{block}
+  \concept{In UNIX, everything is a file, and it makes things easier}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Command-line Arguments}\subtoc
+\begin{frame}{Command line arguments}
+  \begin{block}{Motivation}
+    \begin{itemize}
+    \item Classical tools such as \fbox{\texttt{ls}} or \fbox{\texttt{mv}} get arguments from the
+      command line
+    \item How can we do the same? From the \texttt{main()} arguments of course
+    \end{itemize}
+  \end{block}
+  \begin{block}<2->{\texttt{int main(int argc, char *argv[]) \{\ldots\}}}
+    \begin{itemize}\vspace{-.5\baselineskip}
+    \item \alert{\texttt{argc}}: amount of parameter received;
+      \alert{\texttt{argv}}: array of strings received
+    \item (\structure{note:} these names are conventions, doing really otherwise hinders
+      readability)
+    \end{itemize}
+  \end{block}
+  \begin{columns}
+    \begin{column}{.45\linewidth}
+      \begin{block}<2->{Memory layout for \fbox{\texttt{ls -lt /}}}\medskip
+        \centerline{\includegraphics[width=\linewidth]{fig/c_argv.fig}}    
+      \end{block}      
+    \end{column}
+    \begin{column}{.5\linewidth}
+      \begin{block}<3->{Displaying the arguments}\smallskip
+        \fbox{\vbox{\tt\small\vspace{-\baselineskip}
+            \begin{tabbing}
+              in\=t main(int argc, char *argv[]) \{\\
+              \>int i;\\
+              \>fo\=r (i=1; i<argc; i++) \{\\
+              \>\>printf(\="Argument \#\%d: \%s$\backslash$n",\\
+              \>\>\>i, argv[i]);\\
+              \>\}\\
+              \>return EXIT\_SUCCESS;\\
+            \}
+            \end{tabbing}\vspace{-\baselineskip}
+          }}
+      \end{block}      
+    \end{column}
+  \end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Interacting with Processes}\subtoc
+\begin{frame}{Interacting with Processes}
+  \begin{block}{First of all, what is a process?}
+    \visible<2->{
+      \begin{itemize}
+      \item That's a box encapsulating the execution of a task
+      \item The operating system uses these boxes to let several tasks coexist in memory
+      \item Processes are to programs what objects are to classes: living
+        instances\\
+        {\small You can use the same program than me, but you cannot use my processes}
+      \end{itemize}
+    }
+  \end{block}
+
+  \begin{block}<3->{Basic shell interaction}
+    \begin{itemize}
+    \item Start a process, simply type the name of the program with
+      arguments\\
+      With \&, the process runs in \structure{background}. Ex:
+      \fbox{\texttt{emacs \&}}\\
+      Else, \fbox{\small\sc Ctrl-Z} suspends process; then \fbox{bg} $\leadsto$
+      \alert{b}ack\alert{g}round; \fbox{fg} $\leadsto$
+      \alert{f}ore\alert{g}round
+    \item List all existing processes \fbox{\texttt{ps -ef}} 
+      all mine \fbox{\texttt{ps -aux}}
+      bob's \fbox{\texttt{ps -u bob}}
+    \item Kill a process knowing its PID: \fbox{\texttt{kill} \textit{pid}}
+    \item Kill a process knowing its name: \fbox{\texttt{killall} \textit{name}}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Interacting with Processes from C}
+  \begin{block}{Starting an external process}
+    \begin{itemize}
+    \item This is as easy as \fbox{\texttt{system("mkdir /tmp/directory")}}
+    \item \structure{Trick 1:} the return value is a bit counter-intuitive (0 --false-- if ok)
+    \item \structure{Trick 2:} stdin/stdout of started process get to
+      stdin/stdout of father\\
+      This limits the possible interaction between both processes
+    \end{itemize}
+  \end{block}
+
+  \begin{block}<2->{Starting and interacting with external processes}
+    \begin{itemize}
+    \item Use \fbox{\texttt{FILE* popen(char *command, char *type)}} for that
+    \item If type is "r", read from process. If "w", write to it (cannot  do
+      both this way)
+    \item Use \fbox{\texttt{pclose(FILE*handle)}} instead of \texttt{fclose()} to
+      close such a descriptor
+    \item After the RS course, you'll find implementing \texttt{popen} boring
+      because simple
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{Coupe}
+\section{Associated Tools}\toc
+\subsection{Preprocessor}
+\begin{frame}{The C preprocessor}
+  \begin{block}{Motivation}
+    \begin{itemize}
+    \item C designed to work at (very) low level on a variety of machines\\
+      Sometimes, the only way to portability for a given function is:\\
+      Have several versions {\small(windows, linux, mac)}; pick the right one at compilation
+    \item C is a very old language $\leadsto$ we sometimes want to
+      \textit{extend} it a bit
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{The C preprocessor: in direct line with Paleolithic}
+    \begin{itemize}
+    \item I'm not sure you'll ever have to use such a rudimentary tool 
+    \item It's as dumb as possible, but it perfectly fulfills its tasks
+    \item It's even sometimes used outside of the C ecosystem
+    \item Beware, that's the perfect tool to make your code unreadable
+    \end{itemize}    
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Preprocessor: Macros without Arguments}
+  \begin{block}{\texttt{\#define MACRO\_NAME value}}
+    \begin{itemize}
+    \item This requests a \alert{find/replace}\\
+      Ex: \texttt{\#define MAX 12} $\leadsto$ change every ``MAX'' into 12
+    \item Numerical constants must be defined that way (or const variables, or enums)
+    \item Always write macro names in \structure{all upper case} (to make clear what they are)
+    \item Preprocessor lines expect \structure{no final semi-column} (``;'')
+    \item \structure{Always put too much parenthesis.} Think of the result
+      of:\\
+      \fbox{\hbox to\linewidth{\vbox{\tt\small
+          \#define TWELVE 10+2\\
+          int x = TWELVE * 2; //$\leadsto$ x equals 10+2*2 = 14, not 12*2=24\\
+          // \#define TWELVE (10+2) would fix it
+        }}}
+    \item Preprocessor directive must be on one line only $\leadsto$ 
+      \structure{escape return carriages}
+      \fbox{\hbox to\linewidth{\vbox{\tt\small
+          \#define MY\_MACRO this is $\backslash$\\
+          ~~~~~~~~~~~~~~~~~~~a multi-line $\backslash$\\
+          ~~~~~~~~~~~~~~~~~~~macro definition
+        }}}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{More on Preprocessor Macros}
+  \begin{block}{Predefined macros}
+    \begin{itemize}
+    \item \structure{\_\_STDC\_\_:} 1 if the compiler conforms to ANSI C
+    \item \structure{\_\_FILE\_\_:} current file;
+      \structure{\_\_LINE\_\_:} current line in that file
+%    \item \structure{\_\_FUNCTION\_\_:} current function (gcc only)
+    \item[$\leadsto$] \texttt{printf("\%s:\%d:~was here\n", \_\_FILE\_\_,
+      \_\_LINE\_\_);}
+
+    \end{itemize}
+  \end{block}
+  \begin{block}{\texttt{\#define MACRO\_NAME(parameters) value}}
+    \begin{itemize}\vspace{-.5\baselineskip}
+    \item  \alert{Programmable find/replace}\\
+      Ex: \texttt{\#define MAX(a,b) ((a)>(b)?(a):(b))} (yep, there is no max()
+      in C)
+    \end{itemize}
+  \end{block}
+  \begin{block}{\texttt{\#undef MACRO}}
+    \begin{itemize}\vspace{-.3\baselineskip}
+    \item Forget previous definition of this macro
+    \end{itemize}
+  \end{block}\vspace{-.3\baselineskip}
+  \begin{block}{\texttt{\#include $<$header file$>$}}
+    \begin{itemize}\vspace{-.5\baselineskip}
+    \item As previously said, line replaced by whole content of file
+    \item Header files are source file intended to be loaded this way
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Conditional compilation with the preprocessor}
+  \begin{columns}
+\begin{column}{.45\linewidth}
+  \begin{boitecode}{Conditional on macro definitions}
+#ifdef macro_name
+  /* Code to use if macro defined */
+#else
+  /* Code to use otherwise */
+#endif
+
+#if\alert{n}def macro_name
+  /* Code if macro not defined */
+#else
+  /* Code if defined */
+#endif
+  \end{boitecode}      
+    \end{column}
+    \begin{column}{.45\linewidth}
+  \begin{boitecode}{Conditional on expressions}
+#if constant_expression1
+  /* some C code */
+#elif constant_expression2
+  /* some C code */
+#else
+  /* some C code */
+#endif
+
+#if 0
+  code to kill
+#endif
+  \end{boitecode}      
+\end{column}
+  \end{columns}
+
+  \begin{columns}
+    \begin{column}{.45\linewidth}
+      \begin{boitecode}{Protect against multiple inclusions}
+/* mainly useful for header files */
+#ifndef SOME_UNIQUE_NAME
+#define SOME_UNIQUE_NAME        
+   ... 
+#endif
+      \end{boitecode}
+    \end{column}
+    \begin{column}{.45\linewidth}
+
+      \begin{boitecode}{Redefine a macro}
+#ifdef MACRO
+#undef MACRO
+#endif
+#define MACRO blabla        
+      \end{boitecode}
+    \end{column}
+  \end{columns}
+  
+  \begin{block}{\texttt{\#error "biiiirk"}}
+    \begin{itemize}\vspace{-.5\baselineskip}
+    \item Raises a compilation error with given message (yep, that's sometimes
+      useful)
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Compiling multi-files projects and Makefiles}\subtoc
+\begin{frame}{Compiling the code}
+  \vspace{-.5\baselineskip}
+  \begin{block}{One file, one pass}
+    \begin{itemize}
+    \item \fbox{\texttt{gcc -o binary source.c}} (beware of inversions,
+      possibly erasing source.c)
+    \item Some things don't fit into one file only:
+      {\small Size, Separation of concerns, Team work}
+    \end{itemize}
+  \end{block}\vspace{-.5\baselineskip}
+
+  \begin{block}<2->{Several files, one pass}
+    \begin{itemize}
+    \item \fbox{\texttt{gcc -o binary source1.c source2.c source3.c}}
+    \item Compilation involves 2 steps:
+      \begin{itemize}
+      \item Converting each file into assembly (actually compiling them)
+      \item Linking parts together (big puzzle game to get a proper binary)
+      \end{itemize}
+    \item Compilation is much more costly than linking
+    \item[$\leadsto$] Avoid redoing it when file was not changed
+    \end{itemize}    
+  \end{block}\vspace{-.5\baselineskip}
+
+  \begin{block}<3->{Several files, several passes}
+    \begin{itemize}
+    \item \structure{Compilation:} 
+      \fbox{\small\texttt{gcc -c source1.c}} 
+      \fbox{\small\texttt{gcc -c source2.c}} 
+      \fbox{\small\texttt{gcc -c source3.c}}\\
+      {\small generates \texttt{source1.o, source2.o, source3.o}}
+    \item \structure{Linking:} 
+      \fbox{\small\texttt{gcc -o binary source1.o source2.o source3.o}}
+    \item If only one file is touched, only recompile it, and relink everything
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Dependency nightmare, make and Makefiles}
+  \vspace{-.5\baselineskip}
+  \begin{block}{Motivation}
+    \begin{itemize}
+    \item Deciding what to recompile quickly becomes hairy and error-prone
+    \item Particularly when the touched file is a header itself loaded in a header\ldots
+    \item Tracking dependency is the job of the \texttt{make} command
+    \item Explain your project once, and get the job always done properly then
+    \end{itemize}
+  \end{block}\vspace{-.5\baselineskip}
+
+  \begin{block}<2->{Makefile: explaining the project building process}    
+  \begin{columns}
+    \begin{column}{.36\linewidth}\medskip
+  \begin{boitecode}{Example of such file}
+prog: toto.o tutu.o
+    gcc toto.o tutu.o -o prog
+
+toto.o: toto.c 
+    gcc -c toto.c
+
+tutu.o: tutu.c
+    gcc -c tutu.c    
+  \end{boitecode}      
+    \end{column}
+    \begin{column}{.62\linewidth}
+      \begin{itemize}
+      \item<2-> Set of rules formated as follows:
+        {  \footnotesize
+        \begin{semiverbatim}
+<target file>: <list of dependencies>
+    <command to build target from dependencies>
+        \end{semiverbatim}}\vspace{-.7\baselineskip}
+      \item<3-> \texttt{make} tracks dependencies automatically
+      \item<3-> It rebuilds what should be (and nothing more)
+      \item<3-> By default, builds the first target of file
+      \item<3-> Give specific target as \texttt{make} argument
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \end{block}
+  \begin{itemize}
+  \item<4-> \texttt{make} is used widely, not only for C. You should use it for you Java code!
+  \end{itemize}
+
+  ~\hfill\textit{(this ends the second lecture)}
+\end{frame}
+\toc

@@ -1,0 +1,205 @@
+\setcounter{part}{-1}
+\part{Introduction}
+% Corrige l'absence de la page de garde pour cette partie
+\makeatletter\beamer@partstartpage=1\makeatother
+\section{Introduction}
+\begin{frame}{Introduction}
+  \begin{block}{Course Goals}
+    \begin{itemize}
+    \item Help you mastering your thid programming language
+      \begin{itemize}
+      \item Basics about the syntax
+      \item Caveats (of memory management, amongst other)
+      \item Get some good style
+      \end{itemize}
+    \item Help you mastering your Linux box (or any other UNIX-based one)
+      \begin{itemize}
+      \item Fluent use of the terminal
+      \item Non-trivial command lines
+      \item Simple scripts
+      \end{itemize}
+
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Prerequisite}
+    \begin{itemize}
+    \item Algorithmic Background: you cannot program without that
+    \item Scala/Java Programming: we won't learn to program, but how to write it in C
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Course Context at Telecom Nancy}
+    \begin{itemize}
+    \item Part of Programing Track (courses PPP, TOP, POO, SD, CSH)
+    \item Starts a new track on Operating System (courses CSH, RS, RSA)
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Administrativae}
+  \begin{block}{Module Time Table}
+    \begin{itemize}
+    \item Three lectures
+    \item 7 practical labs + 3 repetition sessions (+ exam): The C language 
+    \item 6 practical labs + 2 small group lectures (+ exam): Shell Scripting
+    \end{itemize}
+  \end{block}
+  \begin{block}{Evaluation}
+    \begin{itemize}
+    \item \structure{Test on table \textit{(partiel)} on C language}
+      \begin{itemize}
+      \item \structure{What:} Content of lectures and labs (of course)
+      \item \structure{When:} someday in march (check ADE agenda)
+      \item \structure{Allowed material during test:} one A4 sheet of paper only
+        \begin{itemize}
+        \item Hand-written (not typed)
+        \item From you (no photocopy)
+        \end{itemize}
+      \end{itemize}
+    \item \structure{Homework:} Do whatever you want (in C)
+    \item \structure{Test on table on Shell Scripting}\\
+      \begin{itemize}
+      \item \structure{When:} someday in may (check ADE agenda)
+      \item (Ask Suzanne Collin for details)
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{About me}
+  \begin{block}{Martin Quinson}
+    \begin{itemize}
+    \item \structure{Study:} Universit\'e de Saint \'Etienne, France
+    \item \structure{PhD:} Grids and HPC in 2003 (team Graal of INRIA /
+      ENS-Lyon, France)
+    \item \structure{Since 2005:}
+      \begin{itemize}
+      \item Assistant professor at Telecom Nancy (Université de Lorraine)
+        % ESIAL (Univ. Henri Poincar\'e--Nancy I, France) 
+      \item Researcher of AlGorille team of LORIA/Inria
+      \end{itemize}
+    \item \structure{Research interests:}
+      \begin{itemize}
+      \item \structure{Context:} Distributed Systems (Grids, HPC, Clusters)
+      \item \structure{Main:} Simulation of Distributed Applications (SimGrid
+        project) 
+      \item \structure{Others:} Experimental Methodology, Model-Checking, ...
+      \end{itemize}
+    \item \structure{Teaching duties:}
+      \begin{itemize}
+%      \item Responsible of first year cursus at ESIAL
+      \item[1A:] \structure{PPP:} introduction to Java;
+        \structure{TOP:} Technics and tOols for Programming;\\
+        \structure{CSH:} C as Second Language (and Shell)
+      \item[2A:] \structure{RS:} System Programming (and Networking)
+      \item[3A:] Peer-to-Peer Systems and Advanced Distributed Algorithms
+        (master)
+      \end{itemize}
+
+    \item \structure{More infos:}
+      \begin{itemize}
+      \item \url{http://www.loria.fr/~quinson} ~~
+      (\url{Martin.Quinson@loria.fr})
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{References}
+\begin{frame}{References: Courses on Internet}
+ % \begin{block}{Courses on Internet}
+    \begin{itemize}
+    \item \structure{Introduction to Systems Programming} (C. Grothoff)\\
+         {\small
+      C covered, but not only.\\
+      \url{http://grothoff.org/christian/teaching/2009/2355/}} 
+      
+    \item \structure{C / Shell} (A. Crouzil, J.D. Durou et Ph. Joly;
+      U. Paul Sabatier, Toulouse)\\
+      {\small 
+        Good coverage of the whole module (in French).\\
+        \url{http://www.irit.fr/ACTIVITES/EQ_TCI/ENSEIGNEMENT/CetSHELL/}}
+
+    \item \structure{Support de Cours de Langage C} (Christian Bac; Telecom SudParis)\\
+      {\small
+        The C Language (in French).\\
+        \url{http://picolibre.int-evry.fr/projects/svn/coursc/}}
+    \end{itemize}
+    % \end{block}\vspace{-\baselineskip}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{References: Books}
+%   \begin{itemize}
+%   \item Coulouris, Jean et Kindberg. \structure{Distributed Systems:
+%       Concepts and Design}. %\\
+% %    Addison-Wesley, ISBN 0201-619-180 (ed. 3) et ISBN 0321263545 (ed. 4).
+%   \item Tannenbaum, Steen. \structure{Distributed Systems: Principles and
+%       Paradigms}.
+%   \item V. K. Garg. \structure{Elements of Distributed Computing.}
+%   \item Ralf Steinmetz, Klaus Wehrle (Eds): \structure{Peer-to-Peer
+%       Systems and Applications.}
+%     \url{http://www.peer-to-peer.info/}
+%   \end{itemize}
+%   \bigskip
+
+%   \centerline{%
+% %    \includegraphics[height=7\baselineskip]{img/cover-coulouris3.jpg}%
+% %    ~
+% %    \includegraphics[height=7\baselineskip]{img/cover-coulouris4.jpg}%
+%     ~~~~
+% %    \includegraphics[height=7\baselineskip]{img/cover-tannenbaum.jpg}%
+%     ~~~~
+% %    \includegraphics[height=7\baselineskip]{img/cover-garg.jpg}%
+%     ~~~~
+% %    \includegraphics[height=7\baselineskip]{img/cover-p2p.jpg}%
+%   }
+% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Table of contents}
+\begin{frame}[squeeze]{Table of Contents}
+  \begin{itemize}
+  \item \structure{\large Introduction and Generalities}
+    \begin{itemize}
+    \item Introduction; Motivation; History.
+    \end{itemize}
+    \medskip
+  \item[\numberedball{1}] \structure{\large Part I: C as Second Language}
+    \begin{itemize}
+    \item \structure{Syntax and Basic usage}
+      \begin{itemize}
+      \item Introduction; First C program and compilation; Syntax, printf; C
+        \textit{vs.} Java.
+      \end{itemize}
+      
+    \item \structure{Memory Management in C}
+      \begin{itemize}
+      \item Variable visibility, storage class; Malloc and friends; Debugging
+        problems. 
+      \end{itemize}
+      
+    \item \structure{Advanced C Topics}
+      \begin{itemize}
+      \item Modularity in C; Makefile; Performance tuning; Game programming.
+      \end{itemize}
+    \end{itemize}
+    \medskip
+  \item[\numberedball{2}] \structure{\large Part II: Shell Scripting}
+    \begin{itemize}
+    \item \structure{Low Script-fu knowledge}
+      \begin{itemize}
+      \item Introduction; First shell ``scripts''; Redirecting I/O \& Pipes;
+        basic commands.
+      \end{itemize}
+    \item \structure{Medium Script-fu knowledge}
+      \begin{itemize}
+      \item More Syntax for Advanced Scripts; Not so basic commands.
+      \end{itemize}
+    \item \structure{Advanced Script-fu knowledge}
+      \begin{itemize}
+      \item Shell functions; Variable Substitutions; Sub-shells; Arrays.  
+      \end{itemize}
+
+    \end{itemize}
+  \end{itemize}    
+\end{frame}
