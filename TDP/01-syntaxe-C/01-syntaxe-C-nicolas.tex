@@ -1,0 +1,278 @@
+\documentclass[10pt]{article}\usepackage[correction]{esial}
+\CSH\unA\sloppy
+
+\usepackage[utf8]{inputenc}
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+
+\begin{document}
+\title{TP1: Premiers programmes C}
+\maketitle
+
+
+\Exercice \textbf{Premier programme, et entrées/sorties.}
+\Question Écrivez un programme C qui calcule le maximum de 3 entiers saisis au
+clavier par l'utilisateur, et qui affiche le résultat. Compilez-le sous le nom
+\file{max3}. 
+
+
+\Question Vérifiez que votre programme est correct. Quels tests effectuez--vous
+pour cela ?
+
+
+\Exercice \textbf{Encore des entrées/sorties: problèmes de date.}
+Les signes astrologiques sont, en fonction de la date, les suivants: 
+
+
+\begin{minipage}{.3\linewidth}
+  \begin{itemize}
+  \item Bélier: 21/3 au 19/4
+  \item Taureau: 20/4 au 20/5
+  \item Gémeaux: 21/5 au 20/6
+  \item Cancer: 21/6 au 21/7
+  \end{itemize}
+\end{minipage}\hfill\begin{minipage}{.3\linewidth}
+  \begin{itemize}
+  \item Lion: 22/7 au 22/8
+  \item Vierge: 23/8 au 22/9
+  \item Balance: 23/9 au 22/10
+  \item Scorpion: 23/10 au 21/11
+  \end{itemize}
+\end{minipage}\hfill\begin{minipage}{.3\linewidth}
+  \begin{itemize}
+  \item Sagitaire: 22/11 au 21/12
+  \item Capricorne: 22/12 au 19/1
+  \item Verseau: 20/1 au 18/2
+  \item Poisson: 19/2 au 20/3
+  \end{itemize}
+\end{minipage}
+
+\Question Écrivez un programme demandant la date de naissance de l'utilisateur
+et indique son signe astrologique. Si les valeurs entrées pour le jour ou le
+mois ne sont pas valides, afficher un message d'erreur et quiter le programme.
+
+\Question Indiquez le jour de la semaine à laquelle l'utilisateur est né, en
+utilisant la formule de Zeller: Le jour de la semaine de la date
+$\Delta=(j,m,a)$ est 
+
+$$w=j+\left\lfloor 2.6\times t - 0.2 \right\rfloor + d + 
+ \left\lfloor \frac{d}{4} \right\rfloor + 
+ \left\lfloor \frac{c}{4} \right\rfloor + 5\times c
+$$
+
+Avec $\displaystyle t=\left\{\begin{array}{ll}\\
+    m+10&\mbox{ (si } m\leq 2)\\
+    m-2&\mbox{ (sinon)}
+  \end{array}\right.$;  
+  $\displaystyle
+  b=\left\{\begin{array}{ll}\\
+    a-1&\textrm{ (si } m\leq 2)\\
+    a&\textrm{ (sinon)}
+  \end{array}\right.$; 
+  $\displaystyle
+  c=\left\lfloor\frac{b}{100}\right\rfloor$;
+  $\displaystyle
+  d=b-100\times c$.
+  
+Ensuite, si $w\equiv 0\textrm{ (mod }7)$, $\Delta$ est un lundi. Si cette
+grandeur vaut 1, $\Delta$ est un mardi. Pour 2, c'est un mercredi, etc.
+
+\Question Demandez également son nom à l'utilisateur pour améliorer
+l'esthétique des affichages.
+
+\bigskip\Exercice\textbf{Manipuler des entiers: le triangle de Pascal}
+%----------------------------------------------
+
+On souhaite écrire un programme qui construit le triangle de Pascal de
+degré N et l'affiche jusqu'à la diagonale incluse. \\
+
+Les éléments du triangle de Pascal se calculent comme suit (si P est
+la matrice mémorisant le triangle)\,: \\
+$P_{i,j} = P_{i-1,j} + P_{i-1,j-1}$
+
+Voici quelques exemples d'affichage pour différentes valeurs de N.
+
+\bigskip\noindent\begin{minipage}{.45\linewidth}
+  \begin{Verbatim}[label=Affichage quand N vaut 6]
+1 
+1  1
+1  2  1
+1  3  3  1
+1  4  6  4  1
+1  5  10 10 5  1
+1  6  15 20 15 6  1    
+  \end{Verbatim}
+\end{minipage}\hfill
+\begin{minipage}{.45\linewidth}
+  \begin{Verbatim}[label=Affichage quand N vaut 7]
+1 
+1  1
+1  2  1
+1  3  3  1
+1  4  6  4  1
+1  5  10 10 5  1
+1  6  15 20 15 6  1    
+1  7  21 35 35 21 7  1
+  \end{Verbatim}
+\end{minipage}
+
+\Question Écrivez ce programme. Dans un premier temps, vous écrirez simplement
+la fonction \framebox{\texttt{int pascal(int i, int j)}} et vous calculerez
+chacune des valeurs de cette façon.
+
+L'approche choisie est relativement inefficace: Afficher le triangle de taille
+100 est par exemple très très lent. Le problème vient du fait que de nombreux
+calculs sont effectués plusieurs fois. Par exemple, calculer $P_{5,3}$ demande
+de calculer $P_{3,2}$ à deux reprises (une fois pour avoir $P_{4,2}$ et une
+fois pour avoir $P_{4,3}$). Pour résoudre ce problème, nous allons utiliser un
+tableau pour stocker les calculs déjà faits afin d'éviter de recalculer deux
+fois la même chose.
+
+\Question Ajoutez un tableau d'entiers en global à votre programme en écrivant
+les lignes suivantes en dehors de toute fonction. Elles créent un tableau à
+deux entrées de taille $100\times100$, et on peut augmenter la taille en
+changeant la valeur de la macro.
+
+\begin{Verbatim}
+#define MAX 100
+int tab[MAX][MAX];
+\end{Verbatim}
+
+Ajoutez une double boucle au début de votre fonction \texttt{main()} pour
+remplir le tableau de 0.
+
+\Question Modifiez votre fonction \texttt{pascal()}. Avant de faire le moindre
+calcul, vous consulterez la case correspondante du tableau. Si cette case
+contient une valeur non-nulle, la fonction retournera directement cette valeur
+sans la recalculer. Si la case contient 0, la fonction calculera le résultat
+comme avant, et stockera le résultat dans la case avant de le retourner en
+résultat. Comparez la vitesse d'affichage du triangle de hauteur 100.
+
+\Question (optionnelle) Il est possible d'optimiser la quantité de mémoire
+nécessaire en ne stockant qu'une seule ligne du tableau. Il faut alors faire
+les calculs dans le bon ordre pour ne pas effacer des cases dont des calculs
+futurs auront besoin. Calculer de droite à gauche permet de faire ceci.
+
+\bigskip\Exercice\textbf{Tableaux de caractères: Cadavres exquis}
+%----------------------------------------------
+L'objectif de cet exercice est de constituer un écrivain automatique. Pour
+cela, il faut initialiser plusieurs tableaux de chaines de caractères: un
+tableau de sujets accompagnés d'un article, un tableau de verbes conjugués à la
+troisième personne, un tableau de compléments d'objets directs au masculin et
+un tableau d'adjectifs au masculin.
+
+\medskip\noindent\begin{minipage}{.6\linewidth}
+  \begin{tabular}{|c|c|c|c|c|}\hline
+    \textit{Sujet}&\textit{Adjectif}&\textit{Verbe}&\textit{Complément}&\textit{Adjectif}
+    \\\hline
+    Le cadavre&exquis&boira&le vin&nouveau\\\hline
+    Le chat&noir&mange&un rat&gris\\\hline
+    Le chien&pouilleux&aime&un os&moelleux\\\hline
+    La grenouille&gluante&capture&un moustique&agressif\\\hline  
+  \end{tabular}
+\end{minipage}\hfill\begin{minipage}{.35\linewidth}
+  Ce jeu fut inventé par les surréalistes vers 1954. La première
+  pharse construite sur ce modèle fut «Le cadavre exquis boira le vin nouveau»,
+  ce qui donna le nom du jeu.
+\end{minipage}
+
+\Question Le premier problème a résoudre est de savoir comment stocker les
+morceaux de phrases qui seront combinés ensuite. Le plus simple est d'utiliser
+des tableaux statiques de chaines statiques. Vous avez deux possibilités,
+présentées dans les deux blocs suivants. Choisissez l'une d'entre elles, et
+écrivez le début de votre programme. 
+
+
+\begin{Verbatim}[label=Première approche pour le stockage des données]
+char *nom[]={"le cadavre","le chat","le chien","la grenouille"};
+char *adj1[]={"exquis","noir","pouilleux","gluant"};
+...  
+\end{Verbatim}
+
+\begin{Verbatim}[label=Deuxieme approche pour le stockage des données]
+char *elements[][]={
+  {"le cadavre","le chat","le chien","la grenouille"},
+  {"exquis","noir","pouilleux","gluant"},
+  ...
+  };
+\end{Verbatim}
+
+\noindent\begin{minipage}{.52\linewidth}
+  \Question Complétez votre programme.\\
+  Obtenir un nombre aléatoire en C n'est pas très compliqué. Il faut utiliser
+  la fonction \texttt{rand()} qui retourne un entier entre 0 et
+  \texttt{RAND\_MAX}. Le problème est que la suite pseudo-aléatoire est
+  toujours la même par défaut. Initialiser cette suite à l'heure actuelle est
+  une bonne solution à ce manque de variété.
+
+\end{minipage}\hfill
+\begin{minipage}{.45\linewidth}
+  \begin{Verbatim}[gobble=4,numbers=right]
+    #include <stdlib.h>
+    #include <time.h>
+
+    int main() {
+      // Initialise le pseudo aleatoire
+      srand(time(NULL));
+      // tire un nombre entre 0 et 3
+      int nb = rand() % 4;
+    }
+  \end{Verbatim}
+\end{minipage}
+
+
+\bigskip\Exercice\textbf{Structures en C: le programme annuaire}
+
+%----------------------------------------------
+
+On souhaite créer un programme en C gérant un annuaire très simplifié qui
+associe à un nom de personne un numéro de téléphone.
+
+\Question Créer une structure Personne pouvant contenir ces informations (nom
+et téléphone). Le nom peut contenir 32 caractères et le numéro 16
+caractères.
+
+\Question Créer une nouvelle structure qui va représenter le carnet d'adresses.
+Cette structure Carnet contiendra un tableau de 20 Personne et un compteur
+indiquant le nombre de personnes dans le tableau.
+
+\Question Créer ensuite une fonction qui renvoie une structure Personne en
+prenant en argument un nom et un téléphone.
+
+\Question Rajouter une fonction qui affiche les informations contenues dans la
+structure Personne passée en argument.
+
+\Question Créer une fonction qui ajoute une personne dans un carnet.
+
+\Question Créer une fonction qui affiche un carnet.
+
+\Question À partir des étapes précédentes, faire programme gérant un carnet
+d'adresse. Créer un menu qui propose d'ajouter une nouvelle personne,
+d'afficher le carnet ou de quitter.
+
+\medskip
+Une extension possible serait d'ajouter une fonction de sauvegarde de
+l'annuaire dans un fichier, et de faire en sorte que les données sauvegardées
+puissent être lues automatiquement au démarrage. 
+
+\Exercice \textbf{Pour aller plus loin: les pyramides en C.}
+
+Reprenez problème des pyramides vu en TD et en TP dans le module de
+TOP\footnote{Ces sujets sont disponibles sur la page
+  \url{http://www.loria.fr/~quinson/teach-prog.html}}. Implémentez la forme
+complète de ce problème, où les numéros des billes ne sont pas forcément des
+nombres successifs. Utilisez l'algorithme le plus efficace vu pour ce problème,
+c'est-à-dire le backtracking avec remplissage par diagonale (et utilisation de
+la fonction \texttt{propage()}).
+
+\Question Quel est le nombre entier $n$ le plus petit tel que l'on puisse
+remplir une pyramide de hauteur 6 avec toutes les numéros de billes utilisées
+inférieurs à $n$?
+
+\Question Quelle est la taille de pyramide maximale pour laquelle vous parvenez
+à trouver un remplissage? 
+
+\medskip\noindent\textit{Si vous parvenez à résoudre cet exercice,
+  bravo. Faites un mail à \url{Martin.Quinson@loria,fr} pour montrer votre
+  solution.}
+\end{document}
+
