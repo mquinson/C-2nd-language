@@ -31,3 +31,6 @@
 *.xdy
 *.tdo
 *.fig.bak
+*~
+*.mk
+cpy.pdf
