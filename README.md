@@ -2,7 +2,7 @@ C second language
 =================
 
 This repository hosts the course "C as a second language", given each
-year at [[Telecom Nancy|http://www.telecomnancy.eu/]] since 2008.
+year at Telecom Nancy (http://www.telecomnancy.eu/) since 2008.
 
 There is many courses in C for absolute beginners out there, but this
 one targets advanced beginners that have been exposed to what
@@ -16,7 +16,10 @@ the C programming model, that is a good abstraction of most modern
 programmable systems. 
 
 This course is also a very good introduction to the topic of
-opertating systems. The rudimentary concepts of OS are presented and
+operating systems. The rudimentary concepts of OS are presented and
 worked with (processes, I/O, inter-process communication). They should
 however be reinforced in futher courses afterwards.
 
+The lectures are in English while the practical are in French. I plan
+to translate everything to English at some point, but didn't find the
+time so far.
