@@ -1,0 +1,251 @@
+\documentclass[10pt]{article}\usepackage[nu]{esial}
+\CSH\1A\sloppy
+\usepackage{subfig,multirow}
+
+\usepackage[utf8]{inputenc}
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+\begin{document}
+\title{TP3: Organisation de la mémoire, Makefiles ~~~  tableaux}
+\maketitle
+
+\begin{Exercice}\textbf{Organisation mémoire d'un processus}
+
+On souhaite explorer la disposition mémoire d'un processus C, c'est-à-dire les
+adresses mémoire où sont placés les différents éléments possible. Pour afficher
+l'adresse à laquelle se trouve une variable \texttt{i} quelconque, il faut
+utiliser: \run{printf("variable i: \%p",\&i);}
+
+\Question~\\[-\baselineskip]
+\begin{itemize}
+\item Dans un fichier appelé exo1.c, déclarer les variables suivantes :
+  \begin{itemize}
+  \item chaîne de 10 caractères globale et statique ;
+  \item tableau de 10 entiers global ;
+  \item flottant local au main;
+  \item caractère local statique ;
+  \item entier nommé \texttt{ex} déclaré en externe.
+  \end{itemize}
+\item Dans la fonction main(), faire écrire les adresses des variables.
+\item Dans un deuxième fichier appelé exo1bis.c mettre la définition de
+  l'entier \texttt{ex} que vous initialiserez à la valeur 20.
+\end{itemize}
+
+\Question Compilez ce programme avec \run{gcc -c exo1.c} \run{gcc -c exo1bis.c}
+puis réalisez l'édition de liens avec \run{gcc -o exo1 exo1.o exo1bis.o}.
+Exécutez \cmd{exo1} et concluez sur la place des différentes variables. Quelle
+est l'effet du modificateur \texttt{static}? Qu'en est-il de \texttt{extern}?
+
+\Question Modifiez votre programme pour qu'il affiche l'adresse de la fonction
+main() elle-même. Obtenir l'adresse d'une fonction est similaire à ce qu'on
+fait pour une variable: \run{printf("\%p$\backslash$n",\&main);} Où est
+placé le code de cette fonction?
+
+\Question Ajoutez une variable de type \texttt{char*} dont le contenu est
+l'adresse d'un bloc alloué dynamiquement avec l'appel \run{malloc(512);}. Où
+est placée cette variable? Où est placé le bloc alloué?
+\end{Exercice}
+
+\Exercice\textbf{Compilation séparée et Makefile.}
+Récupérez le code fourni dans le dépot.
+
+%\noindent$\blacktriangleright$ \textit{Expérimentations avec la compilation
+%  séparée.}
+
+\Question Vérifiez que les commandes \run{gcc -c code1.c} et \run{gcc -c
+  code2.c} ne produisent pas de message d'erreur et que les fichiers
+\file{code1.o} et \file{code2.o} ont été créés.
+
+\Question À partir de ces deux fichiers et de \file{codage.c}, créez le fichier
+exécutable \file{codage} par la commande \run{gcc -o codage codage.c code1.o
+  code2,o}
+
+\Question Exécutez-le, puis supprimez les fichiers \file{code1.o},
+\file{code2.o} et \file{codage}.
+
+%\medskip\noindent$\blacktriangleright$ \textit{Utilisation d'un Makefile.}
+
+\Question Écrivez un fichier Makefile permettant de compiler ce projet. On
+rappelle qu'un tel fichier est composé de différentes règles, chacune suivant
+la syntaxe suivante (avec un caractère tabulation et non des espaces au début
+des lignes de commande):
+\begin{Verbatim}
+<fichier cible> : <liste des dependances>
+	<commande pour fabriquer la cible a partir des dependances>  
+\end{Verbatim}
+
+\Question Vérifiez que votre makefile exécute les bonnes actions dans les cas
+suivants:
+\begin{itemize}
+\item Aucun binaire n'existe, tout est à reconstruire;
+\item Effacement de l'un des \texttt{.o};
+\item Effacement du binaire;
+\item Modification de l'un des fichiers source;
+\end{itemize}
+
+
+\begin{Exercice}\textbf{Dice Poker}
+  Ce jeu est une variation du Poker qui utilise des dés au lieu de cartes. Vous
+  allez maintenant implémenter un programme permettant de jouer à ce jeu contre
+  l'ordinateur.
+
+  Le jeu consiste en plusieurs manches. Dans chaque manche, l'ordinateur et
+  l'humain lancent 5 dés. Certaines combinaisons de valeur de dés permettent de
+  l'emporter sur d'autres. La liste suivante énumère les combinaisons de la
+  plus ``puissante'' à la moins ``puissante'':
+  \begin{itemize}
+  \item[(7)] \textit{Full:} les cinq dés ont la même valeur;
+  \item[(6)] \textit{Quatre d'un coup:} 4 des 5 dés ont la même valeur, et le
+    dernier est différent;
+  \item[(5)] \textit{House:} 3 dés ont la même valeur, tandis que les deux
+    autre ont une autre valeur, identique;
+  \item[(4)] \textit{Straight:} Cinq valeurs consécutives (même dans le
+    désordre);
+  \item[(3)] \textit{Trois d'un coup:} 3 dés ont la même valeur, tandis que les
+    deux autres sont différents;
+  \item[(2)] \textit{Deux paires:} Deux paires de dés ont la même valeur;
+  \item[(1)] \textit{Paire:} 2 dés ont la même valeur, et les autres sont
+    différents;
+  \item[(0)] \textit{Rien}
+  \end{itemize}
+  
+  \Question Observez le code du programme \file{dice\_poker.c} fourni.
+  N'hésitez pas à consulter la page man des fonctions utilisées que vous ne
+  connaissez pas. Compilez-le et exécutez-le plusieurs fois pour vérifier son
+  bon fonctionnement.
+
+  \noindent\begin{minipage}{.77\linewidth}
+    \Question Ajoutez une fonction \run{int manche()} à ce programme, qui crée
+    deux tableaux de 5 entiers tirés aléatoirement, et les affiche sous la
+    forme suivante:
+  \end{minipage}\hfill\begin{minipage}{.19\linewidth}
+    \begin{Verbatim}
+Moi : 3 5 4 4 5
+Vous: 3 3 6 1 2
+    \end{Verbatim}
+  \end{minipage}
+  Vous utiliserez une fonction \run{void affiche(char *name, int hand[5])} pour
+  afficher chacune des lignes. 
+
+  \Question Réalisez une fonction \run{int identifie(int hand[5])} permettant
+  de reconnaître le type de main obtenu. Par exemple, si toutes les valeurs
+  sont différentes, elle renverra la valeur 0, tandis qu'elle renverra 7 si
+  toutes les valeurs sont identiques (\textit{cf.} le nombre entre parenthèses
+  au début de chaque item de la liste des combinaisons).
+
+  Pour cela, il faudra calculer la fréquence de chaque valeur de la main (dans
+  un tableau temporaire). Ainsi, pour la main \{3,5,4,4,5\} la table de
+  fréquence est \{0,0,1,2,2,0\} (il y a zéro fois la valeur 1, zéro fois la
+  valeur 2, une fois la valeur 3, et ainsi de suite). Le cas du ``Straight'' se
+  traite à part.
+
+  \Question Modifiez la fonction \texttt{affiche()} pour qu'elle affiche le
+  type de main obtenu par chacun.
+
+  \noindent\begin{minipage}{.62\linewidth}
+
+    \Question Modifiez \texttt{manche()} pour qu'elle affiche le gagnant de la
+    manche et renvoi -1 si l'ordinateur gagne, 0 sur match nul et 1 si l'humain
+    gagne. 
+
+  \end{minipage}\hfill\begin{minipage}{.35\linewidth}
+    \begin{Verbatim}
+Moi : 3 5 4 4 5 (deux paires)
+Vous: 3 3 6 1 2 (paire)
+JE GAGNE !
+    \end{Verbatim}
+  \end{minipage}
+
+  \Question Modifiez la fonction principale pour jouer 5 manches, compter
+  les points acquis à chaque manche et afficher le résultat final.
+
+  \Question Modifiez votre programme pour autoriser les jeux avec un nombre
+  arbitraire de dés, spécifié en ligne de commande. La fonction d'évaluation
+  doit naturellement être modifiée (on peut laisser les Straight de coté dans
+  un premier temps).  Il faut pour cela consulter non seulement la table des
+  fréquences de valeur, mais également la table des fréquences de la table des
+  fréquences. 
+
+  Par exemple, \{4,6,2,4,3,6,6,6,3\} a la table de fréquence suivante:
+  \{0,1,2,2,0,5\} et la table de fréquence des fréquences suivante:
+  \{2,1,2,0,0,1,0,0,0,0\}. Il y a deux valeurs qui ne sont pas représentées 
+  (le 1 et le 5), une valeur unique (le 2), deux paires (3 et 4), et
+  un groupe de cinq valeurs identiques (les 6). 
+
+
+  \newcommand{\RR}[1]{\multirow{2}{*}{#1}}
+  \begin{figure}[h]
+    \centering
+    \subfloat[Table des fréquences]{
+      \begin{tabular}{|l|c|c|c|c|c|c|}\hline
+        Valeur    & 1 & 2 & 3 & 4 & 5 & 6 \\\hline
+        Fréquence & 0 & 1 & 2 & 2 & 0 & 5 \\\hline
+      \end{tabular}
+    }
+%
+    \subfloat[Table des fréquences de fréquence]{
+      \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|}\hline
+        Fréquence             & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\\hline
+        Nombre de valeurs     &\RR2&\RR1&\RR2&\RR0&\RR0&\RR1&\RR0&\RR0&\RR0&\RR0\\
+        ayant cette fréquence &   &   &   &   &   &   &   &   &   &   \\\hline
+      \end{tabular}
+    }
+  \end{figure}
+  
+  Un \textit{full} d'une main de 9 dés a la table de fréquence des fréquences
+  suivantes: \{5,0,0,0,0,0,0,0,0,1\} (5 valeurs ne sont pas représentées du
+  tout tandis qu'une valeur est représentée neuf fois).
+
+  On peut considérer cette table comme les coefficients d'un polynôme, dont il
+  convient d'ignorer les deux premiers termes. La main du premier exemple
+  correspond ainsi à $2\times X^2+X^5$ (on ne retient que la présence de deux
+  paires et d'un groupe de cinq valeurs identiques) tandis que le full est
+  $X^9$.
+
+  \bigskip Nous voila prêts à modifier la fonction \texttt{affiche()} pour
+  donner une forme textuelle de la combinaison obtenue. On utilisera les
+  abréviations grecques ou latines pour les valeurs supérieures à 4. La main
+  précédente est ``2 paires, 1 penta'' tandis que $X^4 + X^6$ est ``1 carré, 1
+  hexa'' et le full ``1 nona''.
+
+  Pour la valeur de la combinaison, on évaluera le polynôme pour $X=2$
+  (attention, 4 paires sont plus fortes qu'un triple) ou $X=10$ (attention aux
+  débordements de capacité, on peut obtenir des valeurs de main négatives si on
+  s'y prend mal).
+
+  \Question Faites en sorte de permettre à l'utilisateur d'indiquer les dés
+  qu'il souhaite relancer (comme on redemande une carte au Poker) en indiquant
+  5 booléens après chaque lancé. Dans l'exemple suivant, les caractères
+  soulignés sont tapés par l'utilisateur qui demande à relancer les 3 derniers
+  dés.
+  \begin{Verbatim}[commandchars=\\\{\}]
+Moi : 3 5 4 4 5 (deux paires)
+Vous: 3 3 6 1 2 (paire)
+Que voulez vous faire? \underline{0 0 1 1 1}
+Vous: 3 3 3 4 4 (house)
+VOUS GAGNEZ !
+  \end{Verbatim}
+
+  \Question Limitez les cas d'égalité en faisant en sorte qu'entre deux Fulls,
+  le gagnant soit celui dont les dés marquent la plus grande valeur. Faites de
+  même pour les combinaisons ``N d'un coup''. Pour départager deux ``House'',
+  on regarde d'abord la valeur des triplettes avant de regarder la valeur des
+  paires si les triplettes sont équivalentes. On départage les ``Deux paires''
+  de façon similaire. Un ``Six Straight'' (2-6) est plus fort qu'un ``Five
+  Straight'' (1-5).
+
+  \Question \textit{(mini projet)} Dotez l'ordinateur d'une stratégie pour lui
+  aussi relancer certain de ses dés. Cette décision sera prise par le biais
+  d'une fonction \run{int *rejoue(int *hand, int hand\_size)}. 
+
+  \Question Implémentez plusieurs fonctions de ce type (tout rejouer, rien
+  rejouer, rejouer un dé une fois sur deux, ainsi que des ``vraies''
+  stratégies), et faites jouer les AI les unes contre les autres sur un grand
+  nombre de parties pour déterminer la meilleure approche. Faites jouer votre
+  AI contre celle de votre voisin.
+\end{Exercice}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% coding: utf-8

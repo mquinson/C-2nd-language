@@ -1,0 +1,298 @@
+\documentclass[10pt]{article}\usepackage[nu]{esial}
+\CSH\1A\sloppy
+\usepackage{url,moreverb}
+\usepackage[utf8]{inputenc}
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+
+\sloppy
+\begin{document}
+\title{TP4: Allocation mémoire et mise au point de programmes C}
+\maketitle
+
+\newcommand{\I}{\hspace{1.5em}}
+
+
+L'objectif de ce TP est de vous donner des pistes sur comment trouver les bugs
+dans vos programmes.
+
+La recherche d'une erreur au sein d'un programme est une sorte de jeu de pistes
+où l'on recherche des informations sur le contexte, les symptômes, les causes
+possibles de l'erreur. Cela permet de déterminer sa localisation et la manière
+de la corriger.  La méthode traditionnelle consistent à utiliser la commande
+\texttt{printf} en divers endroits du programme est l'expression de cette
+recherche d'information. Des outils tels que \cmd{gdb} et \cmd{valgrind}
+facilitent l'obtention d'informations sur les programmes.
+
+
+\begin{Exercice}\textbf{la méthode printf}
+
+  \noindent\begin{minipage}{.76\linewidth}
+    Cette méthode est utilisée dans les cas où on ne peut (ou ne veut) pas
+    utiliser de debugger. Attention cependant au piège classique de cette
+    méthode, mis en valeur dans le programme \texttt{boom.c} ci-contre
+    (également dans le dépot). 
+
+    Ce programme devrait afficher \framebox{\texttt{12Erreur de segmentation}}
+    puisque la ligne 9 revient à déréférencer le pointeur NULL, ce qui est
+    interdit.
+    
+    \Question Quel est l'affichage généré par ce programme ?
+
+    C'est parce que les affichages de printf ne sont pas toujours réalisées
+    immédiatement. Pour des raisons de performances, le système cherche en
+    effet à retarder les affichages de façon à avoir moins d'action d'affichage
+    pour plus de texte à chaque fois. C'est pourquoi les ``1'' et ``2'' sont
+    placés dans un tampon pour être affichés plus tard. Malheureusement, comme
+    l'erreur de segmentation de la ligne 9 tue brutalement le programme, ces
+    messages ne seront jamais affichés.
+
+
+
+  \end{minipage}~ \begin{minipage}{.23\linewidth}
+    \VerbatimInput[label=boom.c,numbers=right]{sources/boom.c}
+  \end{minipage}
+
+  \medskip
+  Les \texttt{printf} suggèrent donc une localisation erronée du problème, ce
+  qui peut faire perdre un temps considérable. Plusieurs solutions permettent
+  d'éviter ou au moins de contrôler cette mise en tampon.
+
+  \Question Ajoutez des retours-chariots à la fin des affichages (la ligne 6
+  devient \texttt{printf("1\underline{$\backslash$n}");}). Quel est maintenant
+  l'affichage de votre programme ? Et si vous lancez votre programme de la
+  façon suivante : \cmd{./boom|less} ?
+
+  C'est parce que le système vide le tampon à chaque fin de ligne si et
+  seulement l'affichage est dirigé sur un terminal.
+
+  \Question Retirez les $\backslash$n que vous aviez ajouté à la question
+  précédente, et demandez à réaliser les affichages sur la sortie d'erreur (en
+  utilisant \cmd{fprintf(stderr, "...")} à la place de printf. Quel est
+  maintenant le comportement de votre programme? Et si la sortie n'est pas un
+  terminal mais un tube?
+
+  C'est parce que la sortie d'erreur n'est pas mise en tampon, car les messages
+  d'erreurs sont considérés urgents et doivent être affichés au plus vite, même
+  si cela induit une petite perte de performances.
+
+  \Question Rechangez vos affichages pour utiliser la sortie standard (avec
+  \cmd{printf}), et ajoutez des \cmd{fflush(stdout)} après chaque \cmd{printf}.
+  Quel est maintenant le comportement de votre programme? Et si la sortie n'est
+  pas un terminal mais un tube?
+
+  C'est parce que la fonction \cmd{fflush} a pour objectif de pour vider le
+  tampon et forcer l'affichage immédiat des informations.
+
+  \medskip
+
+  \noindent\textbf{Conclusion.} Cet exercice nous a permis d'explorer le
+  principal piège de la mise au point à base de \cmd{printf}. Nous avons vu 3
+  façons de contourner ce piège, mais cette méthode reste artisanale, et il est
+  souvent nécessaire d'utiliser des outils spécialisés comme \cmd{gdb}.
+\end{Exercice}
+\newpage
+
+\begin{Exercice}\textbf{le debugger GNU: gdb (utilisation de base)}
+
+{\bf TODO} utiliser par défaut l'interface textuelle "graphique" de gdb qui montre le
+code source et surligne la ligne en cours d'exécution ? Des élèves de mon groupe l'ont
+déclenchée par erreur et c'est très pratique! G.H.
+
+
+  \noindent\begin{minipage}[b]{.6\linewidth}
+    Nous utiliserons comme premier exemple le programme \texttt{boucle.c}
+    ci-contre (également dans le dépot).  \smallskip
+
+    \textbf{Pour le compiler}, il convient d'utiliser la commande \run{gcc
+      -Wall -g -o boucle boucle.c}. L'option \texttt{-Wall} demande
+    l'activation de nombreux \textit{warnings} (mais pas tous!) tandis que
+    \texttt{-g} ajoute au binaire produit les informations de deboguage
+    nécessaire à \cmd{gdb} (et autres debuggers).
+
+    \Question Exécutez ce programme. Que constatez vous?
+    \smallskip
+
+    \textbf{Lancement de gdb}. Tapez la commande \run{gdb ./boucle} pour
+    charger votre programme dans l'environnement GDB.  On controle ce programme
+    en tapant des commandes à l'invite. Les commandes les plus importantes sont
+    \texttt{help}, \texttt{list}, \texttt{quit} et \texttt{run}.
+
+    \Question Essayez la session suivante dans gdb:
+    \begin{itemize}
+    \item[$\bullet$] Chargez boucle dans gdb et lancez le programme. 
+    \item[$\bullet$] Tapez $<$ctrl+c$>$ pour interrompre votre programme.
+    \item[$\bullet$] Visualisez le code en cours d'exécution avec
+      \texttt{list}.\vspace{.2\baselineskip}
+    \end{itemize}
+
+  \end{minipage}\hfill\begin{minipage}[b]{.38\linewidth}
+    \VerbatimInput[label=boucle.c,numbers=right]{sources/boucle.c}
+  \end{minipage}
+
+  \vspace{.2\baselineskip}\noindent
+  \begin{minipage}{\linewidth}
+  \begin{itemize}
+  \item[$\bullet$] Reprenez l'exécution avec \texttt{cont}, puis interrompez-la
+    de nouveau. L'exécution n'a pas progressé.
+  \item[$\bullet$] Aidez le programme à franchir la zone difficile à l'aide de
+    la commande \cmd{jump 11}, ce qui fait sauter l'exécution à la ligne 11
+    (oui, cela modifie le schéma d'exécution du programme). Le programme doit
+    se terminer normalement. Reste à comprendre pourquoi le programme ne passe
+    pas la ligne 10 seul.
+  \end{itemize}
+  \end{minipage}
+
+  \noindent \textbf{Points d'arrêt et exécution pas à pas}
+
+  Lors de la traque d'une erreur, il est fréquent d'avoir une idée de sa
+  localisation potentielle. \cmd{gdb} permet donc de spécifier des points
+  d'arrêt dans le code où l'exécution est automatiquement interrompue.  La
+  commande \cmd{break} suivie d'un nom de fonction ou d'un numéro de ligne
+  (éventuellement associé à un fichier) insère un point d'arrêt à l'endroit
+  spécifié. \cmd{clear} supprime le point d'arrêt spécifié.
+
+  Placez un point d'arrêt sur la fonction \texttt{main} puis lancez
+  l'exécution. Elle s'interrompt avant le début du code.  Expérimentez avec les
+  commandes \cmd{next} et \cmd{step}. Chacune permet d'avancer l'exécution
+  d'une ligne puis de bloquer l'exécution.  Si cette ligne contient un appel de
+  fonction, \cmd{step} entre dans le code de cette fonction tandis que
+  \cmd{next} l'exécute en entier et passe à la ligne suivante de la fonction
+  courante.
+
+  \Question Pour trouver le problème, interrompez au besoin votre programme
+  (ctrl-C), utilisez la commande \cmd{print} pour afficher le contenu de la
+  variable i (\cmd{print i}). Vous pouvez également le faire continuer
+  (commande \cmd{continue}), et le réinterrompre. Corrigez le problème.
+
+  \textit{Indice:} ce premier bug se trouve ligne 7.
+
+  \Question Maintenant que le programme s'exécute jusqu'à la fin, on constate
+  que l'affichage de la ligne 20 indique que l'affectation du tableau ne
+  s'effectue pas correctement, puisque les cases valent 0 au lieu du 1
+  attendu. Réexécutez votre programme pas à pas pour comprendre le problème,
+  puis corrigez le.
+
+  \textit{Indice:} ce second bug se trouve ligne 9.
+\end{Exercice}
+
+\begin{Exercice}\textbf{le debugger GNU: gdb (utilisation avec les fonctions)}
+
+  Nous allons maintenant utiliser le debugger avec un autre programme afin
+  d'expérimenter les opérations permettant de trouver les problèmes impliquant
+  des fonctions.
+
+  \textbf{Pile et cadres} La commande \cmd{backtrace} permet d'afficher la pile
+  d'exécution du processus. Compilez \file{fact.c} (page suivante et dans le
+  dépot) puis chargez fact dans \cmd{gdb}. Spécifiez un point d'arrêt sur la
+  ligne 9 (x=1) et lancez l'exécution. Lorsque le processus est stoppé,
+  exécutez \cmd{backtrace}.
+
+  La liste affichée indique tout d'abord les appels récursifs à fact et
+  termine par main. Les fonctions sont donc listées depuis l'appel le plus
+  imbriqué (regardez la valeur indiquée pour le paramètre n de f pour chaque
+  cadre) vers l'appel le moins imbriqué (donc dans l'ordre inverse de l'ordre
+  chronologique, d'où le nom de la commande).
+
+  Chaque ligne constitue ce que l'on appelle un \textit{cadre de pile} («frame»
+  en étranger). Il est possible de se déplacer dans la pile avec les commandes
+  \cmd{up} et \cmd{down}, ou directement avec la commande \cmd{frame} suivie du
+  numéro de cadre visé.
+
+  \noindent\begin{minipage}{.67\linewidth}
+    \medskip \textbf{Affichage de variables et d'expressions} La commande
+    \cmd{print} permet d'afficher le contenu d'une variable. Placez un point
+    d'arrêt sur \texttt{fact} puis ré-exécutez. Utilisez \run{print n}. La
+    commande \cmd{disp} est similaire, mais affiche le résultat à chaque
+    interruption du programme. Exécutez \run{disp (char)n+65} puis utilisez
+    \cmd{cont} plusieurs fois.
+   
+    \I On peut de plus modifier des valeurs avec \run{set variable VAR=EXP} où
+    VAR est le nom de la variable à modifier et EXP l'expression dont le
+    résultat est à lui affecter. Si le nom de la variable à modifier n'entre
+    pas en conflit avec les variables internes de GDB, on peut omettre le
+    mot-clé variable.
+
+  \medskip
+  \noindent\textbf{Conclusion sur gdb}. Vous en savez maintenant assez
+  sur \cmd{gdb} pour faire vos premiers pas. Il existe cependant de nombreuses
+  fonctionnalités que nous n'avons pas abordé ici comme les
+  \textit{watchpoints} (qui arrêtent l'exécution quand une variable donnée est
+  modifiée), le chargement de fichiers \texttt{core}, la prise de contrôle de
+  processus en cours d'exécution, et bien d'autres encore. \run{info gdb} pour
+  les détails.
+  \end{minipage}\hfill\begin{minipage}{.32\linewidth}
+    \VerbatimInput[label=fact.c,numbers=right]{sources/fact.c}
+  \end{minipage}
+
+
+\end{Exercice}
+
+\begin{Exercice}\textbf{La suite d'outils valgrind}
+  
+  \cmd{valgrind} est une suite d'outil fabuleuse pour mettre au point vos
+  programmes. Selon l'outil utilisé, il est possible de détecter la plupart des
+  problèmes liés à la mémoire (outil \texttt{memcheck}), d'étudier les effets
+  de cache pour améliorer les performances (avec \texttt{cachegrind}), de
+  débugger des programmes multi-threadés (avec \texttt{hellgrind}, voir le
+  cours de système en 2A) ou encore d'optimiser les programmes (avec
+  \texttt{callgrind}). Nous allons nous intéresser au premier outil, que l'on
+  lance avec \run{valgrind --tool=memcheck $<$prog$>$}
+
+  \Question Lancez valgrind sur le programme \texttt{boom} étudié plus
+  tôt. S'affichent de nombreuses lignes commençant par \texttt{==$<$identifiant
+    du processus$>$==}. Elles sont le fait de \texttt{valgrind}.
+
+  La cause de l'erreur de segmentation est donnée par le second groupe de
+  ligne:
+  \begin{Verbatim}
+==29579== Invalid write of size 4
+==29579==    at 0x80483CA: main (boom.c:9)
+==29579==  Address 0x0 is not stack'd, malloc'd or (recently) free'd    
+  \end{Verbatim}
+
+  À la ligne \texttt{boom.c$:$9}, nous écrivons 4 octets (sans doute un entier)
+  à un endroit invalide. En effet, l'adresse \texttt{0x0} [où nous tentons
+  d'écrire] n'est ni sur la pile, ni le résultat d'un \texttt{malloc} et il n'a
+  pas été free()é récemment. Bien sûr! La ligne 9 écrit à l'adresse pointé par
+  \texttt{p}, mais \texttt{p} vaut la valeur \texttt{NULL}, qui n'est pas une
+  adresse valide (et on a \texttt{NULL=0x0}). \texttt{valgrind} localise
+  immédiatement et précisément le problème.
+
+  \Question Lancez maintenant \cmd{valgrind} sur le programme \texttt{boucle}
+  (après avoir corrigé les deux bugs identifiés dans l'exercice 2). Vous pouvez
+  constater que le programme que l'on croyait corrigé contient encore des
+  problèmes:
+  \begin{Verbatim}
+==10816== Invalid write of size 4
+==10816==    at 0x8048429: initialise (boucle.c:11)
+==10816==    by 0x8048476: main (boucle.c:18)
+==10816==  Address 0x41a7c68 is 0 bytes after a block of size 40,000 alloc'd
+==10816==    at 0x402601E: malloc (vg_replace_malloc.c:207)
+==10816==    by 0x8048465: main (boucle.c:17)    
+  \end{Verbatim}
+
+  La ligne \texttt{boucle.c$:$11} tente d'écrire 4 octets à un endroit
+  invalide. De plus, cet endroit est localisé juste après un gros bloc mémoire
+  alloué en \texttt{boucle.c$:$17}. Corrigez ce problème (indice: le bug est en
+  ligne 9).
+
+  \Question Relancez \cmd{valgrind} sur le programme \texttt{boucle}.  À la fin
+  de l'exécution, valgrind affiche:
+  \begin{Verbatim}
+==394== LEAK SUMMARY:
+==394==    definitely lost: 0 bytes in 0 blocks.
+==394==      possibly lost: 0 bytes in 0 blocks.
+==394==    still reachable: 400 bytes in 1 blocks.
+==394==         suppressed: 0 bytes in 0 blocks.
+==394== Reachable blocks (those to which a pointer was found) are not shown.
+==394== To see them, rerun with: --show-reachable=yes    
+  \end{Verbatim}
+  
+  Il y a donc un bloc de mémoire (de 400 octets) obtenu par \texttt{malloc},
+  mais jamais restitué au système avec \texttt{free}.  Ajoutez l'option
+  nécessaire pour voir lequel et corrigez le problème.
+\end{Exercice}
+\end{document}
+
+%%% Local Variables:
+%%% coding: utf-8
