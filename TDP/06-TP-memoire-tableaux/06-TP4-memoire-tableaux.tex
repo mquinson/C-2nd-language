@@ -5,7 +5,7 @@
 \usepackage[utf8]{inputenc}
 \hypersetup{colorlinks=false,pdfborder={0 0 0}}
 \begin{document}
-\title{TP4: Organisation de la mémoire, Makefiles ~~~  tableaux}
+\title{TP4: Organisation de la mémoire, Makefiles et tableaux}
 \maketitle
 
 \begin{Exercice}\textbf{Organisation mémoire d'un processus}
@@ -15,20 +15,28 @@ adresses mémoire où sont placés les différents éléments possible. Pour aff
 l'adresse à laquelle se trouve une variable \texttt{i} quelconque, il faut
 utiliser: \run{printf("variable i: \%p",\&i);}
 
-\Question~\\[-\baselineskip]
-\begin{itemize}
-\item Dans un fichier appelé exo1.c, déclarer les variables suivantes :
-  \begin{itemize}
-  \item chaîne de 10 caractères globale et statique ;
-  \item tableau de 10 entiers global ;
-  \item flottant local au main;
-  \item caractère local statique ;
-  \item entier nommé \texttt{ex} déclaré en externe.
-  \end{itemize}
-\item Dans la fonction main(), faire écrire les adresses des variables.
-\item Dans un deuxième fichier appelé exo1bis.c mettre la définition de
-  l'entier \texttt{ex} que vous initialiserez à la valeur 20.
-\end{itemize}
+\Question Dans un fichier appelé \file{exo1.c}, déclarer les variables
+suivantes :
+
+\noindent\begin{minipage}{.55\linewidth} 
+  \begin{enumerate}
+  \item[(1)] une chaîne de 10 caractères globale et statique ;
+  \item[(3)] un tableau de 10 entiers global ;
+  \end{enumerate}   
+\end{minipage}\begin{minipage}{.45\linewidth}
+  \begin{enumerate}
+  \item[(2)] un double local au main;
+  \item[(4)] un caractère local statique ;
+  \end{enumerate}
+\end{minipage}
+\begin{enumerate}
+\item[(5)] un entier nommé \texttt{ex} déclaré en externe et sans valeur
+  initiale.
+\end{enumerate}
+
+Dans la fonction main(), également dans \file{exo1.c}, faites écrire les
+adresses des variables. Dans un deuxième fichier appelé exo1bis.c mettre la
+définition de l'entier \texttt{ex} que vous initialiserez à la valeur 20.
 
 \Question Compilez ce programme avec \run{gcc -c exo1.c} \run{gcc -c exo1bis.c}
 puis réalisez l'édition de liens avec \run{gcc -o exo1 exo1.o exo1bis.o}.
@@ -90,26 +98,26 @@ suivants:
   l'humain lancent 5 dés. Certaines combinaisons de valeur de dés permettent de
   l'emporter sur d'autres. La liste suivante énumère les combinaisons de la
   plus ``puissante'' à la moins ``puissante'':
-  \begin{itemize}
-  \item[(7)] \textit{Full:} les cinq dés ont la même valeur;
-  \item[(6)] \textit{Quatre d'un coup:} 4 des 5 dés ont la même valeur, et le
-    dernier est différent;
-  \item[(5)] \textit{House:} 3 dés ont la même valeur, tandis que les deux
-    autre ont une autre valeur, identique;
-  \item[(4)] \textit{Straight:} Cinq valeurs consécutives (même dans le
-    désordre);
-  \item[(3)] \textit{Trois d'un coup:} 3 dés ont la même valeur, tandis que les
-    deux autres sont différents;
-  \item[(2)] \textit{Deux paires:} Deux paires de dés ont la même valeur;
-  \item[(1)] \textit{Paire:} 2 dés ont la même valeur, et les autres sont
-    différents;
-  \item[(0)] \textit{Rien}
-  \end{itemize}
+  \begin{tabular}{|c|c|l|}\hline
+    \textbf{Id}&\textbf{Nom}&\textbf{Description}\\\hline
+    7&Full& Les cinq dés ont la même valeur\\\hline
+    6&Quatre d'un coup& Quatre dés sur cinq ont la même valeur, et le dernier
+                        est différent\\\hline
+    5&House&Trois dés ont la même valeur, et les deux
+            autre ont la même autre valeur\\\hline
+    4&Straight& Cinq valeurs consécutives (même dans le
+                désordre)\\\hline
+    3&Trois d'un coup&Trois dés ont la même valeur, tandis que les
+                      deux autres sont différents\\\hline
+    2&Deux paires&Deux paires de dés ont la même valeur\\\hline
+    1&Paire&Deux dés ont la même valeur, et les autres sont
+            différents\\\hline
+    0&Rien&Toutes les autres situations\\\hline
+  \end{tabular}
   
   \Question Observez le code du programme \file{dice\_poker.c} fourni.
-  N'hésitez pas à consulter la page man des fonctions utilisées que vous ne
-  connaissez pas. Compilez-le et exécutez-le plusieurs fois pour vérifier son
-  bon fonctionnement.
+  Consultez la page man des fonctions utilisées que vous ne connaissez
+  pas. Compilez-le et exécutez-le plusieurs fois pour essayer.
 
   \noindent\begin{minipage}{.77\linewidth}
     \Question Ajoutez une fonction \run{int manche()} à ce programme, qui crée
@@ -122,13 +130,10 @@ Vous: 3 3 6 1 2
     \end{Verbatim}
   \end{minipage}
   Vous utiliserez une fonction \run{void affiche(char *name, int hand[5])} pour
-  afficher chacune des lignes. 
+  afficher chaque ligne.
 
-  \Question Réalisez une fonction \run{int identifie(int hand[5])} permettant
-  de reconnaître le type de main obtenu. Par exemple, si toutes les valeurs
-  sont différentes, elle renverra la valeur 0, tandis qu'elle renverra 7 si
-  toutes les valeurs sont identiques (\textit{cf.} le nombre entre parenthèses
-  au début de chaque item de la liste des combinaisons).
+  \Question Réalisez une fonction \run{int identifie(int hand[5])} retournant
+  l'identificateur du type de main obtenu (voir la colonne Id ci-dessus).
 
   Pour cela, il faudra calculer la fréquence de chaque valeur de la main (dans
   un tableau temporaire). Ainsi, pour la main \{3,5,4,4,5\} la table de
@@ -170,7 +175,7 @@ JE GAGNE !
   un groupe de cinq valeurs identiques (les 6). 
 
 
-  \newcommand{\RR}[1]{\multirow{2}{*}{#1}}
+  \newcommand{\RR}[1]{\multirow{2}{*}{#1}}\vspace{-\baselineskip}
   \begin{figure}[h]
     \centering
     \subfloat[Table des fréquences]{
@@ -210,18 +215,22 @@ JE GAGNE !
   débordements de capacité, on peut obtenir des valeurs de main négatives si on
   s'y prend mal).
 
-  \Question Faites en sorte de permettre à l'utilisateur d'indiquer les dés
-  qu'il souhaite relancer (comme on redemande une carte au Poker) en indiquant
-  5 booléens après chaque lancé. Dans l'exemple suivant, les caractères
-  soulignés sont tapés par l'utilisateur qui demande à relancer les 3 derniers
-  dés.
-  \begin{Verbatim}[commandchars=\\\{\}]
+  \noindent
+  \begin{minipage}{.58\linewidth}
+    \Question Faites en sorte de permettre à l'utilisateur de demander à
+    relancer des dés (comme on redemande des cartes au Poker) en indiquant 5
+    booléens après chaque lancé. Dans l'exemple suivant, les caractères
+    soulignés sont tapés par l'utilisateur qui demande à relancer les 3 derniers
+    dés.
+  \end{minipage}\hfill\begin{minipage}{.4\linewidth}
+    \begin{Verbatim}[numbers=none,commandchars=\\\{\}]
 Moi : 3 5 4 4 5 (deux paires)
 Vous: 3 3 6 1 2 (paire)
 Que voulez vous faire? \underline{0 0 1 1 1}
 Vous: 3 3 3 4 4 (house)
 VOUS GAGNEZ !
-  \end{Verbatim}
+    \end{Verbatim}
+  \end{minipage}
 
   \Question Limitez les cas d'égalité en faisant en sorte qu'entre deux Fulls,
   le gagnant soit celui dont les dés marquent la plus grande valeur. Faites de
