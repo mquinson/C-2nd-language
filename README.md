@@ -13,7 +13,7 @@ We teach C to semi-beginners to ensure that they become better Java
 programmers by betterly understanding the underlying system. The focus
 is not on the very basics of programming nor on algorithmics, but on
 the C programming model, that is a good abstraction of most modern
-programmable systems. 
+programmable devices. 
 
 This course is also a very good introduction to the topic of
 operating systems. The rudimentary concepts of OS are presented and
