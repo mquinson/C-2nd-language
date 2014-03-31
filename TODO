@@ -1,0 +1,6 @@
+* TP5 *
+*******
+gdb: present the "graphical" interface where the current line is
+highlighted. That's rather neat to use. We could also present the
+gdb-emacs and/or the gdb/eclipse interfaces, or at least point to some
+good tutorial for that.
