@@ -1,12 +1,12 @@
 \documentclass[10pt]{article}\usepackage[nu]{esial}
-\CSH\1A\sloppy
+\CSH\sloppy
 \usepackage{url,moreverb}
 \usepackage[utf8]{inputenc}
 \hypersetup{colorlinks=false,pdfborder={0 0 0}}
 
 \sloppy
 \begin{document}
-\title{TP4: Allocation mémoire et mise au point de programmes C}
+\title{TP5: Allocation mémoire et mise au point de programmes C}
 \maketitle
 
 \newcommand{\I}{\hspace{1.5em}}
@@ -73,7 +73,7 @@ facilitent l'obtention d'informations sur les programmes.
 
   C'est parce que la sortie d'erreur n'est pas mise en tampon, car les messages
   d'erreurs sont considérés urgents et doivent être affichés au plus vite, même
-  si cela induit une petite perte de performances.
+  si cela induit une perte de performances.
 
   \Question Rechangez vos affichages pour utiliser la sortie standard (avec
   \cmd{printf}), et ajoutez des \cmd{fflush(stdout)} après chaque \cmd{printf}.
@@ -94,20 +94,16 @@ facilitent l'obtention d'informations sur les programmes.
 
 \begin{Exercice}\textbf{le debugger GNU: gdb (utilisation de base)}
 
-{\bf TODO} utiliser par défaut l'interface textuelle "graphique" de gdb qui montre le
-code source et surligne la ligne en cours d'exécution ? Des élèves de mon groupe l'ont
-déclenchée par erreur et c'est très pratique! G.H.
-
-
   \noindent\begin{minipage}[b]{.6\linewidth}
     Nous utiliserons comme premier exemple le programme \texttt{boucle.c}
     ci-contre (également dans le dépot).  \smallskip
 
-    \textbf{Pour le compiler}, il convient d'utiliser la commande \run{gcc
-      -Wall -g -o boucle boucle.c}. L'option \texttt{-Wall} demande
-    l'activation de nombreux \textit{warnings} (mais pas tous!) tandis que
-    \texttt{-g} ajoute au binaire produit les informations de deboguage
-    nécessaire à \cmd{gdb} (et autres debuggers).
+    \textbf{Pour le compiler}, il convient d'utiliser la commande \run{gcc -Wall
+      -Wextra -g -o boucle boucle.c}. L'option \texttt{-Wall} demande
+    l'activation de nombreux \textit{warnings}, mais pas tous puisque
+    \texttt{-Wextra} en active d'autres (il en manque encore).  \texttt{-g}
+    ajoute au binaire produit les informations de deboguage nécessaire à
+    \cmd{gdb} (et autres debuggers).
 
     \Question Exécutez ce programme. Que constatez vous?
     \smallskip
@@ -136,12 +132,13 @@ déclenchée par erreur et c'est très pratique! G.H.
     de nouveau. L'exécution n'a pas progressé.
   \item[$\bullet$] Aidez le programme à franchir la zone difficile à l'aide de
     la commande \cmd{jump 11}, ce qui fait sauter l'exécution à la ligne 11
-    (oui, cela modifie le schéma d'exécution du programme). Le programme doit
+    (oui, cela modifie l'exécution du programme). Le programme doit
     se terminer normalement. Reste à comprendre pourquoi le programme ne passe
     pas la ligne 10 seul.
   \end{itemize}
   \end{minipage}
 
+  \smallskip
   \noindent \textbf{Points d'arrêt et exécution pas à pas}
 
   Lors de la traque d'une erreur, il est fréquent d'avoir une idée de sa
@@ -215,11 +212,11 @@ déclenchée par erreur et c'est très pratique! G.H.
   \medskip
   \noindent\textbf{Conclusion sur gdb}. Vous en savez maintenant assez
   sur \cmd{gdb} pour faire vos premiers pas. Il existe cependant de nombreuses
-  fonctionnalités que nous n'avons pas abordé ici comme les
-  \textit{watchpoints} (qui arrêtent l'exécution quand une variable donnée est
-  modifiée), le chargement de fichiers \texttt{core}, la prise de contrôle de
-  processus en cours d'exécution, et bien d'autres encore. \run{info gdb} pour
-  les détails.
+  fonctionnalités que nous n'avons pas abordé ici comme les \textit{watchpoints}
+  (qui arrêtent l'exécution quand une variable donnée est modifiée), le
+  chargement de fichiers \texttt{core} pour débugger un programe après sa mort,
+  la prise de contrôle de processus en cours d'exécution, et bien d'autres
+  encore. \run{info gdb} pour les détails.
   \end{minipage}\hfill\begin{minipage}{.32\linewidth}
     \VerbatimInput[label=fact.c,numbers=right]{sources/fact.c}
   \end{minipage}
