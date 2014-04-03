@@ -1,2 +1,4 @@
 fig/*.pdftex
 fig/*.pdftex_t
+beamer.stamp
+handout.stamp

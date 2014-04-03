@@ -9,8 +9,8 @@ LATEXFILTER=/usr/share/texmf/scripts/latex-make/latexfilter.py |\
   grep  '[a-zA-Z]' |\
   grep -v 'Package hyperref Warning: Token not allowed in a PDFDocEncoded string,' 
 
-TARGET?=$(shell ls *.tex |grep -v -- -beamer.tex|grep -v -- -handout.tex|grep -v '^[0-9]'|grep -v 'UNUSED'|sed 's/\.tex$$//')
-DISTDIR?=/home/mquinson/public_html/Teaching/SDR/
+TARGET=CSH
+DISTDIR?=/home/mquinson/wiki/Teaching/CSH/
 
 VPATH=/usr/share/texmf/tex/latex/esial/:fig/
 
@@ -20,9 +20,8 @@ include LaTeX.mk
 %.pdf: %.tex
 
 dist:publish
-publish: handout 
-	cp $(TARGET)-handout.pdf $(TARGET)-8up.pdf $(DISTDIR)
-	$(MAKE) -C ~/public_html publish
+publish: handout beamer $(TARGET)-4up.pdf
+	cp $(TARGET)-handout.pdf $(TARGET)-beamer.pdf $(TARGET)-4up.pdf $(DISTDIR)
 	                
 prof: $(TARGET).tex
 	echo \\documentclass[10pt,trans,notes=show]{beamer} >  $(TARGET)-prof.tex
@@ -36,7 +35,6 @@ handout.stamp: $(TARGET).tex
 	grep -v documentclass $(TARGET).tex        >>        $(TARGET)-handout.tex
 	$(MAKE) $(TARGET)-handout.pdf
 	rm -rf `ls $(TARGET)-handout.*|grep -v '^$(TARGET)-handout.pdf$$'`
-	beamer2handout $(TARGET).pdf 8up $(TARGET)-8up.pdf
 	touch handout.stamp
 
 beamer: beamer.stamp
@@ -47,12 +45,8 @@ beamer.stamp: $(TARGET).tex
 	rm -rf `ls $(TARGET)-beamer.*|grep -v '^$(TARGET)-beamer.pdf$$'`
 	touch beamer.stamp
 
-8up.pdf: DistributedSystems.pdf
-	beamer2handout DistributedSystems.pdf 8up 8up.pdf
-25up.pdf: DistributedSystems.pdf
-	beamer2handout DistributedSystems.pdf 25up 25up.pdf
-4up.pdf: DistributedSystems.pdf
-	beamer2handout DistributedSystems.pdf 4up 4up.pdf
+$(TARGET)-4up.pdf: $(TARGET).pdf
+	beamer2handout $(TARGET)-handout.pdf 4up $(TARGET)-4up.pdf
 
 .PHONY: up 4up 6up 16up 25up 
 up: 4up 6up 16up 25up 
