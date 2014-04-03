@@ -4,7 +4,8 @@ all: $(PROGRAMS) generer_vecteur generer_matrice
 
 test: $(PROGRAMS)
 	@echo;echo "*** TESTS ***";echo;\
-	@for file in $^;\
+	chmod +x teste_programme; \
+	for file in $^;\
 	do echo -n "$$file : ";\
 	   ./teste_programme $$file 2>/dev/null;\
 	done
