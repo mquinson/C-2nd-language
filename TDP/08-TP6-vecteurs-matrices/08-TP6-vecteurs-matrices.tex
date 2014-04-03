@@ -1,0 +1,206 @@
+\documentclass[10pt]{article}\usepackage[nu]{esial}
+\CSH\unA\sloppy
+\usepackage{url,moreverb}
+\usepackage[utf8]{inputenc}
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+
+\sloppy
+\begin{document}
+\title{TP5: Allocation de tableaux en C}
+\maketitle
+
+\newcommand{\I}{\hspace{1.5em}}
+
+L'objectif de ce TP est d'appliquer les méthodes de debug vues au TP précédent
+pour mettre au point des programmes manipulant la mémoire. L'excuse du jour
+sera la création d'une bibliothèque permettant de créer et manipuler des
+vecteurs et des matrices. À la fin de ce TP vous saurez:
+\begin{itemize}
+\item Créer un type de données particulier;
+\item Utiliser en pratique les outils de mise au point de programme C gdb et
+  valgrind. 
+\end{itemize}
+\bigskip
+
+\PseudoExo{Introduction.} En C, l'allocation dynamique d'un tableau
+multidimensionnel se fait
+en deux étapes :\\
+\begin{minipage}{.5\linewidth}
+  \begin{itemize}
+  \item allocation d'un tableau de pointeurs dont la taille correspond au
+    nombre de lignes souhaité
+  \item allocation de chacune des lignes en utilisant le tableau de pointeurs
+    précédent pour stocker leur adresse
+  \end{itemize}
+
+  Ensuite, l'accès au tableau se fait comme d'habitude en C, en utilisant
+  l'opérateur [] pour préciser l'indice dans chacune des dimensions. La seule
+  difference avec un tableau alloué de manière statique est le type des objets
+  manipulés : dans le cas dynamique ce sera un tableau de pointeurs, dans le
+  cas statique ce sera un tableau de tableaux (les tableaux sont réellement
+  stockés les uns après les autres en mémoire).
+
+\end{minipage}\hfill\begin{minipage}{.48\linewidth}
+  \includegraphics[width=\linewidth]{tableau.fig}
+\end{minipage}
+
+
+\begin{Verbatim}[label=Exemple: allocation d'un tableau de 10*10 doubles (sans aucune vérification)]
+double **tableau;
+
+tableau = (double **) malloc(sizeof(double *)*10);
+for (i=0; i<10; i++)
+    tableau[i] = (double *) malloc(sizeof(double)*10);
+\end{Verbatim}
+
+\noindent\begin{minipage}{.64\linewidth}
+\begin{Verbatim}[label=Idem avec libération en cas d'erreur]
+double **tableau;
+
+tableau = (double **) malloc(sizeof(double *)*10);
+if (tableau != NULL) {
+  i=0;
+  erreur=0;
+  while ((i<10) && !erreur) {
+    tableau[i] = (double *) malloc(sizeof(double)*10);
+    if (tableau == NULL)
+      erreur = 1;
+    else
+      i++;
+  }
+  if (erreur) {
+    while (i) {
+      i--;
+      free(tableau[i]);
+    }
+  }
+}
+\end{Verbatim}
+\end{minipage}\hfill\begin{minipage}{.35\linewidth}
+  \begin{Verbatim}[label=Initialisation des éléments,numbers=right]    
+for (i=0; i<10; i++)
+    for (j=0; j<10; j++)
+        tableau[i][j] = 0;
+\end{Verbatim}
+\end{minipage}
+
+\medskip
+
+Vous trouverez dans le dépot plusieurs programmes à compléter. Vous pouvez
+compiler et tester tous les exercices de la séance avec la commande \run{make
+  test}
+
+Chaque test correspond à un programme (le nom du programme s'affiche avant
+ECHEC ou SUCCES) que vous pouvez exécuter independemment pour déterminer vos
+erreurs. Le test \texttt{$<$toto$>$} est passé si votre programme \texttt{toto}
+affiche exactement la même chose que ce qui se trouve dans le fichier
+\texttt{toto.result}. N'hésitez pas à consulter le contenu des fichiers fournis
+pour comprendre le fonctionnement de l'ensemble. Si votre programme vous semble
+fonctionner, mais que la suite de tests vous indique le contraire, comparez le
+contenu du fichier \texttt{toto.output} produit par votre programme au fichier
+\texttt{toto.result}, qui est la sortie attendue par la suite de tests. Pour
+cela, vous pouvez utiliser la commande \run{diff -u toto.result toto.output}
+qui affiche les différences ligne par ligne. Il est bien entendu possible de
+modifier \texttt{toto.result} pour faire en sorte que les tests ne détectent
+plus le problème, mais ce n'est pas l'objectif ;)
+
+\begin{Exercice} \textbf{Vecteurs}
+
+  Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
+  vecteur. Complétez \file{vecteur.c} qui contient toutes les fonctions de
+  gestion de vecteur que nous voulons implémenter. Le fichier \file{vecteur.h}
+  contient toutes les informations nécéssaires : description des fonctions et
+  déclaration du type vecteur. Une fois les fonctions complétées, tapez
+  \run{make vecteur\_testbase} pour compiler, \run{./vecteur\_testbase} pour
+  executer le programme de test et make test pour tester si le résultat du
+  programme de test est correct (s'il affiche la même chose que ce qui se
+  trouve dans \file{vecteur\_testbase.result}).
+\end{Exercice}
+
+\begin{Exercice} \textbf{Matrices}
+
+  Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
+  matrice, où les matrices sont représentées par un tableau bidimensionel
+  dynamique. Complétez le fichier \file{matrice.c} qui contient toutes les
+  fonctions de gestion de matrice que nous voulons implémenter. Le fichier
+  \file{matrice.h} contient toutes les informations nécessaires : description
+  des fonctions et déclaration du type matrice. Une fois les fonctions
+  complétées, tapez \run{make matrice\_testbase} pour compiler,
+  \run{./matrice\_testbase} pour exécuter le programme de test et \run{make
+    test} pour tester si le résultat du programme de test est correct.
+\end{Exercice}
+
+\begin{Exercice} \textbf{Matrices linéaires} 
+
+  Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
+  matrice, où les matrices sont représentées par un seul tableau
+  unidimensionel. Dans ce cas, les lignes de la matrice sont stockées les unes
+  après les autres et la fonction d'accès va devoir faire la traduction d'un
+  couple d'indices vers un unique indice dans le tableau (l'avantage est que
+  l'on économise une indirection ainsi que le coût des structures de gestion
+  mémoire associées à chaque \texttt{malloc} par le système). La figure
+  suivante décrit l'organisation de nos matrices en mémoire :
+
+  \centerline{\includegraphics[width=\linewidth]{tableau-lineaire.fig}}
+
+  Complétez le fichier \file{matrice\_lineaire.c} qui contient toutes les
+  fonctions de gestion de matrice que nous voulons implémenter. Le fichier
+  \file{matrice\_lineaire.h} contient toutes les informations nécessaires :
+  description des fonctions et déclaration du type matrice. Une fois les
+  fonctions complétées, tapez \run{make matrice\_lineaire\_testbase} pour
+  compiler, \run{./matrice\_lineaire\_testbase} pour exécuter le programme de
+  test et \run{make test} pour tester si le résultat du programme de test est
+  correct.
+\end{Exercice}
+
+\begin{Exercice} \textbf{Vérifier les bornes}
+
+  Reprenez les trois exercices précédents en ajoutant un test dans la fonction
+  d'accès permettant de renvoyer NULL si les indices demandés sont en dehors
+  des bornes de l'objet concerné. Les fichiers à completer sont
+  \file{vecteur\_verif.c}, \file{matrice\_verif.c} et
+  \file{matrice\_lineaire\_verif.c}. Les commandes sont analogues aux exercices
+  précédents.
+\end{Exercice}
+
+\begin{Exercice} \textbf{Réallocation dynamique}
+
+  Reprenez les trois premiers exercices en ajoutant une réallocation dynamique
+  des objets dans la fonction d'accès. Le comportement de cette fonction doit
+  alors être le suivant :
+  \begin{itemize}
+  \item si un des indices d'accès est négatif retourner \texttt{NULL};
+  \item si les indices sont dans les bornes de l'objet retourner le pointeur
+    d'accès au bon élément;
+  \item si un des indices dépasse les bornes de l'objet tenter de réallouer
+    plus de mémoire et renvoyer le pointeur d'accès au bon élément si la
+    réallocation réussit et \texttt{NULL} sinon.
+  \end{itemize}
+  
+  Pour la réallocation, on pourra utiliser au choix un \texttt{malloc} d'un
+  bloc plus gros suivi d'une copie ou bien l'appel système \texttt{realloc}
+  dont on obtient la description avec la commande \run{man realloc}.
+
+  Complétez \file{vecteur\_dynamique.c}, \file{matrice\_dynamique.c} et
+  \file{matrice\_li neaire\_dynamique.c}.
+\end{Exercice}
+
+\begin{Exercice}\textbf{Opérations mémoire.}
+Implémentez les fonctions de manipulation mémoire suivantes :
+\begin{itemize}
+\item \texttt{my\_memcpy} : copie d'une zone en mémoire de la même manière que
+  \texttt{memcpy} (cf. man);
+\item \texttt{my\_memmove} : copie d'une zone en mémoire avec recouvrement
+  possible.  (cf. \texttt{man memmove});
+\item \texttt{is\_little\_endian} : renvoie vrai si l'architecture cible
+  utilise la convention little endian pour la représentation des entiers en
+  mémoire;
+\item \texttt{reverse\_endianess} : renvoie la valeur passée en argument avec
+  ses octets inversé.
+\end{itemize}
+  Le fichier à completer est \file{memory\_operations.c}. 
+\end{Exercice}
+\end{document}
+
+%%% Local Variables:
+%%% coding: utf-8

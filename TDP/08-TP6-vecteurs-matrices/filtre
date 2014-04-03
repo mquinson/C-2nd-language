@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+use strict;
+my $mode=shift;
+my $quiet=0;
+my $line;
+
+while ($line=<>) {
+    if ($line =~ /^ *\/\* *SOLUTION *\*\/ *$/o and $mode ne "SOLUTION") {
+	$quiet=1;
+	print "/* A vous de jouer */\n";
+    }
+    $quiet=1 if $line =~ /^ *\/\* *SUJET *\*\/ *$/o and $mode ne "SUJET";
+    print $line if not $quiet and $line !~ /^ *\/\* *[A-Z]* *\*\/ *$/o;
+    $quiet=0 if $line =~ /^ *\/\* *FIN *\*\/ *$/o;
+}
