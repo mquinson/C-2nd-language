@@ -4,3 +4,12 @@ gdb: present the "graphical" interface where the current line is
 highlighted. That's rather neat to use. We could also present the
 gdb-emacs and/or the gdb/eclipse interfaces, or at least point to some
 good tutorial for that.
+
+* TP6 *
+*******
+- remove the vecteur.c and matrice.c that are using static structures
+  Instead, use only vecteur_dynamique.c and matrice_dynamique.c that
+    are more in line with what is presented in the lecture.
+  That practical is ways too long anyway.
+- we need a valgrind target to the makefile, running the tests in
+  valgrind for expertise
