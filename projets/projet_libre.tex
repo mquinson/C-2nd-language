@@ -1,0 +1,140 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[nu]{esial}
+\usepackage{url,subfig,multirow}%csh
+\usepackage{moreverb}
+\1A\CSH
+\begin{document}
+\title{Projets de Programmation}
+\maketitle
+
+\newcommand{\Para}[1]{\medskip\noindent\textbf{#1}}
+
+\Para{Modalités:} Le projet se fait en binôme.
+
+\Para{Date de fin:} \underline{mi mai 2010}, date à laquelle des
+soutenances de projet seront organisées.
+
+\Para{Compte-rendu:}
+Avant votre soutenance, vous devrez m'\emph{avoir envoyé} votre rapport au format
+PDF ainsi que le code source de votre projet dans une archive tar.gz.
+Nommez votre archive et votre rapport avec vos noms de famille,
+je n'ai pas envie de me retrouver avec 50 fichiers qui s'appellent {\tt projet.tar.gz}.
+
+\bigskip
+
+Le rapport doit contenir:
+
+\begin{itemize}
+\item Une ou deux captures d'écran de votre logiciel (s'il y a lieu).
+\item Un résumé court de ce que fait votre logiciel (1 ou 2 paragraphe max).
+\item Une mention indiquant si vous êtes d'accord pour une diffusion de
+ votre travail, et sous quelle condition: source ok / source non, mais
+ binaire ok / rien du tout. Si vous savez ce qu'est une licence
+ logicielle, c'est mieux mais pas indispensable.
+\item Des indications sur ce qui vous a posé problème et comment vous avez
+ relevé ces défis.
+\item Un paragraphe expliquant comment vous avez géré votre code source
+     (gestion de versions, hébergement).
+\item Un décompte du nombre d'heures engagées sur quels points par quel
+ membre du binome (conception, codage, tests, rédaction du rapport).
+\item Une liste des sites et autres sources d'info que vous avez utilisés.
+\end{itemize}
+
+Vous vous attacherez à expliquer brièvement ce que fait votre programme:
+nous savons lire du code, il n'est pas nécessaire de détailler l'action de chaque ligne. En
+revanche expliciter les structures de données choisies et les modules de votre
+programme semble judicieux.
+
+\Para{Archive du projet}
+
+L'archive de votre projet doit contenir
+
+\begin{itemize}
+\item un fichier texte nommé INSTALL qui explique comment compiler et exécuter le projet.
+\item un fichier texte nommé README qui contient vos noms, une présentation succinte du projet
+      (vous pouvez réutiliser une partie de votre rapport), et la mention sur
+      votre éventuel accord sur la diffusion du logiciel.
+\end{itemize}
+
+\bigskip
+
+Si votre projet a consisté à contribuer à un logiciel libre existant, ne rendez
+pas d'archive mais donnez dans votre rapport tous les pointeurs permettant de voir
+facilement vos contributions.
+
+\Para{Soutenance:} Les soutenances auront lieu à la mi-mai. Vous aurez 15 minutes
+pour défendre votre projet.
+
+\Para{Évaluation:} Les sujets ne sont évidement pas tous de la même difficulté,
+et nous en tiendrons compte.
+
+%\Para{Rappel:} La tricherie sera \textbf{sévèrement punie}.  Voir
+%\url{http://www.loria.fr/~quinson/teaching.html}
+
+\section*{Projet à réaliser}\vspace{-.5\baselineskip}
+
+Il vous revient de choisir le sujet de votre projet, à condition de respecter les règles suivantes:
+\begin{itemize}
+\item[$\bullet$] Le projet doit être réalisé sous Linux, et écrit en C (ou à la
+  limite en shell).
+\item[$\bullet$] Le projet doit être \textbf{original} (pas de mastermind ni de
+  gemmified, svp). De plus le même sujet ne peut être pris que par un binôme de
+  la promotion. Pour cela, il est indispensable de \textbf{me faire un courriel
+    pour réserver votre sujet} dès que vous l'avez choisi
+  (\url{martin.quinson@loria.fr}).
+\item[$\bullet$] Le projet doit être \textbf{suffisamment complexe} (pas de
+  pendu, svp). Dans le cas contraire, votre note s'en ressentira forcément. Si
+  vous implémentez un jeu un peu trop simple, il semble indispensable
+  d'implémenter une interface graphique et/ou un joueur ordinateur. En cas de
+  doutes, faites moi un courriel pour me demander mon avis.
+\end{itemize}
+
+\bigskip
+Voici quelques pistes possibles pour ceux d'entre vous en panne d'imagination:
+\vspace{-\baselineskip}
+\section*{Sujets amusants}\vspace{-.5\baselineskip}
+L'idée de projet conseillée pour la plupart d'entre vous est de refaire un
+petit jeu de logique comme on en trouve des milliers en flash sur internet. Par
+exemple, le projet de 2007 était de réimplémenter le jeu bejeweled tel
+qu'on le trouve sur \url{www.popcap.com}. Voici un rapide florilège de site
+offrant de tels jeux en ligne pour vous inspirer:
+\begin{itemize}
+\item[$\bullet$] \url{http://www.kongregate.com/}
+\item[$\bullet$] \url{http://www.popcap.com/}
+\item[$\bullet$] \url{http://www.onlineflashgames.org/}
+\item[$\bullet$] \url{http://gamegecko.com/}
+\item[$\bullet$] \url{http://www.java4k.com/}
+\end{itemize}
+Je suis sûr que vous en connaissez des dizaines d'autres, n'hésitez pas à me
+donner vos bonnes adresses~ ;)
+
+\vspace{-.5\baselineskip}\section*{Sujets utiles}\vspace{-.5\baselineskip}
+Pour ceux qui s'en sentent capables, une autre forme de projets conseillée est
+d'aider des logiciels libres. Il s'agira d'identifier un projet existant (par
+exemple par le biais de sourceforge ou équivalent), et d'apporter une aide
+conséquente à son développement. Il peut s'agir d'implémenter une nouvelle
+fonctionnalité, ou de corriger des problèmes existants dans le code.
+%
+Dans le même genre d'esprit, il est possible de parcourir la liste des
+bugs critiques listés dans le projet
+Debian\footnote{\url{http://bugs.debian.org/release-critical/}}, et
+d'apporter un correctif à plusieurs d'entre eux.
+
+Les règles énoncées plus haut (en C ou shell et suffisamment complexe)
+s'appliquent évidement également à cette catégorie de projets.
+
+\vspace{-.5\baselineskip}\section*{Sujets originaux}\vspace{-.5\baselineskip}
+
+N'hésitez pas à faire preuve d'imagination dans votre recherche de
+sujet. 
+
+\medskip
+\centerline{\textit{Quel que soit votre choix, faites-moi un courriel
+pour que je valide votre sujet (ou non).}}
+
+\end{document}
+
+%%% Local Variables:
+%%% coding: utf-8

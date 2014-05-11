@@ -1,0 +1,18 @@
+* l'IA de tetris comme sur le online-judge
+* Jeux de Gemmes (jewelled), le jeu de l'avion
+  On a un tableau de pierres de différentes couleurs
+  Un mouvement = inverser deux pierres contigues (pas diago)
+  c'est légal ssi ca permet d'aligner des pierres de meme couleur.
+  Les pierres qui deviennent en ligne de la sorte disparaissent.
+  Ensuite, y'a la gravité qui décale tout vers le bas, on reremplis de
+   pierres tirées aléatoirement, et on regarde si les nouvelles venues font
+   des lignes (soit avec l'existant soit entre elles).
+  10 points pour la premiere ligne qui se fait (20 si elle fait 4 de long,
+  etc), 20 pour la suivante dans la réaction en chaine, etc.
+  Faudrait blinder le sujet pour pouvoir le tester de dehors:
+    - possibilité d'injecter un ordre de billes à ajouter
+    - interface en ligne de commande qui donne une liste d'ordre, et juste
+      le score à la fin
+http://www.popcap.com/gamepopup.php?theGame=diamondmine      
+* un sudoku pas forcément 3x3 carré
+  
