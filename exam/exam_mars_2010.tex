@@ -1,0 +1,541 @@
+%
+%    Examen C-shell de mars 2010 (1A)
+%
+%------------------------------------------
+
+
+\documentclass[a4paper,9pt]{article}
+\usepackage[french,english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{alltt}
+\usepackage{t1enc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{amsthm}
+\usepackage{latexsym}  
+%------------
+ 
+\marginparwidth -15pt 
+\oddsidemargin -15pt 
+\evensidemargin -15pt
+\marginparsep 0pt
+\topmargin -55pt 
+\textwidth 6.9in 
+\textheight 10.2in
+\headsep 25pt
+\setlength{\parindent}{0.5cm}
+
+%------------
+\usepackage[pdftitle={Devoir surveille de C du 27 mars 2010},
+            pdfauthor={Suzanne Collin}]{hyperref}
+\begin{document}
+
+\thispagestyle{empty}
+
+
+% pour le logo de l'ESIAL
+\parbox{3cm}
+{\includegraphics[width=\linewidth]{logoESIAL.pdf}}
+\ \hfill \
+\parbox{4.5cm} {\Large\sffamily\bfseries ESIAL 1$^{\grave{e}re}$
+  année \\
+  ~\\
+  \large 27 mars 2010 \\
+  \large 9h00 - 11h00 \\
+  \large Module C-Shell }
+
+%\vspace*{0.6cm}
+
+\begin{center}
+\fbox{
+{\large \sffamily\bfseries Examen du module C-Shell\,: partie Langage C }
+}
+\end{center}
+
+%---------------------
+
+\theoremstyle{remark}
+\newtheorem{definition}{Définition}
+
+\theoremstyle{definition}
+
+%-----------------
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\boite}{$\Box$\xspace}
+% \newcommand{\boiteRep}{$\BoxRep$\xspace}
+
+\newcommand{\run}[1]{\fbox{\texttt{#1}}}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newenvironment{runblock}{\begin{texttt}\beginVerbatim}{\endVerbatim\end{texttt}}
+
+%-----------------
+
+\newtheorem{Question}{$\triangleright$ Question}
+\newtheorem{Exercice}{\setcounter{Question}{0}\hspace{-1.3em}{\Large $\star$} Exercice}
+
+%-----------------
+% une macro de double trait 
+\long\def\dtrait{\vspace{-1.6 cm}
+\rule[-15 mm]{\textwidth}{0.5 mm}\\
+\rule[15 mm]{\textwidth}{0.2mm}
+\vspace{-2 cm}}
+
+%-----------------
+\dtrait
+
+{\sffamily\em Les exercices sont indépendants. La correction tiendra
+  compte de la qualité de la rédaction et de la présentation.\\
+  Tout document interdit sauf une feuille format A4 recto-verso à
+  rendre avec votre copie.} 
+
+
+\begin{Exercice}  {\bf (3 pts)}
+%-----------------------------
+
+On veut calculer une approximation du nombre d'Euler à
+$\epsilon$ près par la série tronquée\,: $e_{N} = \sum_{n=0}^{N}\frac{1}{n!}$. 
+
+\Question Une façon simplifiée pour calculer cette approximation est
+d'exprimer une relation de récurrence entre deux termes successifs,
+({\bf\tt sans utiliser le calcul de  $n!$})  et
+d'additionner les termes   de la somme jusqu'à ce que  le terme
+suivant  soit plus petit qu'une valeur $\epsilon$.
+
+
+Ecrire un programme  qui calcule une approximation du nombre d'Euler
+et qui affiche {\sc n}.
+
+
+\end{Exercice}
+
+
+
+\begin{Exercice}  {\bf (3 pts)}
+%-----------------------------
+
+On souhaite écrire une fonction qui renvoie l'adresse de la
+\underline{dernière} 
+occurence d'un caractère (le paramètre  \texttt{c}) dans une chaîne
+de caractères (le paramètre  \texttt{str}), ou {\sc null}  si le caractère
+n'est pas présent. 
+Le prototype de la fonction est le suivant\,:  
+\run{char   *dernier\_car(char c, char *str)}
+
+\Question Ecrire cette fonction.
+
+\Question Ecrire la fonction \fich{main}
+permettant de tester la fonction écrite précédemment. Un exemple
+d'exécution est le suivant\,: 
+{\small\small 
+\begin{verbatim}
+   $ ./occurence o Bonjour
+   la dernière occurence de 'o' dans 'Bonjour' est à la position 5.
+   $
+\end{verbatim}
+}
+
+\end{Exercice}
+
+
+
+\begin{Exercice}  {\bf (2 pts)}
+%-----------------------------
+
+Répertorier toutes les erreurs se trouvant dans le programme
+ci-dessous et indiquer la façon de les corriger.
+{\small\small 
+\begin{quote}
+\begin{tabular}{|p{100mm}|}
+\hline
+\begin{verbatim}
+1  #include <stdio.h>
+2  int main(void) {
+3    char *chaine, mot_passe = "Mot_2_Passe";
+4  
+5    scanf("%s\n", &chaine);
+6  
+7    if (chaine == mot_passe) 
+8      printf(" OK, c'est bon!\n");
+9    else 
+10     printf("Ce n'est pas ça !\n");
+11   return 1;
+12  }
+\end{verbatim} 
+\\
+\hline
+\end{tabular}
+\end{quote}
+}
+
+\end{Exercice}
+
+
+\begin{Exercice}  {\bf (3 pts)}
+%-----------------------------
+
+Qu'imprime le programme suivant\,? Indiquer également les valeurs
+des variables citées dans chacune des 6 lignes de commentaire. 
+
+
+On rappelle que les caractères en C sont représentés par un {\tt entier} (le
+code {\sc ascii} du caractère) et sont codés de manière  consécutive 
+selon l'ordre alphabétique. 
+Par exemple, le caractère {\tt 'a'} est codé par l'entier 97, le
+caractère  {\tt 'b'} est codé par 98, et {\tt 'b' + 2} vaut 100, soit
+le caractère {\tt 'd'}.
+
+{\small\small 
+\begin{quote}
+\begin{tabular}{|p{130mm}|}
+\hline
+\begin{verbatim}
+#include <stdio.h>
+
+int main() {
+
+  char chaine[] = "examen";
+  char *ptr_ch;
+
+  ptr_ch = chaine;
+       // 1: valeur de chaine et de ptr_ch ?
+  *ptr_ch = (*chaine) + 1;
+  ptr_ch += 1;
+  *ptr_ch = *(ptr_ch + 1);
+      // 2: valeur de *ptr_ch ? 
+  *(ptr_ch + 1) += 2;
+      // 3: valeur de *ptr_ch ?
+  ptr_ch += 2;
+      // 4: valeur de chaine ?
+  *ptr_ch = 'i';
+  ptr_ch += 1;
+      // 5: valeur de ptr_ch  ?
+  *(ptr_ch + 1) = *ptr_ch;
+      // 6: valeur de chaine  ?
+  *ptr_ch = (*ptr_ch) + 7;
+
+  printf("%s ... comme est %s\n", chaine, ptr_ch);
+  ptr_ch = "partiel d\'informatique : ";
+  printf("%s %s  \n", ptr_ch, chaine);
+}
+\end{verbatim} 
+\\
+\hline
+\end{tabular}
+\end{quote}
+}
+
+% réponse :
+% facile ... comme est le
+% partiel d'informatique :  facile ! 
+
+\end{Exercice}
+
+
+
+\begin{Exercice}  {\bf (3 pts)}
+%-----------------------------
+
+\Question  A quoi sert le pré-processeur\,? Donner (en les
+commentant) deux exemples de directives traitées par le
+pré-processeur.
+
+
+\Question  Soit le \fich{Makefile} suivant\,:
+
+{\small\small 
+\begin{quote}
+%\begin{tabular}{|p{130mm}|}
+%\hline
+\begin{verbatim}
+CC = gcc
+CFLAGS = -g -ansi -Wall -o $<
+
+OBJ = main.o arbre.o liste.o
+REP = /users/outils/
+
+appli : $(OBJ) $(REP)es.o 
+     $(CC)  $(OBJ) $(REP)es.o -o appli
+
+main.o:  $(REP)const.h
+
+arbre.o: global.h $(REP)const.h
+
+liste.o: $(REP)const.h
+
+$(REP)es.o: $(REP)const.h
+
+\end{verbatim} 
+%\hline
+%\end{tabular}
+\end{quote}
+}
+
+
+Que fait ce \fich{Makefile}\,? Le commenter.
+
+ 
+Représenter  l'arborescence des fichiers.
+
+
+\end{Exercice}
+
+\newpage
+
+\begin{Exercice}  {\bf (4 pts)}
+%-----------------------------
+
+Des relevés météorologiques sont effectués chaque jour dans
+différents sites (20 au total).
+Les données sont transmises à un opérateur qui dispose du programme
+nécessaire pour leur traitement.
+Ce programme permet la saisie de chaque relevé, détermine le maximum
+et le minimum des écarts de températures rencontrés dans les
+différents sites, puis affiche dans chaque cas, la liste des sites
+concernés.
+Un relevé comporte les informations suivantes\,: {\em site}, {\em
+  température minimale},   {\em  température maximale}.
+
+
+Par exemple\,:   
+{\small\small 
+\begin{verbatim}
+          Toulouse   12   26
+          Nancy      07   22
+          ...
+\end{verbatim}
+}
+
+\Question Compléter les parties {\tt (a)},  {\tt (b)},  {\tt (c)} et
+	  {\tt (d)} du programme suivant afin que le traitement
+	  effectué soit conforme au traitement souhaité\,: 
+
+{\small\small 
+\begin{quote}
+%\begin{tabular}{|p{130mm}|}
+%\hline
+\begin{verbatim}
+#include <stdio.h}
+#define NB_RELEVE 200
+
+/* Déclaration des constantes, types, variables globales, etc */
+     ... (a)
+
+/* Saisie des relevés et calcul des écarts de température */
+
+   void saisir_releves(int *e_min, int *e_max)
+     {   ... (b)    }
+
+
+/* Fonction d'affichage des villes dont l'écart de température
+   correspond à celui indiqué.
+   Cette fonction renvoie le nombre de villes concernées.    */
+
+  int lister_villes(int ecart)
+     {   ... (c)    }
+
+
+/* Programme  "principal" */
+
+int main() {
+  int ecart_min, ecart_max;
+  saisir_releves ( ... (d) );
+ 
+  printf(" Ecart minimum de la journée : %d\n", ecart_min);
+  printf("%d villes concernées \n", lister_villes(ecart_min);
+  printf(" Ecart maximum de la journée : %d\n", ecart_max);
+  printf("%d villes concernées \n", lister_villes(ecart_max);
+
+\end{verbatim}
+\end{quote}
+}
+
+% \Question {\em (subsidiaire)} Quelles modifications doit-on apporter
+%  pour les données ne soient plus saisies manuellement   mais lues
+%  dans le fichier \fich{releves} et que le résultat du traitement ne
+%  soit plus affiché à l'écran mais écrit dans un fichier \fich{resultats}\,?
+\end{Exercice}
+
+
+
+\newpage
+
+
+{\Large NOM : } \hspace{7cm} {\Large PRENOM : }
+
+\dtrait
+
+\begin{Exercice} \textbf{QCM (3 pts)} Répondez sur la feuille
+  fournie. Les réponses fausses seront   pénalisées.
+
+~\\
+
+\begin{itemize}
+
+\item[$\bullet$] Pour disposer dans une fonction {\tt f} d'une
+  variable {\tt i} dont la valeur est préservée entre chaque appel et
+  qui ne soit pas visible de l'extérieur de {\tt f}, il faut la
+  définir en tant que\,: \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  {\em static int i;}  à l'intérieur de f   & 
+    \boite~  {\em int i;}    à l'intérieur de f  &
+    \boite~  {\em  static int i;}  à l'extérieur de f &
+    \boite~  {\em extern int i;}  à l'extérieur de f
+  \end{tabular}
+
+\item[$\bullet$] Pour récupérer au clavier un entier et 2 caractères à
+  placer dans une variable {\tt i} et les 2 cases {\tt t[0]} et {\tt
+  t[1]} d'un tableau de caractères, on peut écrire {\tt
+  scanf("\%d\%c\%c ", ....)} avec en paramètres,\smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  \&i, t, t+1   &
+    \boite~  \&i, *t, *(t+1)  &
+    \boite~  i, t[0], t[1]  &
+    \boite~  \&i, t
+  \end{tabular}
+
+
+\item[$\bullet$] Le corps de la boucle {\em for(i=1; i<10; ) \{ ++i;
+    {\tt corps}\}} s'exécute\,:\smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  0 fois  &
+    \boite~  9 fois  &
+    \boite~  10 fois  &
+    \boite~  aucune des réponses précédentes
+  \end{tabular}
+
+\item[$\bullet$] Si {\tt t} est défni par {\tt int *t} alors {\tt
+  \&(t[2] + 1)} est de type,
+
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~ (int *) &
+    \boite~ (int **) &
+    \boite~ (int)  &
+    \boite~  c'est une expression erronée 
+  \end{tabular}
+
+
+\item[$\bullet$] Si {\tt t} est défni par {\tt int *t} alors {\tt
+  t[*t]} est de type\,: \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  (int)  &
+    \boite~   (int *)  &
+    \boite~   (int **) &
+    \boite~   c'est une expression erronée
+  \end{tabular}
+
+
+\item[$\bullet$] Si {\tt t} est défni par {\tt int *t} alors {\tt \&t}
+  est de type\,:\smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  (int)  &
+    \boite~  (int *)  &
+    \boite~  (int **)  &
+    \boite~  c'est une expression erronée 
+  \end{tabular}
+
+
+\item[$\bullet$] Si {\tt t} est défni par {\tt int *t} alors
+  {\tt \&(t[2]+1)} est de type\,: \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~   (int)  &
+    \boite~   (int *)  &
+    \boite~   (int ** )&
+    \boite~    c'est une expression erronée 
+  \end{tabular}
+
+
+\item[$\bullet$] Soient les deux déclarations suivantes\,:  {\tt char
+  v[\,] = "abcd";} {\tt char *p = "abcd";} \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  ces 2 déclarations sont équivalentes  &
+    \boite~  on peut écrire {\tt *p='A'} &
+    \boite~  la taille de  {\tt v} est 5 &
+    \boite~  le contenu de {\tt v} n'est pas modifiable
+  \end{tabular}
+
+
+
+\item[$\bullet$] Si  {\tt p} est un pointeur sur un tableau de
+  caractères, alors {\tt p} peut se définir comme\,:  \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~ char *p   &
+    \boite~ char *p[\,]   &
+    \boite~ (char [\,]) p *  &
+    \boite~ char **p
+  \end{tabular}
+
+
+\item[$\bullet$] Pour inclure le fichier d'en-tête système
+  \fich{glob.h} on doit écrire\,: \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  \#include <glob.h>  &
+    \boite~  \#include 'glob.h'  &
+    \boite~  \#include  "glob.h  "&
+    \boite~  \#include  glob.h
+  \end{tabular}
+
+
+
+\item[$\bullet$] Pour utiliser gdb, il faut compiler le source C avec
+  l'option,    \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~ -Werror   &
+    \boite~ -Wall   &
+    \boite~ -g  &
+    \boite~ -E
+  \end{tabular}
+
+
+
+\item[$\bullet$] Les chaînes de caractères en C se terminent, en
+  mémoire, par  \smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~  '$\backslash$n'  &
+    \boite~  '$\backslash$0' &
+    \boite~   aucun caractère spécial &
+    \boite~   '$\backslash$o' 
+  \end{tabular}
+
+
+\end{itemize}
+
+\end{Exercice}
+
+% +0.25 par case cochée à juste titre
+% -0.25 par case cochée à tord
+% 0 si blanc
+
+
+\end{document}
+
+
+Pas donné !
+
+\item[$\bullet$] Si {\tt f} est une fonction prenant en paramètre un
+  pointeur sur un tableau de double et renvoyant un pointeur d'entier,
+  alors le prototype de la fonction peut s'écrire\,:\smallskip
+  
+  \begin{tabular}{*{4}{p{.23\linewidth}}}
+    \boite~ int f(double [\,])  &
+    \boite~  int *f([\,] double)   &
+    \boite~  int *f(double *)  &
+    \boite~  int (*f)(double[\,]) 
+  \end{tabular}
+
+
+
+

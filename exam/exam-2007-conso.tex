@@ -1,0 +1,147 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{esial}\CSH\1A
+%\usepackage[correction]{esial}\CSH\1A
+\newcommand{\cd}[1]{\medskip\noindent\file{\null\hspace{-1em}[#1] }}
+\newcommand{\touche}[1]{\hbox{$<$#1$>$}}
+\newcommand{\ctrl}[1]{\touche{ctrl-#1}}
+\newcommand{\tab}{\touche{TAB}}
+\sloppy
+\usepackage{textcomp,amstext}
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\BoxRep}{\ifcorrection{\boxtimes}{\Box}}
+
+\title{Devoir surveillé du 13 juin 2007}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{quote}
+  Tous documents interdits. Les exercices sont indépendants. La correction
+  tiendra compte de la qualité de la rédaction et de la présentation. Barème
+  approximatif.
+\end{quote}
+
+
+\begin{Exercice} 
+  On souhaite écrire une fonction qui échange le contenu de deux zones mémoires
+  de taille \texttt{x} et d'adresses respectives \texttt{a} et \texttt{b}. Si
+  les deux blocs se recouvrent, le comportement de la fonction n'est pas
+  défini. Le prototype de la fonction est le suivant : 
+  \run{void memex(void *a, void *b, size\_t x);}
+  
+
+\Question \textbf{(3 pts)} Écrivez cette fonction.
+
+\begin{Reponse}
+  \begin{Verbatim}
+void premier_cara(void *a, void *b, size\_t x) {
+  int i;
+  char c;
+  for (i=0; i<x; i++) {
+    c=a[i];
+    a[i] = b[i];
+    b[i] = c;
+  }
+}
+  \end{Verbatim}
+\end{Reponse}
+\end{Exercice}
+
+
+\begin{Exercice} Lecture d'une chaîne de caractères \textbf{(7 pts)} 
+
+  Dans cet exercice, nous nous intéressons aux fonctions \texttt{gets} et
+  \texttt{fgets}. La fonction \texttt{gets} permet de lire une ligne (tous les
+  caractères jusqu'au premier '$\backslash$n' inclus ou bien jusqu'à la fin de
+  fichier) sur l'entrée standard (le clavier en général) et place le résultat
+  (en y a joutant un '$\backslash$0' final) en mémoire à l'adresse donnée str
+  en paramètre.  Cette fonction renvoie NULL si elle n'a lu aucun caractère
+  (fin de fichier) et dans ce cas la mémoire pointée par \texttt{str} reste
+  inchangée. Dans tous les autres cas, elle renvoie le pointeur qui lui est
+  passé en paramètre. Son prototype est le suivant :
+  \run{char *gets(char *str) ;}
+
+  La fonction \texttt{fgets} est quasiment identique à \texttt{gets} si ce
+  n'est qu'elle lit les caractères depuis un flux passé en paramètre et qu'elle
+  lit au plus \texttt{size} moins un caractères. Elle renvoie NULL si elle n'a
+  lu aucun caractère et dans ce cas la mémoire pointée par \texttt{str} reste
+  inchangée. Son prototype est le suivant:
+  \run{char *fgets(char *str, int size, FILE *stream);}
+
+  \Question (2 pts) Peut-on écrire \texttt{fgets} en utilisant
+  \texttt{gets}?  \texttt{gets} en utilisant \texttt{fgets} ? Justifiez vos
+  réponses soit en expliquant pourquoi c'est impossible, soit en écrivant la
+  fonction répondant à la question.
+
+  \Question (1 pt) Pourquoi est-il fortement déconseillé d'utiliser la
+  fonction \texttt{gets} bien qu'elle fasse partie de la bibliothèque standard
+  du C ?
+
+  \Question (4 pts) Ecrivez la fonction \texttt{fgets} en utilisant la
+  fonction \texttt{fgetc} qui permet de lire un caractère sur un flux donné :
+  \run{int fgetc(FILE *stream)}.
+
+\end{Exercice}
+
+\begin{Exercice} \textbf{(5pts)}
+  Soit un fichier regroupant les notes d'étudiants sous la forme suivante :
+  \begin{Verbatim}
+bob123 12 16
+henri4 7 14
+leon43 4 1
+  \end{Verbatim}
+La première colonne est le login unix de l'étudiant, la seconde est la note en
+projet et la troisième est la note à l'examen final. Les colonnes sont séparées
+par une seul espace.
+
+\Question (\textonehalf~pt) Écrire un script shell listant tous les étudiants ayant eu 20
+en projet.
+
+\Question (\textonehalf~pt) Écrire un script shell donnant la note de projet de l'étudiant
+toto42.
+
+\Question (2 pts) Écrire un script shell calculant la moyenne à
+l'examen final.\\
+\textbf{1 point de bonus} si votre solution calcule les moyennes avec un
+chiffre après la virgule en n'utilisant que \texttt{expr} pour faire les
+calculs.
+
+\noindent\textit{Indication:} \run{expr 10 / 4} donne le résultat de la divion entière
+entre 10 et 4 (c'est-à-dire 2). \run{expr 10 \% 4} donne le reste de cette
+division (c'est-à-dire 2 également).
+
+\Question (2 pts) Écrire un script shell calculant la moyenne de chaque
+étudiant.% en considérant que les coefficients des deux épreuves sont égaux.
+
+\end{Exercice}
+
+\begin{Exercice} \textbf{(5 pts)} Écrire un script shell \run{menage dir}
+  proposant d'effacer tous les fichiers du répertoire \texttt{dir} indiqué dont
+  les noms se terminent par \~~ou par .BAK ou .bak. Pour chaque fichier, le
+  script doit demander à l'utilisateur la confirmation de la suppression avant
+  de l'effacer.
+
+  \Question (2 pts) Écrivez ce script.\\
+\noindent\textit{Indication:} \run{read toto} permet de lire une chaine de
+caractères du clavier et de la stocker dans la variable shell \texttt{toto}.
+
+  \begin{Question} (2 pts)
+    Modifiez votre script pour parcourir récursivement les sous-répertoires
+    de \texttt{dir}.
+  \end{Question}
+
+  \begin{Question} (1 pt)
+    Modifiez votre script pour qu'il ne pose la question qu'une fois après
+    avoir présenté la liste de tous les fichiers qui seraient écrasés.
+  \end{Question}
+
+\end{Exercice}
+\end{document}
+
+% LocalWords:  Makefile Laurel strings
+%%% Local Variables:
+%%% coding: utf-8

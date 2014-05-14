@@ -1,0 +1,297 @@
+\documentclass[10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{../tp/csh}\sloppy
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\title{Devoir surveillé du 23 mai 2006}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{quote}
+  Tous documents interdits. Les exercices sont indépendants. La correction
+  tiendra compte de la qualité de la rédaction et de la présentation. Barème
+  approximatif.
+\end{quote}
+
+
+\begin{Exercice} \textbf{(4pts)} L'utilisateur {\tt laurel} examine le contenu
+  du répertoire courant~:
+\begin{Verbatim}
+{laurel} 1 > ls -l
+total 92
+-rw-r--r--   1 laurel esial1     226 avr  4 10:08 Makefile
+drwxr-xr-x   2 laurel esial1     512 avr  7 07:03 TP1
+drwxr-xr-x   2 laurel esial1     512 avr  7 07:03 TP2
+-rw-r--r--   1 laurel esial1     129 mar 10 17:12 deux.c
+-rw-r--r--   1 laurel esial1      12 jun 11 15:04 deux_entiers
+-rw-r--r--   1 laurel esial1     225 jun 10 17:13 trois.c
+-rw-r--r--   1 laurel esial1     173 mar  7 07:07 installeTP.sh
+-rwxr-xr-x   1 laurel esial1    1115 jun  8 17:04 max2
+-rw-r--r--   1 laurel esial1     897 mai 10 17:14 un.c
+-rw-r--r--   1 laurel esial1     154 mai 27 15:29 y.c
+\end{Verbatim}
+
+\Question \textbf{(2pts)}
+Laurel exécute alors différentes commandes qui se terminent toutes
+par un message d'erreur.  Expliquez dans chaque cas le sens de ces messages et
+indiquez comment remédier au problème.
+
+\begin{enumerate}
+\item[a]
+  \begin{minipage}{1.0\linewidth}    
+    \begin{Verbatim}[gobble=6]
+      {laurel} 2 > more deux_entiers 
+      23 12
+      {laurel} 3 > max2 < resultat > deux_entiers
+      resultat: No such file or directory.
+      {laurel} 4 >
+    \end{Verbatim}
+  \end{minipage}
+
+\item[b]
+  \begin{minipage}{1.0\linewidth}    
+    \begin{Verbatim}[gobble=6]
+      {laurel} 5 > which installeTP.sh 
+      installeTP.sh: Command not found.
+      {laurel} 6 >
+    \end{Verbatim}
+  \end{minipage}
+
+\item[c]
+  \begin{minipage}{1.0\linewidth}    
+    \begin{Verbatim}[gobble=6]
+      {laurel} 7 > gcc -o y y.c
+      Undefined                       first referenced
+       symbol                             in file
+      ploumploum                          /var/tmp//ccMi6qE9.o
+      ld: fatal: Symbol referencing errors. No output written to y
+      collect2: ld returned 1 exit status
+      {laurel} 8 >
+    \end{Verbatim}
+  \end{minipage}
+
+\item[d]
+  \begin{minipage}{1.0\linewidth}    
+    \begin{Verbatim}[gobble=6]
+      {laurel} 9 > touch *.c
+      {laurel} 10 > make
+      gcc -c un.c
+      gcc -c deux.c
+      gcc -c trois.c
+      gcc -o quatre un.o deux.o trois.o
+      ld: fatal: symbol `zero' is multiply-defined:
+              (file deux.o type=FUNC; file trois.o type=FUNC);
+      ld: fatal: File processing errors. No output written to quatre
+      collect2: ld returned 1 exit status
+      *** Error code 1
+      make: Fatal error: Command failed for target `quatre'
+      {laurel} 11 >
+    \end{Verbatim}
+  \end{minipage}
+\end{enumerate}
+
+\Question \textbf{(1pt)} Écrivez un contenu possible pour le fichier
+\fich{Makefile}.
+
+\Question \textbf{(1pt)} L'utilisateur {\tt hardy} a aussi écrit un
+\fich{Makefile} dans son répertoire personnel. Comment Laurel sait-t-il s'il
+peut lire le \fich{Makefile} de son ami ? Quelle(s) commande(s) pourra-t-il
+alors utiliser pour comparer ces deux fichiers \fich{Makefile} ?
+\end{Exercice}
+
+\begin{Exercice} \textbf{(3pts)}
+  La commande \fich{strings} permet d'étudier les parties lisibles d'un fichier
+  binaire dont le nom est passé en argument. Elle n'affiche à l'écran que les
+  caractères du fichier dont les codes Ascii sont dans l'intervalle \mbox{$[32,
+    126]$} (ce sont les caractères ``affichables'', les autres étant des
+  des codes de contrôle).
+
+\smallskip\noindent{\bf Exemple~:}
+si \fich{fichier} contient les caractères de codes Ascii 
+$(12, 33, 65, 69, 5, 4, 77, 89, 14, 35, 101, 102)$\\
+alors \run{strings fichier} affichera les caractères:
+$(33, 65, 69, 77, 89, 35, 101, 102)$. Soit: \run{!AEMY\#ef}
+
+\Question Écrivez en C la commande \fich{strings}.
+  
+\end{Exercice}
+
+\begin{Exercice}\textbf{(3pts)}
+Écrivez un programme C \fich{min\_maj.c}, compilé sous le nom \fich{min\_maj},
+qui affiche à l'écran ses arguments en convertissant toutes les lettres 
+minuscules en lettres majuscules (les autres caractères étant inchangés).
+
+\noindent \textit{Exemples}~:
+\begin{itemize}
+\item \run{min\_maj bOnNE nUIt LES petits ...} 
+  affiche à l'écran : 
+  \texttt{BONNE NUIT LES PETITS ...}
+\item \run{min\_maj Le C eT Le ShEll, tROp 3ll3t}  
+  affiche à l'écran : 
+   \texttt{LE C ET LE SHELL, TROP 3LL3T}
+\end{itemize}
+\smallskip\noindent \textit{Indication}: le décallage entre les majuscules et
+les minuscules est donné par l'expression \texttt{'A'-'a'}.
+\end{Exercice}
+      
+\begin{Exercice}\textbf{(2pts)}
+%
+Écrivez un fichier de commandes de nom \fich{sauvegarde.sh} permettant de~: 
+\begin{itemize}
+\item 
+	Créer un répertoire de nom \fich{Archives} dans votre répertoire 
+	personnel (s'il n'y existe pas déjà)~;
+      \item Déplacez dans ce répertoire \fich{Archives} tous les fichiers
+        exécutables qui se trouvent dans le répertoire dont le nom est donné en
+        argument.  \\
+        Si le répertoire donné en argument n'existe pas, afficher un message
+        d'erreur.
+\end{itemize}
+\end{Exercice}
+
+% \begin{Exercice} \textbf{(3pts)}
+%   %
+%   L'administrateur d'une machine souhaite être prévenu lorsque le nombre
+%   d'utilisateurs d'une machine dépasse une certaine valeur N.  Il souhaite donc
+%   écrire un programme qui lui affiche un message chaque fois que cette valeur
+%   est dépassée.
+
+%   Pour connaître le nombre courant d'utilisateurs il dispose de la commande
+%   \fich{uptime}:
+
+% \begin{Verbatim}
+% {administrateur} 27 >uptime
+%   9:16am  up 99 day(s), 23:08,  2 users,  load average: 1.47, 1.60, 1.52
+% {administrateur} 28 >
+% \end{Verbatim}
+
+% \Question \textbf{(\textonehalf pt)} Écrivez un fichier de commande
+% \fich{uptime.sh} qui exécute la commande \fich{uptime} toutes les 10 minutes.
+
+% \Question \textbf{(2pt)} Écrivez un programme C qui sera compilé sous le nom
+% \fich{uptime\_vers\_users}.  Ce programme prend en argument sur la ligne de
+% commande un entier N et une adresse email.  Il lit en permanence au clavier le
+% résultat de la commande \fich{uptime} et envoie un couriel lorsque le nombre
+% d'utilisateurs dépasse N. 
+
+% \noindent \textit{Indication:} La fonction C \underline{\texttt{int
+%     system(char *cmd)}} permet d'exécuter la commande \texttt{cmd} dans un
+% shell. On peut utiliser le programme \texttt{mail} dans cette commande.
+
+% \Question \textbf{(\textonehalf pt)} Quelle commande doit exécuter notre
+% administrateur pour recevoir un couriel chaque fois qu'il y a plus de 15
+% utilisateurs sur la machine ?
+% \end{Exercice}
+
+\begin{Exercice} \textbf{(5pts)}
+%
+La commande {\tt wc -l} affiche le nombre de lignes du fichier
+donné en arguments~:
+
+\begin{Verbatim}
+{batman} 2 > wc -l debordechar.c 
+      35 debordechar.c
+{batman} 3 >
+\end{Verbatim}
+
+\Question \textbf{(2pts)} Écrivez un programme C \texttt{compte\_ligne} mimant
+l'action de \run{wc -l}. Il prend un nom de fichier en argument et affiche le
+nombre de lignes du fichier suivi du nom du fichier. 
+
+\Question \textbf{(subsidiaire, 0pt)} Écrivez un script shell
+\texttt{compte\_ligne.sh} équivalent. 
+
+\noindent\textit{Indication:} \run{grep -c} affiche le nombre d'occurences du
+motif passé en argument.
+
+\medskip On souhaite maintenant connaître le nombre total de lignes de tous les
+fichiers suffixés par \texttt{.c} ou \texttt{.h} du répertoire courant.
+
+\Question \textbf{(1pt)} Décrivez en quelques lignes le principe d'une solution
+possible.  Cette solution peut combiner l'utilisation de commandes existantes
+ainsi que des programmes C ou fichiers de commandes (dont vous préciserez les
+fonctionnalités). Vous pouvez utiliser \texttt{compte\_ligne}%
+%ou \texttt{compte\_ligne.sh} 
+, mais pas \texttt{wc}.
+
+\Question \textbf{(2pts)} Donnez la réalisation complète de votre solution.
+\end{Exercice}
+
+
+\begin{Exercice}\textbf{(3pts)} % Pour chacune des questions suivantes, vous répondrez en une
+%  seule ligne de commande.
+%   \begin{enumerate}
+%   \item Envoyer la liste détaillée des fichiers du répertoire courant à toto@loria.fr
+%   \item Idem, mais on ne souhaite pas afficher les informations concernant les
+%     répertoires. 
+%   \end{enumerate}
+  On suppose que l'on dispose d'un fichier calepin.txt, contenant des noms et
+  des numéros de téléphone rangés de la manière suivante :
+  \begin{Verbatim}[label=calepin.txt,gobble=4]
+    DUPONT Jean,05.61.75.18.47,21/08/1975,jean.dupont@free.fr
+    MARTIN Yvonne,02.23.34.45.56,26/02/1977,yvonne.martin@cegetel.fr
+    ...
+  \end{Verbatim}
+
+  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+  effectue la recherche des personnes s'appelant DURAND et qui restitue leur
+  numéro de téléphone.
+
+% Rep: cat calepin.txt | grep 'durand' | cut -f3 -d' '
+
+  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+  compte les gens habitant dans le sud-est (numéro en 04)
+% Rep: cat calepin.txt | cut -f3 -d' ' | cut -f1 -d'.' | grep '05' | wc -l
+
+  \Question \textbf{(1pt)} Écrire un script (ou une commande) envoyant un
+  message éléctronique contenant ``Bonne Année'' à tout le monde.
+
+  \Question \textbf{(1pt)} Écrire un script (ou une commande) envoyant un
+  message éléctronique contenant ``Bon anniversaire'' à toutes les personnes
+  dont c'est l'anniversaire.
+
+  \noindent \textit{Indication}: \run{date +\%d/\%m} affiche la date du jour
+  sous la forme: jj/mm
+\end{Exercice}
+\end{document}
+
+
+
+\subsection*{Exercice 6}
+
+L'option {\tt -o} du compilateur {\tt gcc} permet d'indiquer le nom du 
+programme exécutable que l'on souhaite générer. Cette option est ``dangereuse''
+dans le sens où le compilateur ne fait aucune vérification sur le nom de ce 
+programme exécutable. Ainsi la commande suivante efface silencieusement
+le fichier source \fich{max2.c}~: \\
+	\unix{gcc max2 -o max2.c}
+
+Pour éviter ce genre de problème à un utilisateur débutant, on propose de 
+lui écrire une nouvelle commande de nom \fich{compile}, qui accepte les mêmes 
+arguments que \fich{gcc}, et qui~: 
+\begin{itemize}
+\item affiche un message d'avertissement si la commande proposée risque 
+	d'effacer un fichier source ;
+\item exécute normalement la commande standard \fich{gcc} dans le cas contraire.
+\end{itemize}
+~ \\
+
+On suppose que cet utilisateur n'écrit et ne compile que des programmes constitués 
+d'un seul fichier source. Il utilisera donc la commande \fich{compile} de deux 
+manière possible : \\
+	\unix{compile -o \mbox{{\em fichier1}} \mbox{{\em fichier2}}} \\
+ou \\
+	\unix{compile \mbox{{\em fichier1}} -o \mbox{{\em fichier2}}} 
+
+
+{\bf 1.} 
+Ecrivez la commande \fich{compile} sous la forme d'un fichier de commande.
+
+{\bf 2.} 
+Ecrivez la commande \fich{compile} sous la forme d'un programme C.
+
+
+% LocalWords:  Makefile Laurel strings

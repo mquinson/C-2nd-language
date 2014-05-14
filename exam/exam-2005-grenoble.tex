@@ -1,0 +1,247 @@
+\documentclass[10pt]{article}
+\usepackage{fancyheadings}
+\usepackage[latin1]{inputenc}
+\usepackage{verbatim}
+\usepackage{graphics}
+\usepackage{fullpage}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\begin{document}
+\thispagestyle{empty}
+
+{\bf Université Joseph Fourier} 
+\hfill {\bf UE INF122 } \\
+{\bf Licence L1 ``Sciences et Technologies''} \\
+
+\vspace{0.4cm}
+
+\begin{center}
+{\Large {\bf Devoir Surveillé du 14 janvier 2005}}\\
+\end{center}
+
+\vspace{0.4cm}
+
+Durée 1h30 ; Documents autorisés \\
+Les exercices sont indépendants 
+
+\vspace{0.2cm}
+
+
+\subsection*{Exercice 1}
+
+L'utilisateur {\tt laurel} débute une session de travail en examinant 
+le contenu du répertoire courant~: 
+\begin{verbatim}
+{laurel} 5 >ls -l
+total 92
+-rw-r--r--   1 laurel dsu-etu     226 Jan  4 10:08 Makefile
+drwxr-xr-x   2 laurel dsu-etu     512 Jan  7 07:03 TP1
+drwxr-xr-x   2 laurel dsu-etu     512 Jan  7 07:03 TP2
+-rw-r--r--   1 laurel dsu-etu     129 Nov 10 17:12 deux.c
+-rw-r--r--   1 laurel dsu-etu      12 Nov 11 15:04 deux_entiers
+-rw-r--r--   1 laurel dsu-etu     225 Nov 10 17:13 trois.c
+-rw-r--r--   1 laurel dsu-etu     173 Jan  7 07:07 installeTP.sh
+-rwxr-xr-x   1 laurel dsu-etu    1115 Jan  8 17:04 max2
+-rw-r--r--   1 laurel dsu-etu     897 Nov 10 17:14 un.c
+-rw-r--r--   1 laurel dsu-etu     154 Dec 27 15:29 y.c
+\end{verbatim}
+
+{\bf 1.} Laurel exécute alors différentes commandes qui se terminent
+toutes par un message d'erreur.
+Expliquez dans chaque cas le sens de ces messages d'erreurs et indiquez
+comment remédier au problème.
+
+\begin{enumerate}
+\item
+\begin{verbatim}
+{laurel} 2 >more deux_entiers 
+23 12
+{laurel} 3 >max2 < resultat > deux_entiers
+resultat: No such file or directory.
+{laurel} 4 >
+\end{verbatim}
+\vspace*{1em}
+\item
+\begin{verbatim}
+{laurel} 6 >which installeTP.sh 
+installeTP.sh: Command not found.
+{laurel} 7 >
+\end{verbatim}
+\vspace*{1em}
+\item
+\begin{verbatim}
+{laurel} 21 >gcc -o y y.c
+Undefined                       first referenced
+ symbol                             in file
+ploumploum                          /var/tmp//ccMi6qE9.o
+ld: fatal: Symbol referencing errors. No output written to y
+collect2: ld returned 1 exit status
+{laurel} 22 >
+\end{verbatim}
+\vspace*{1em}
+\item
+\begin{verbatim}
+{laurel} 55 >touch *.c
+{laurel} 56 >make
+gcc -c un.c
+gcc -c deux.c
+gcc -c trois.c
+gcc -o quatre un.o deux.o trois.o
+ld: fatal: symbol `zero' is multiply-defined:
+        (file deux.o type=FUNC; file trois.o type=FUNC);
+ld: fatal: File processing errors. No output written to quatre
+collect2: ld returned 1 exit status
+*** Error code 1
+make: Fatal error: Command failed for target `quatre'
+{laurel} 57 >
+\end{verbatim}
+\end{enumerate}
+
+{\bf 2.} Ecrivez un contenu possible pour le fichier \fich{Makefile}.
+
+{\bf 3.} L'utilisateur {\tt hardy} a aussi écrit un \fich{Makefile} dans son 
+	répertoire personnel. Comment Laurel sait-t-il s'il peut lire le \fich{Makefile}
+	de son ami ? Quelle(s) commande(s) pourra-t-il alors utiliser 
+	pour comparer ces deux fichiers \fich{Makefile} ?
+
+\subsection*{Exercice 2}
+
+La commande {\sc Unix} \fich{strings} est une commande qui s'applique à un 
+fichier dont le nom est précisé en argument de la ligne de commande~: \\
+	\unix{strings fichier}
+ 
+Cette commande permet d'afficher à l'écran tous les caractères contenus dans 
+\fich{fichier} dont les codes Ascii sont situés dans l'intervalle \mbox{$[32, 126]$}
+(ce sont les caractères ``affichables'' du code Ascii).
+
+{\bf Exemple~:}
+si \fich{fichier} est constitué des caractères dont les codes Ascii 
+sont  
+\[
+12, 32, 65, 69, 5, 4, 77, 89, 14, 35, 101, 102  
+\]
+alors {\tt strings fichier} affichera à l'écran les caractères dont les 
+codes Ascii sont
+\[
+32, 65, 69, 77, 89, 35, 101, 102
+\] 
+
+Ecrivez en C la commande \fich{strings}.
+
+\subsection*{Exercice 3}
+
+Ecrivez un programme C \fich{min\_maj.c}, compilé sous le nom \fich{min\_maj},
+qui affiche à l'écran ses arguments en convertissant toutes les lettres 
+minuscules en lettres majuscules (les autres caractères étant inchangés).
+
+Exemples~: \\
+	\unix{min\_maj bOnNE nUIt LES petits ...} \\ 
+affiche à l'écran : \\
+	\unix{BONNE NUIT LES PETITS ...} \\
+~\\
+	\unix{min\_maj Vive Inf\_122 !} \\
+affiche à l'écran : \\
+	\unix{VIVE INF\_122 !}
+
+\subsection*{Excercice 4}
+
+Ecrivez un fichier de commandes de nom \fich{sauvegarde.sh} permettant de~: 
+\begin{itemize}
+\item 
+	Créer un répertoire de nom \fich{Archives} dans votre répertoire 
+	personnel (s'il n'y existe pas déjà)~;
+\item
+	Déplacez dans ce répertoire \fich{Archives} tous les fichiers exécutables 
+	qui se trouvent dans le répertoire dont le nom est donné en argument. 
+        Si le répertoire donné en argument n'existe pas, afficher un message d'erreur.    
+\end{itemize}
+
+\subsection*{Exercice 5}
+
+L'administrateur d'une machine souhaite être prévenu lorsque le nombre
+d'utilisateurs d'une machine dépasse une certaine valeur N.
+Il souhaite donc écrire un programme qui lui affiche un message chaque fois
+que cette valeur est dépassée.
+
+Pour connaitre le nombre courant d'utilisateurs il dispose de la commande \fich{uptime}
+(vue en TP)~:
+
+\begin{verbatim}
+{administrateur} 27 >uptime
+  9:16am  up 99 day(s), 23:08,  2 users,  load average: 1.47, 1.60, 1.52
+{administrateur} 28 >
+\end{verbatim}
+
+{\bf 1.} Ecrivez un fichier de commande \fich{uptime.sh} qui exécute 
+	la commande \fich{uptime} toutes les 10 minutes
+
+{\bf 2.} Ecrivez un programme C qui sera compilé sous le nom \fich{uptime\_vers\_users}.
+	Ce programme prend en argument sur la ligne de commande un entier N. 
+	Il lit en permanence au clavier le résultat de la commande \fich{uptime} et 
+	affiche un message lorsque le nombre d'utilisateurs dépasse N. 
+
+{\bf 3.} Quelle(s) commande(s) doit exécuter notre administrateur pour qu'un 
+	message soit affiché chaque fois qu'il y a plus de 15 utilisateurs sur 
+	la machine ?
+
+\subsection*{Exercice 6}
+
+La commande {\tt wc -l} affiche à l'écran le nombre de lignes du fichier
+donné en arguments~:
+
+\begin{verbatim}
+{batman} 2 >wc -l debordechar.c 
+      35 debordechar.c
+{batman} 3 >
+\end{verbatim}
+
+On souhaite connaître le nombre total de lignes de tous les fichiers 
+suffixés par {\tt .c} du répertoire courant.
+
+{\bf 1.} Décrivez en quelques lignes le principe d'une solution possible.
+	Cette solution peut combiner l'utilisation de commandes existantes 
+	ainsi que des programmes C ou fichiers de commandes 
+	(dont vous préciserez les fonctionnalités).
+
+{\bf 2.} Donnez la réalisation complète de votre solution.
+
+\end{document}
+
+
+
+\subsection*{Exercice 6}
+
+L'option {\tt -o} du compilateur {\tt gcc} permet d'indiquer le nom du 
+programme exécutable que l'on souhaite générer. Cette option est ``dangereuse''
+dans le sens où le compilateur ne fait aucune vérification sur le nom de ce 
+programme exécutable. Ainsi la commande suivante efface silencieusement
+le fichier source \fich{max2.c}~: \\
+	\unix{gcc max2 -o max2.c}
+
+Pour éviter ce genre de problème à un utilisateur débutant, on propose de 
+lui écrire une nouvelle commande de nom \fich{compile}, qui accepte les mêmes 
+arguments que \fich{gcc}, et qui~: 
+\begin{itemize}
+\item affiche un message d'avertissement si la commande proposée risque 
+	d'effacer un fichier source ;
+\item exécute normalement la commande standard \fich{gcc} dans le cas contraire.
+\end{itemize}
+~ \\
+
+On suppose que cet utilisateur n'écrit et ne compile que des programmes constitués 
+d'un seul fichier source. Il utilisera donc la commande \fich{compile} de deux 
+manière possible : \\
+	\unix{compile -o \mbox{{\em fichier1}} \mbox{{\em fichier2}}} \\
+ou \\
+	\unix{compile \mbox{{\em fichier1}} -o \mbox{{\em fichier2}}} 
+
+
+{\bf 1.} 
+Ecrivez la commande \fich{compile} sous la forme d'un fichier de commande.
+
+{\bf 2.} 
+Ecrivez la commande \fich{compile} sous la forme d'un programme C.
+

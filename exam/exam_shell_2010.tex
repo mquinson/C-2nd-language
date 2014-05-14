@@ -1,0 +1,569 @@
+%
+%    Examen shell (1h) du 4 mai 2010 (1A)
+%               SANS DOCUMENT
+%
+%------------------------------------------
+
+
+
+
+\documentclass[a4paper,10pt]{article}
+\usepackage[french,english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{amsthm}
+\usepackage{latexsym}  % pour les petits carrés des math ...
+\usepackage{fullpage}
+ 
+%------------
+\usepackage[pdftitle={Devoir surveille de shell du 4 mai 2010},
+            pdfauthor={Suzanne Collin}]{hyperref}
+\begin{document}
+
+\thispagestyle{empty}
+
+% pour le logo de l'ESIAL
+\parbox{3cm}
+{\includegraphics[width=2cm]{logoESIAL.pdf}}
+
+
+\begin{center}
+\fbox{
+{\Large\sffamily\bf  Examen Shell année 2009-2010}
+}
+\end{center}
+
+%------------
+\theoremstyle{remark}
+\newtheorem{definition}{Définition}
+\theoremstyle{definition}
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\boite}{$\Box$\xspace}
+% \newcommand{\boiteRep}{$\BoxRep$\xspace}
+
+\newcommand{\I}{\hspace{1.5em}}
+
+\newcommand{\run}[1]{\fbox{\texttt{#1}}}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newenvironment{runblock}{\begin{texttt}\beginVerbatim}{\endVerbatim\end{texttt}}
+
+%-----------------
+
+\newtheorem{Question}{$\triangleright$ Question}
+\newtheorem{Exercice}{\setcounter{Question}{0}\hspace{-1.3em}{\Large $\star$} Exercice}
+
+
+%-----------------
+% une macro de double trait 
+\long\def\dtrait{\vspace{-1.6 cm}
+\rule[-15 mm]{\textwidth}{0.5 mm}\\
+\rule[15 mm]{\textwidth}{0.2mm}
+\vspace{-2 cm}}
+
+% \dtrait
+
+{\sffamily\em Les exercices sont indépendants. La correction tiendra
+  compte de la qualité de la rédaction et de la présentation.
+Le barême est donné à titre indicatif.\\
+  Tout document interdit.} 
+
+~\\
+\hrule       
+
+~\\
+%---------------------------------------
+\begin{Exercice}{\bf Questions diverses.} {\bf (4.5 pts)} 
+
+\Question Quelle est la différence entre les symboles {\tt |} et {\tt
+  >}\,?
+Donnez un exemple d'utilisation de chacun de ces symboles.
+
+% > redirection de la sortie standard vers un fichier
+% | redirection de la sortie standard vers l'entrée standard
+% echo "Hello World!" > hello.txt
+% ls -l . | grep hello
+
+\Question Quelle est la différence entre les quotes et les backquotes
+en shell\,? Illustrez votre réponse par un exemple. 
+
+\Question Ecrire une commande équivalente à {\tt cp fich1.c fich2.c}.
+
+% cat fich1.c > fich2.c
+
+%\Question Ecrire une commande qui permet d'effacer les 10 premières
+%lignes du fichier {\tt document.txt}.
+% sed 'd/ .....' pas vu pour tous les groupes - on laisse tomber
+
+\Question On considère que dans le répertoire courant, un fichier
+nommé {\tt groupes.txt}  est un fichier texte contenant le mot {\tt
+  projet}.
+Parmi les commandes suivantes, lesquelles sont correctes\,? 
+Quel est le résultat affiché par celles qui sont correctes\,? 
+{\tt\bf Justifiez vos réponses.}
+
+\begin{quote}
+ $\bullet$ {\tt cat groupes.txt | echo} 
+ 
+ $\bullet$ {\tt cat groupes.txt > echo}
+
+ $\bullet$ {\tt echo projet | groupes.txt }
+
+ $\bullet$ {\tt  echo projet > groupes.txt}
+\end{quote}
+
+
+\Question Quel est l'effet des commandes suivantes :
+\begin{small}
+\begin{quote}
+\begin{verbatim}
+  1. find . -print
+  2. find . -name '*.c' -print
+\end{verbatim}
+  % 3. find sousRepertoire -name '*.c' -ls
+\end{quote}
+\end{small}
+
+% 1. affiche tous les fichiers dans le dossier . récursivement
+% 2. affiche tous les fichiers avec une extention .c
+%% 3. fais un ls -dils sur tous les fichiers avec une extention .c dans le
+%%    répertoire sousRepertoire
+
+\Question  Quelle est la différence entre les deux commandes suivantes :
+\begin{small}
+\begin{quote}
+\begin{verbatim}
+   1. ls -l *.tex
+   2. find . -name '*.tex' -print
+\end{verbatim}
+\end{quote}
+\end{small}
+
+% find fait un parcours récursif
+
+\Question Ecrire une commande qui trouve  tous les fichiers {\tt
+	  a.out} ou se terminant par {\tt .o} dans l'arborescence et
+	  qui les supprime après confirmation.  
+ 
+% find . \( -name 'a.out' -o -name '*.o' \) -exec rm -i {} \;
+ 
+
+\Question On suppose que la commande {\bf date} affiche les
+informations suivantes\,: 
+\begin{verbatim}
+    lundi 3 mai 2010, 09:14:30 (UTC+0200)
+\end{verbatim}
+
+Ecrire une commande qui permette d'afficher uniquement le mois (ex\,:
+mai).
+
+
+\Question La commande suivante est-elle correcte\,? Si oui, expliquez
+ce qu'elle fait, si non, proposer une solution corrigée.
+\begin{verbatim}
+    grep 'l\'examen' doc.txt
+\end{verbatim}
+
+
+\Question Que réalise la commande suivante\,?  
+\begin{verbatim} 
+    sed 's/\([a-z]*\)\[[0-9]*\)/\2 \1/' 
+\end{verbatim} 
+
+
+\end{Exercice}
+
+~\\
+%----------------------------------------------------------------------
+
+\begin{Exercice}\textbf{Organisation du planning des soutenances de
+  projet CSH.} {\bf (2.5 pts)} 
+ 
+On dispose d'un fichier {\tt binomes.csv} dont voici un extrait :
+
+\begin{verbatim}
+"KAMGAING, BOINNOT";G3
+"LORENZI,KOMUSSIDI";"G3,G5"
+"KLEIN,TRUCHI";"G3,G5"
+"NGUYEN, SOMBE";"G2,G4"
+"BOULDOIRE, DIEZ";"G4,G2"
+"BOHR, BUZEAU","G1,G5"
+"FOULON, GIRARDIN";"G2,G4"
+"RIGAULT, BEN FAIDA";G2
+"GUERNIER, ROUSSET";G3
+"DOMARIN, LARROQUE";G3
+"PRUVOST, VITALE";G2
+"BARONE,CAMANINI";G2
+\end{verbatim}
+
+Chaque ligne indique le nom des élèves et leur(s) groupe(s).
+
+\bigskip
+
+Donnez une commande permettant, en une seule ligne, de :
+\begin{enumerate}
+\item compter combien de binômes ont au moins un membre dans le groupe 2
+% grep G2 binomes.csv  | wc -l
+\item compter combien de binômes ont au moins un membre dans le groupe
+  4 mais aucun membre dans le groupe 2 
+% grep G2 binomes.csv  | grep -v G4 | wc -l
+\item donner les noms des binômes dont au moins un membre est du groupe 3
+(sans enlever les double quotes)
+% grep G3 binomes.csv  | cut -d\; -f1
+% \item la même chose, en enlevant les caractères double quotes et en
+%   passant les noms en majuscule
+% % grep G3 binomes.csv  | cut -d\; -f1 | sed s/\"//g | tr a-z A-Z
+\item la même chose, en enlevant les caractères double quotes
+% grep G3 binomes.csv  | cut -d\; -f1 | sed s/\"//g 
+\item donner les noms des binômes qui n'appartiennent qu'à un seul groupe
+% grep \;G[0-9]$ binomes.csv | cut -d\; -f1 | sed s/\"//g
+\end{enumerate}
+
+\end{Exercice}
+
+
+%----------------------------------------------
+\begin{Exercice}{\bf Gestion de versions.} {\bf (2.5 pts)} 
+
+
+Vous travaillez sur votre ordinateur portable qui est déconnecté du réseau.
+Vous êtes dans une copie de travail Subversion, dont le dépôt est sur
+une machine actuellement inaccessible.\\
+Parmi les commandes suivantes de Subversion, indiquez celles qui ne
+fonctionneront pas\,:\\
+{\tt add log revert status update commit}\\
+
+% log update commit
+
+Vous avez un autre projet sur votre ordinateur portable, celui-ci
+versionné par Darcs. Là encore, le dépôt principal est sur une autre
+machine, inaccessiblepour le moment.\\
+Parmi les commandes suivantes de Darcs, indiquez celles qui ne
+fonctionneront pas\,:\\
+{\tt add changes revert whatsnew record push pull}
+
+% push pull
+
+\end{Exercice}
+
+
+%----------------------------------------------
+
+\begin{Exercice}\textbf{Correction d'un projet de compilation.}{\bf (3.5 pts)} 
+
+On demande à des élèves de programmer un compilateur. Ce
+compilateur doit entre autres signaler un certain nombres de {\tt
+WARNING} dans des cas précis.\\
+ Pour évaluer ces compilateurs, on met
+en place une suite de tests : on crée un fichier source pour chaque
+cas de {\tt WARNING} que doit prendre en compte un compilateur. Ces
+fichiers sources sont dans le répertoire {\tt warnings}.\\
+On écrit un script qui prend en argument un exécutable et qui le teste
+ sur chaque fichiere source du répertoire {\tt
+  warnings}.
+On vérifie alors que l'exécutable affiche bien {\tt WARNING} lors
+de la compilation de chaque fichier source.
+Ce script enregistre le nom des fichiers sources pour lesquels
+l'exécutable n'a pas signale de {\tt WARNING}, et attribue une note
+en fonction du nombre de test réussis.\\
+Le script contient des erreurs : chaque ligne où apparait le
+commentaire {\tt \# ERREUR} nécessite une correction, 
+indiquez-les (il y en a 7).
+
+\newpage
+
+{\small
+\begin{quote}
+\begin{tabular}{|p{135mm}|}
+\hline
+\begin{verbatim}
+#/bin/sh      # ERREUR 1
+
+# tester si le bon nombre d'arguments a été donné
+
+if [ $* != 1 ]     # ERREUR 2
+then
+ echo "donner le nom de l'executable en argument"
+ exit 1
+fi
+
+# récupérer la liste des fichiers sources, et créer un fichier pour
+# stocker les résultats
+
+note = 0                 # ERREUR 3
+fichiers="ls warnings"   # ERREUR 4
+rm -f $1.rapport
+touch $1.rapport
+
+# pour chaque fichier...
+for f in $fichiers
+do 
+
+ # exécuter l'exécutable dessus et récupére la sortie 
+
+ ./$1 warnings/$f > output
+
+ # si la sortie affiche un WARNING incrémenter la note
+
+ grep  -q "WARNING" output
+ if [ $? -eq 0 ]
+ then
+  note=`expr $note + 1`
+ else
+
+  # si erreur, indiquer le nom du fichier et recopier
+  # la sortie du programme dans le rapport
+
+  echo "Erreur avec le fichier $f" >> $1.rapport
+  echo output >> $1.rapport           # ERREUR 5
+ fi
+done
+
+# si le rapport ne contient pas d'erreurs, afficher "parfait"
+
+grep -q "^Erreur$" $1.rapport     # ERREUR 6
+if [ $? -eq 1 ]
+then
+ echo "Parfait !" >> $1.rapport
+fi
+
+# ajouter la note de l'exécutable dans le rapport
+
+echo note >> $1.rapport    # ERREUR 7
+
+# nettoyage
+
+rm output
+\end{verbatim} 
+\\
+\hline
+\end{tabular}
+\end{quote}
+}
+
+% ERREUR 1 : #!/bin/sh
+% ERREUR 2 : if [ $# != 1 ]
+% ERREUR 3 : note=0
+% ERREUR 4 : fichiers=`ls warnings`
+% ERREUR 5 : cat output >> $1.rapport
+% ERREUR 6 : grep -q "^Erreur" $1.rapport 
+% ERREUR 7 : echo $note >> $1.rapport
+
+\end{Exercice}
+
+~\\
+%---------------------------------------
+\begin{Exercice}{\bf (Petit) Script shell.} {\bf (3 pts)} 
+
+Ecrivez un script shell qui réalise la compilation d'un fichier source
+C dont le nom est passé en argument, sans extension.
+Cette commande devra vérifier,
+\begin{enumerate}
+ \item que le fichier existe,
+ \item qu'il correspond bien à un fichier source écrit en langage C
+ (on supposera pour cela qu'un fichier C contient la fonction {\tt main()}).
+\end{enumerate}
+
+% De plus, ce script ne lancera la compilation que si le source est plus
+% récent que l'exécutable (de même nom que le source, mais sans suffixe).
+
+\end{Exercice}
+
+% #!/bin/sh
+%
+% if [ $# != 1 ]
+% then
+%     echo usage : $0 source_file
+% fi
+%
+% source=$1.c
+% exec=$1
+%
+% if [ -f $source ]
+% then
+%     grep -q main\(.*\) $source
+%     if [ $? -eq 0 ]
+%     then
+% 	  gcc -o $exec $source
+%     fi
+% fi
+
+
+%---------------------------------------
+\begin{Exercice}{\bf La commande sed.} {\bf (3.5 pts)} 
+
+On rappelle que sous {\tt /home/1A/} se trouve l'ensemble des noms de
+login de chacun d'entre-vous.
+
+La commande {\tt ls -l} affiche (ici pour l'utilisateur {\tt andrew})
+l'ensemble des fichiers  et répertoires sous la forme\,:\\
+
+\run{-rw-r--r-- 1 andrew esial1 ~~~~~867 2010-03-21 14:47 mystere.c}
+
+~\\
+Soit le script {\tt examen.sh} suivant\,:
+{\small
+\begin{quote}
+\begin{tabular}{|p{130mm}|}
+\hline
+\begin{verbatim}
+#! /bin/sh 
+# commande examen.sh
+rep=/home/1A/
+
+n=`ls -l $rep | grep "^-.*" | sed 's/^\([^ ]*\) *\([0-9]*\) *\([^ ]*\).*/\3/'`
+echo $n
+\end{verbatim} 
+\\
+\hline
+\end{tabular}
+\end{quote}
+}
+
+~\\
+\Question Que fait ce script\,? Qu'imprime-t-il\,?
+
+% renvoit pour chaque fichier l'utilisateur qui le possède
+
+\Question On souhaite modifier ce script afin qu'il supprime tous les
+fichiers {\tt core} qui se trouveraient sous le {\em home directory}
+des étudiants d'Esial1 après avoir affiché sa taille.
+Le cas échéant, le script indiquera\,:
+\begin{center}
+{\tt etudiant andrew : fichier core inexistant}
+\end{center}
+
+Réécrivez le script de telle sorte que\,:
+\begin{enumerate}
+ \item il vérifie que les droits du fichier {\tt core}, s'il existe,
+ sont positionnés de sorte que ce fichier soit entièrement accessible
+ pour le groupe {\em others},
+ \item il affiche  la taille de ce fichier {\tt core} s'il existe et le
+ supprime ensuite, ou imprime, le  cas échéant le message cité précédemment.
+ On rappelle que la taille d'un fichier est donnée par le 5ième champ
+ d'une ligne retournée par {\tt ls -l} (valeur 867 pour le fichier
+ mystère.c).
+\end{enumerate} 
+
+
+% pour avoir la taille, faire:
+% size=`ls -l $rep | sed 's/^\([^ ]*\) *\([0-9]*\) *\([^ ]*\) *\([^ ]*\)
+%  *\([0-9]*\).*/\5/'` 
+
+\end{Exercice}
+
+
+~\\
+
+\hrule
+
+~\\
+{\Large\sffamily  Rappel de quelques options de {\tt grep}.}
+
+\begin{quote}
+\begin{verbatim}
+  grep  - print lines matching a pattern
+
+   -c, --count
+       Suppress normal output; instead print a count of matching  lines
+       for  each  input  file.
+
+   -q, --quiet, --silent
+       Quiet;  do  not  write  anything  to  standard   output.    Exit
+       immediately  with  zero status if any match is found, even if an
+       error was detected. 
+
+   -v, --invert-match
+       Invert the sense of matching, to select non-matching lines. 
+\end{verbatim}
+\end{quote}
+
+
+%-----------------------------
+\end{document}
+
+\newpage
+
+{\large \bf Solution exercice 5\,:}
+
+{\small\small 
+\begin{quote}
+\begin{tabular}{|p{170mm}|}
+\hline
+\begin{verbatim}
+#! /bin/sh
+# question 5 de l'examen shell de mai 2010
+
+rep=/home/1A
+
+n=`ls -l $rep | grep "^-.*" | sed 's/^\([^ ]*\) *\([0-9]*\) *\([^ ]*\).*/\3/'`
+
+
+for i in $n
+do	
+if [ ! -f $rep/$i/core ]
+then 
+   echo " etudiant $i : fichier core inexistant "
+   exit 1
+else
+   droit=`ls -l $rep/$i/core | grep -c "^.......rwx"`
+   # $droit vaut 1  si les droits sont en rwx pour others 
+   # $droits vaut 0 sinon
+
+   if [ $droit -eq 0 ]
+   then 
+      echo "$rep/$i/core : droits sur core non ouverts"
+      exit 2
+   else
+      size=`ls -l $rep/$i/core | sed 's/^\([^ ]*\) *\([0-9]*\) *\([^ ]*\) *\([^ ]*\) *\([0-9]*\).*/\5/'` 
+      echo "taille du fichier core : $size "
+      echo "on efface ce fichier inutile"
+      rm -i $rep/$i/core
+   fi
+fi
+
+done
+exit 0
+\end{verbatim} 
+\\
+\hline
+\end{tabular}
+\end{quote}
+}
+
+
+
+Des trucs en vrac ....
+%----------------------------------------
+
+Trouvez tous les fichiers core dans l'arborescence et supprimez les
+après confirmation. 
+
+Solution:
+
+find / -name "core" -print -ok rm {}\; 
+
+----------------
+
+Dans le fichier passwd qui est dans votre home directory, éditez les
+lignes commençant par des noms de login ne contenant pas de chiffre. 
+
+Solution:
+
+cat passwd | grep "^[^0-9][^0-9]*:"
+
+ou
+
+cat passwd | grep "^[a-z][a-z]*:"
+
+----------
+
+Editez les lignes du fichier passwd commençant par des noms de login
+de 3 ou 4 caractères. 
+
+Solution:
+
+cat passwd | grep "^.\{3,4\}:" 

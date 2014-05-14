@@ -1,0 +1,471 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{esial}\CSH\1A
+%\usepackage[correction]{esial}\CSH\1A
+\newcommand{\cd}[1]{\medskip\noindent\file{\null\hspace{-1em}[#1] }}
+\newcommand{\touche}[1]{\hbox{$<$#1$>$}}
+\newcommand{\ctrl}[1]{\touche{ctrl-#1}}
+\newcommand{\tab}{\touche{TAB}}
+\sloppy
+\usepackage{textcomp,amstext}
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\BoxRep}{\ifcorrection{\boxtimes}{\Box}}
+
+\title{Devoir surveillé du 26 mai 2007}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{quote}
+  Tous documents interdits. Les exercices sont indépendants. La correction
+  tiendra compte de la qualité de la rédaction et de la présentation. Barème
+  approximatif.
+\end{quote}
+
+
+\begin{Exercice} 
+  On souhaite écrire une fonction qui renvoie la position de la première
+  occurence d'un caractère (paramètre \texttt{c}) dans une chaîne de caractères
+  (paramètre \texttt{str}), ou -1 si le caractère n'est pas présent. Voici le
+  prototype de la fonction:
+
+  \run{int premier\_cara(char c, char *str);}
+\Question \textbf{(2 pts)} Écrire cette fonction
+
+\begin{Reponse}
+  \begin{Verbatim}
+int premier_cara(char c, char *str) {
+  int i;
+  for (i=0; str[i] != '\0; i++) 
+    if (str[i] == c) 
+      return i+1;
+  return -1;
+}
+  \end{Verbatim}
+\end{Reponse}
+\Question \textbf{(1 pt)} Écrire une fonction \texttt{main} permettant de tester votre
+travail. Exemple d'exécution:
+\begin{Verbatim}
+$ ./occurence o Bonjour
+La première occurence de 'o' dans 'Bonjour' est à la position 2.
+$  
+\end{Verbatim}
+\begin{Reponse}
+  \begin{Verbatim}
+#include <stdio.h>
+int main(int argc,char *argv[]) {    
+  printf("La première occurence de '%c' dans %s' est à la position %d.\n",
+         argv[1][0], argv[2], premier_cara(argv[1][0], argv[2]));
+  return 1;        
+}
+  \end{Verbatim}
+\end{Reponse}
+\end{Exercice}
+
+
+\begin{Exercice} \textbf{(2 pts)}
+  La fonction \texttt{strdup} de la bibliothèque standard permet de duppliquer
+  une chaîne: elle réserve un emplacement mémoire suffisament grand pour
+  contenir la chaîne, puis effectue la copie.
+
+  \Question Réimplémentez \texttt{strdup} sans utiliser de fonction de la
+  bibliothèque standard à part malloc.
+\begin{Reponse}
+  \begin{Verbatim}
+char *chdup(char *str) {
+  char *res;
+  int i;
+  for (i=0; str[i] != '\0'; i++);/* Calcule la longueur */
+  
+  res = malloc(i+1);             /* Alloue un espace suffisament grand (+1 pour \0) */
+
+  for (i=0; str[i] != '\0'; i++) /* Fait la copie */
+    res[i] = str[i];
+  res[i] = '\0';
+  return res;
+}
+  \end{Verbatim}
+\end{Reponse}
+\end{Exercice}
+
+\begin{Exercice} \textbf{(2 pts)}
+  Écrire un script shell \run{est\_arrive utilisateur} qui teste toutes les dix
+  secondes si l'\texttt{utilisateur} en question s'est connecté, et s'arrête
+  avec un message adéquat si c'est le cas. \texttt{utilisateur} est un nom de
+  login UNIX. On rappelle que la commande \texttt{who} affiche les utilisateurs
+  actuellement connectés sous la forme:
+  \begin{Verbatim}
+rouyerj2 pts/3        May 24 11:01
+cario2   pts/46       May  2 08:59
+costa15  pts/71       May  3 10:39
+alexand2 pts/11       May 23 10:51 (arc.loria.fr)    
+  \end{Verbatim}
+
+\end{Exercice}
+\begin{Reponse}
+  \begin{Verbatim}
+#! /bin/sh
+while true ; # ou [ 1 -eq 1 ] par exemple
+do
+  if who | grep $1 ; then 
+    echo $1 est arrivé!
+    exit 0
+  fi
+  sleep 10
+done    
+  \end{Verbatim}
+\end{Reponse}
+
+\begin{Exercice} \textbf{(2 pts)}
+  Écrire un script shell \run{danger dir} qui cherche tous les sous-répertoires
+  de \texttt{dir} dans lesquels tout le monde peut écrire. 1 pt de bonus si votre
+  solution mène une recherche récursive.
+  \begin{Reponse}
+    \begin{Verbatim}[label=Version de base]
+#! /bin/sh
+
+cd $1
+for d in * ; do
+  if [ -d $d ] ; then
+      if ls -l $1 | grep $d | grep '^d.......w.' > /dev/null; then
+            echo "Danger! Tout le monde peut écrire dans $1/$d"
+      fi
+  fi
+done
+\end{Verbatim}
+\begin{Verbatim}[label=Version récursive]
+#! /bin/sh
+
+for d in $1/* ; do
+  if [ -d $d ] ; then
+      bn=`basename $d`
+      if ls -lh $1 | grep $bn | grep '^d.......w.' > /dev/null; then
+            echo "Danger! Tout le monde peut écrire dans $d"
+      fi
+      $0 $d
+  fi
+done
+    \end{Verbatim}
+  \end{Reponse}
+\end{Exercice}
+
+\begin{Exercice}\textbf{(2pts)}
+%
+Écrivez un fichier de commandes de nom \fich{sauvegarde.sh} permettant de~: 
+\begin{itemize}
+\item 
+	Créer un répertoire de nom \fich{Archives} dans votre répertoire 
+	personnel (s'il n'y existe pas déjà)~;
+      \item Copier dans ce répertoire \fich{Archives} tous les fichiers
+        exécutables qui se trouvent dans le répertoire dont le nom est donné en
+        argument.  \\
+        Si le répertoire donné en argument n'existe pas, afficher un message
+        d'erreur.
+\end{itemize}
+\end{Exercice}
+\begin{Reponse}\newpage
+  \begin{Verbatim}
+#! /bin/sh
+if [ ! -e ~/Archives ] ; then
+  mkdir ~/Archives
+fi
+if [ ! -e $1 ] ; then
+  echo "$0: $1 n'existe pas"
+  exit 1
+fi
+for fich in $1/* ; do
+  if [ ! -d $fich ] ; then if [ -x $fich ] ; then
+    cp $fich ~/Archives
+  fi; fi
+done
+  \end{Verbatim}
+\end{Reponse}%$
+\begin{Exercice}\textbf{(3pts)} % Pour chacune des questions suivantes, vous répondrez en une
+%  seule ligne de commande.
+%   \begin{enumerate}
+%   \item Envoyer la liste détaillée des fichiers du répertoire courant à toto@loria.fr
+%   \item Idem, mais on ne souhaite pas afficher les informations concernant les
+%     répertoires. 
+%   \end{enumerate}
+  On suppose que l'on dispose d'un fichier calepin.txt, contenant des noms et
+  des numéros de téléphone rangés de la manière suivante :
+  \begin{Verbatim}[label=calepin.txt,gobble=4]
+    DUPONT Jean,05.61.75.18.47,21/08/1975,jean.dupont@free.fr
+    MARTIN Yvonne,02.23.34.45.56,26/02/1977,yvonne.martin@cegetel.fr
+    ...
+  \end{Verbatim}
+
+  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+  effectue la recherche des personnes s'appelant DURAND et qui restitue leur
+  addresse éléctronique.
+
+  \begin{Reponse}
+cat calepin.txt $|$ grep -i durand $|$ cut -f4 -d,
+  \end{Reponse}
+
+%  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+%  compte les gens habitant dans le sud-est (numéro en 04)
+%  \begin{Reponse}
+%     cat calepin.txt | cut -f3 -d' ' | cut -f1 -d'.' | grep '05' | wc -l
+%  \end{Reponse}
+  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+  compte les gens ayant 20 ans cette année.
+  \begin{Reponse}
+    cat calepin.txt $|$ cut -f3 -d, $|$ cut -f3 -d'/' $|$ grep -c 1987
+  \end{Reponse}
+
+%  \Question \textbf{(1pt)} Écrire un script (ou une commande) envoyant un
+%  message éléctronique contenant ``Bonne Année'' à tout le monde.
+  \Question \textbf{(2 pts)} Écrire un script (ou une commande) classant les
+  personnes de la plus vieille à la plus jeune.
+  \begin{Reponse}
+    \begin{Verbatim}
+cat calepin.txt | \
+  sed 's|^\([^,]*,[^,]*\),\(..\)/\(..\)/\(....\)|\4/\3/\2,\1,\2/\3/\4|' | \
+  sort -r | \
+  sed 's|^[^,],||'
+    \end{Verbatim}
+    \begin{itemize}
+    \item On écrit les lignes sous la forme:\\
+      1975/08/21,DUPONT Jean,05.61.75.18.47,21/08/1975,jean.dupont@free.fr
+    \item On les trie
+    \item On retire le début qui nous a servi à trier
+    \end{itemize}
+  \end{Reponse}
+
+%  \Question \textbf{(1pt)} Écrire un script (ou une commande) envoyant un
+%  message éléctronique contenant ``Bon anniversaire'' à toutes les personnes
+%  dont c'est l'anniversaire.
+%
+%  \noindent \textit{Indication}: \run{date +\%d/\%m} affiche la date du jour
+%  sous la forme: jj/mm
+
+  \noindent \textit{Indication}: \run{sort -r} trie les lignes passées entrée
+  standard dans l'ordre décroissant.
+\end{Exercice}
+
+%\chead{}
+\lhead{\LARGE NOM:}
+\chead{\LARGE PRÉNOM:}
+\newpage
+\begin{Exercice}
+  Voici un programme C. Il compile et s'exécute normalement sans erreur.
+
+  \begin{minipage}{.35\linewidth}
+  \begin{Verbatim}
+#include <stdlib.h>
+#include <stdio.h>
+// Définition des fonctions
+void f1 ( int a, int *b ) {
+  a = *b;
+}
+void f2 ( int *b, int c ) {
+  *b = c;
+}
+void f3 ( int *a, int c ) {
+  f4 ( &a, c );
+}
+void f4 ( int **b, int a ) {
+  **b = a;
+}
+  \end{Verbatim}
+  \end{minipage}~~~~
+  \begin{minipage}{.6\linewidth}
+  \begin{Verbatim}
+// Fonction principale
+int main () {
+  int x = 5, y = 7, z = 9;
+  f1 ( x, &y );
+  printf ( "x = %d, y = %d, z = %d\n", x, y, z );
+  f2 ( &x, y );
+  printf ( "x = %d, y = %d, z = %d\n", x, y, z );
+  f3 ( &y, z );
+  printf ( "x = %d, y = %d, z = %d\n", x, y, z );
+  return 0;
+}    
+  \end{Verbatim}    
+  \end{minipage}
+
+\Question \textbf{(3 pts)}  Qu'affiche ce programme lors de son exécution?
+\begin{Reponse}
+\noindent x = 5, y = 7, z = 9\\
+x = 7, y = 7, z = 9\\
+x = 7, y = 9, z = 9
+
+(-1/2 par erreur, mais l'exo est largement sur-noté. Il vaut pas 3 pts)
+\end{Reponse}
+\end{Exercice}
+
+\begin{Exercice} \textbf{QCM}
+Répondez sur la feuille fournie. Il peut y avoir plusieurs cases valides par
+ligne; les réponses fausses seront pénalisées.
+
+\Question \textbf{(2 pts)} Quel est le type de chacune des variables dans cet
+extrait de programme?
+
+\noindent\hspace{-.8em}\begin{minipage}{.28\linewidth}
+\begin{Verbatim}
+int *a,b;
+char **c, *d[12];
+
+typedef struct {
+  char *marque;
+  int nb_places;
+  float consomation;
+} voiture_t, *voiture; 
+
+voiture_t e,f[12];
+voiture   g,h[12];
+\end{Verbatim}  
+\end{minipage}~\begin{minipage}{.7\linewidth}
+\begin{tabular}{|l|c|c|c|c|c|c|}\hline
+  variable & entier & flottant & structure & pointeur & tableau & 
+  $\left(\!\!\begin{array}{c}
+    \text{écriture}\\
+    \text{invalide}
+  \end{array}\!\!\right)$ \\\hline
+  a & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$\\\hline
+  b & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  c & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$\\\hline
+  d & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$\\\hline
+  e & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  e.nb\_places    & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  e-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  f & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$\\\hline
+  f.nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  f-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  f[0].nb\_places    & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  f[0]-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  g & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$\\\hline
+  g.nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  g-$>$nb\_places & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  h & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$\\\hline
+  h.nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  h-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  h[0].nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  h[0]-$>$nb\_places & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+\end{tabular}
+\end{minipage}
+\begin{Reponse}
+  \begin{itemize}
+  \item +0.1 par réponse juste
+  \item -0.1 par réponse fausse
+  \item 0 si blanc ou une réponse juste et une réponse fausse sur la ligne
+  \item arrondi au quart supérieur
+  \end{itemize}
+\end{Reponse}
+
+\Question \textbf{(1 pt)}
+\begin{itemize}
+\item[$\bullet$] Si dans un fichier \textit{makefile} on trouve la ligne suivante :
+  \run{toto: tutu}
+  \begin{itemize}
+  \item[$\BoxRep$] cela veut dire qu'il faut reconstruire \texttt{toto} chaque
+    fois que \texttt{tutu} change
+  \item[$\Box$] cela veut dire qu'il faut reconstruire \texttt{tutu} chaque
+    fois que \texttt{toto} change
+  \end{itemize}
+\item[$\bullet$] Dans un fichier d'entêtes (.h), on peut trouver:
+  \begin{itemize}
+  \item[$\Box$] Des définitions de fonctions
+  \item[$\BoxRep$] Des prototypes de fonctions
+  \item[$\BoxRep$] Des définitions de types
+  \end{itemize}
+\item[$\bullet$] L'expression \run{if [ -x toto -a -d toto ]} teste si:
+  \begin{itemize}
+  \item[$\Box$] on a le droit d'exécuter et d'effacer \texttt{toto}
+  \item[$\Box$] on a le droit d'exécuter \texttt{toto} et si sa taille est non nulle
+  \item[$\Box$] \texttt{toto} est un répertoire dont on peut lire le contenu
+  \item[$\BoxRep$] \texttt{toto} est un répertoire dans lequel on peut entrer
+  \end{itemize}
+\end{itemize}
+\begin{Reponse}
+  \begin{itemize}
+  \item +0.25 par case cochée à juste titre
+  \item -0.25 par case cochée à tord
+  \item 0 si blanc
+  \end{itemize}
+\end{Reponse}
+
+\end{Exercice}
+
+      
+
+% \begin{Exercice} \textbf{(3pts)}
+%   %
+%   L'administrateur d'une machine souhaite être prévenu lorsque le nombre
+%   d'utilisateurs d'une machine dépasse une certaine valeur N.  Il souhaite donc
+%   écrire un programme qui lui affiche un message chaque fois que cette valeur
+%   est dépassée.
+
+%   Pour connaître le nombre courant d'utilisateurs il dispose de la commande
+%   \fich{uptime}:
+
+% \begin{Verbatim}
+% {administrateur} 27 >uptime
+%   9:16am  up 99 day(s), 23:08,  2 users,  load average: 1.47, 1.60, 1.52
+% {administrateur} 28 >
+% \end{Verbatim}
+
+% \Question \textbf{(\textonehalf pt)} Écrivez un fichier de commande
+% \fich{uptime.sh} qui exécute la commande \fich{uptime} toutes les 10 minutes.
+
+% \Question \textbf{(2pt)} Écrivez un programme C qui sera compilé sous le nom
+% \fich{uptime\_vers\_users}.  Ce programme prend en argument sur la ligne de
+% commande un entier N et une adresse email.  Il lit en permanence au clavier le
+% résultat de la commande \fich{uptime} et envoie un couriel lorsque le nombre
+% d'utilisateurs dépasse N. 
+
+% \noindent \textit{Indication:} La fonction C \underline{\texttt{int
+%     system(char *cmd)}} permet d'exécuter la commande \texttt{cmd} dans un
+% shell. On peut utiliser le programme \texttt{mail} dans cette commande.
+
+% \Question \textbf{(\textonehalf pt)} Quelle commande doit exécuter notre
+% administrateur pour recevoir un couriel chaque fois qu'il y a plus de 15
+% utilisateurs sur la machine ?
+% \end{Exercice}
+
+\end{document}
+
+
+
+\subsection*{Exercice 6}
+
+L'option {\tt -o} du compilateur {\tt gcc} permet d'indiquer le nom du 
+programme exécutable que l'on souhaite générer. Cette option est ``dangereuse''
+dans le sens où le compilateur ne fait aucune vérification sur le nom de ce 
+programme exécutable. Ainsi la commande suivante efface silencieusement
+le fichier source \fich{max2.c}~: \\
+	\unix{gcc max2 -o max2.c}
+
+Pour éviter ce genre de problème à un utilisateur débutant, on propose de 
+lui écrire une nouvelle commande de nom \fich{compile}, qui accepte les mêmes 
+arguments que \fich{gcc}, et qui~: 
+\begin{itemize}
+\item affiche un message d'avertissement si la commande proposée risque 
+	d'effacer un fichier source ;
+\item exécute normalement la commande standard \fich{gcc} dans le cas contraire.
+\end{itemize}
+~ \\
+
+On suppose que cet utilisateur n'écrit et ne compile que des programmes constitués 
+d'un seul fichier source. Il utilisera donc la commande \fich{compile} de deux 
+manière possible : \\
+	\unix{compile -o \mbox{{\em fichier1}} \mbox{{\em fichier2}}} \\
+ou \\
+	\unix{compile \mbox{{\em fichier1}} -o \mbox{{\em fichier2}}} 
+
+
+{\bf 1.} 
+Ecrivez la commande \fich{compile} sous la forme d'un fichier de commande.
+
+{\bf 2.} 
+Ecrivez la commande \fich{compile} sous la forme d'un programme C.
+
+
+% LocalWords:  Makefile Laurel strings
+%%% Local Variables:
+%%% coding: utf-8

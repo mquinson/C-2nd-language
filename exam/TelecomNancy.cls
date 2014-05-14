@@ -1,0 +1,1 @@
+../../LatexThemeTelecomNancy/TelecomNancy.cls

@@ -1,0 +1,291 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{esial}\CSH\1A
+%\usepackage[correction]{esial}\CSH\1A
+\newcommand{\cd}[1]{\medskip\noindent\file{\null\hspace{-1em}[#1] }}
+\newcommand{\touche}[1]{\hbox{$<$#1$>$}}
+\newcommand{\ctrl}[1]{\touche{ctrl-#1}}
+\newcommand{\tab}{\touche{TAB}}
+\sloppy
+\usepackage{textcomp,amstext}
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\BoxRep}{\ifcorrection{\boxtimes}{\Box}}
+
+\title{Devoir surveillé du 11 juin 2008 (consolidation)}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{quote}
+  Tous documents interdits. Les exercices sont indépendants. La correction
+  tiendra compte de la qualité de la rédaction et de la présentation. Barème
+  approximatif.
+\end{quote}
+
+
+\begin{Exercice} \textbf{(6pts)}
+  On souhaite écrire une fonction qui compte le nombre d'occurrence de
+  caractères dans une chaîne donnée. 
+  
+  \Question (2pts) Écrivez la fonction \run{int compte\_un(char
+    *chaine, char car)} comptant le nombre d'occurrences du caractère passé en
+  deuxième argument dans la chaîne passée en premier argument. Ainsi,
+  \run{compte\_un("bonjour",b)} doit retourner 1 tandis que 
+  \run{compte\_un("bonjour",o)} doit retourner 2.
+
+\begin{Reponse}
+  \begin{Verbatim}
+int compte_un(char *chaine, char car) {
+  int res = 0;
+  char *p = chaine;
+  while (*p != '\0') {
+    if (*p == car)
+      res++;
+    p++;
+  }
+  return res;
+}
+\end{Verbatim}
+\end{Reponse}
+
+\Question (4pts) Écrivez la fonction \run{int *compte\_tous(char *chaine)} qui
+retourne un tableau de 26 entiers (que vous devrez allouer), chacun indiquant
+le nombre d'occurrences de la lettre correspondante.
+
+\begin{Reponse}
+\begin{Verbatim}
+int *compte_tous(char *chaine) {
+  int* res = malloc(sizeof(int)*26);
+  int i;
+  char *p = chaine;
+  for (i=0;i<26;i++) {
+    res[i] = 0;
+  }
+  while (*p != '\0') {
+    if (*p<='z' && *p >= 'a') {
+      res[*p-'a']++;
+    }
+  }
+  return res;
+}
+  \end{Verbatim}
+\end{Reponse}
+\end{Exercice}
+
+\medskip
+\begin{Exercice} \textbf{(7pts)} Soit un fichier regroupant les résultats de
+  l'euro 2008 sous la forme suivante :
+
+  \noindent
+  \begin{minipage}{.3\linewidth}
+  \begin{Verbatim}
+Suisse Rep.Tcheque 0 1
+Portugal Turquie 2 0
+Rep.Tcheque Portugal 1 3  
+Autriche Croatie 0 1
+Allemagne Pologne 2 0
+Roumanie France 0 0
+Pays-Bas Italie 3 0
+Espagne Russie 4 1
+Grèce Suède 0 2
+  \end{Verbatim}    
+  \end{minipage}\hfill%
+  \begin{minipage}{.68\linewidth}
+  Les deux premières colonnes sont les équipes ayant joué le match (dans un
+  ordre non spécifié) et les deux suivantes sont les scores respectifs de ces
+  équipes. Les colonnes sont séparées par une seule espace.
+  \end{minipage}
+
+  \Question (\textonehalf~pt) Écrire une commande shell donnant tous les
+  résultats concernant la France.
+
+\begin{Reponse}
+  \begin{Verbatim}
+grep France fichier    
+  \end{Verbatim}
+\end{Reponse}
+
+\Question (\textonehalf~pt) Écrire une commande donnant le score du match
+entre la France et la Roumanie.
+
+\begin{Reponse}
+  \begin{Verbatim}
+grep France fichier | grep Roumanie 
+  \end{Verbatim}
+ On peut pas faire un seul grep (facilement) car on ne sait pas dans quel ordre
+ sont listées les équipes.
+\end{Reponse}
+
+\Question (2pts) Écrire un script shell listant tous les matches s'étant soldés
+par un match nul (même nombre de buts inscrits par chaque équipe).
+
+\begin{Reponse}
+  Version inélégante: 
+  \begin{Verbatim}
+grep "0 0'' fichier; grep "1 1" fichier; grep "2 2" fichier (etc)
+  \end{Verbatim}
+  Version plus réfléchie:
+  \begin{Verbatim}
+for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 ; do
+  grep "$i $i" fichier
+done    
+  \end{Verbatim}
+  Version propre:
+  \begin{Verbatim}
+for i in `seq 0 20`; do
+  grep "$i $i" fichier
+done    
+  \end{Verbatim}
+\end{Reponse}
+
+\Question (4 pts) Écrire un script shell prenant deux noms d'équipes en
+paramètres et indiquant si la première équipe a gagné, si c'est la seconde ou
+si le match s'est soldé par un nul.
+
+\begin{Reponse}
+  \begin{Verbatim}
+match=`grep $1 fichier | grep $2`  # la ligne qui parle de ce match 
+                                   # (attention, le portugal a fait 2 matchs !)
+
+un=`echo $match | grep "^$1" | cut -f3 -d' '`   # le champ 3 si $1 est au début
+if [ -z $un ] ; then                            # si vide, $1 était en 2ieme
+  un=`echo $match | cut -f4 -d' '`              # alors on cherche le champ 4
+fi
+deux=`echo $match | grep "^$2" | cut -f3 -d' '`       # La même chose avec $2
+if [ -z $un ] ; then 
+  deux=`echo $match | cut -f4 -d' '`
+fi
+
+# On a les deux scores, reste plus qu'à comparer
+if [ $un -lt $deux ] ; then 
+  echo "C'est la première équipe ($1) qui a gagné"
+fi
+if [ $un -gt $deux ] ; then 
+  echo "C'est la deuxième équipe ($2) qui a gagné"
+fi
+if [ $un -eq $deux ] ; then 
+  echo "C'est un match nul"
+fi
+  \end{Verbatim}
+\end{Reponse}
+\end{Exercice}
+
+\smallskip
+\begin{Exercice}\textbf{(6pts)}
+  \textit{Le ROT13 ("rotate by 13 places") (une variante du chiffre de César)
+    est un algorithme très simple de chiffrement de texte. Comme son nom
+    l'indique, il s'agit d'un décalage de 13 caractères de chaque lettre du
+    texte à chiffrer.
+%
+  [...]
+%
+  L'avantage de ROT13, c'est le fait que le décalage soit de 13. L'alphabet
+  comporte 26 lettres, et si on applique deux fois de suite le chiffrement, on
+  obtient comme résultat le texte en clair. Pour cela on doit considérer
+  l'alphabet comme circulaire, c'est-à-dire qu'après la lettre Z on a la lettre
+  A, ce qui permet de grandement simplifier son usage et sa programmation
+  puisque c'est la même procédure qui est utilisée pour le chiffrement et le
+  déchiffrement.} \hfill(D'après Wikipédia).
+\medskip
+
+\hspace{-3.5em}\noindent\begin{tabular}{|c|*{26}{c@{$\,$}|}}\hline
+  Caractère non-chiffré&A&B&C&D&E&F&G&H&I&J&K&L&M&N&O&P&Q&R&S&T&U&V&W&X&Y&Z\\
+  \hline
+  Caractère chiffré&N&O&P&Q&R&S&T&U&V&W&X&Y&Z&A&B&C&D&E&F&G&H&I&J&K&L&M\\
+  \hline
+\end{tabular}
+
+\Question (3pts) Écrivez une fonction \run{void rot13(char *chaine)} appliquant
+l'algorithme ROT13 à la chaîne passée en argument (modifiez la chaîne en place
+pour plus de simplicité). 
+
+\begin{Reponse}
+  \begin{Verbatim}
+void rot13(char *chaine) {
+  char *p=chaine;
+  while (*p) { // jusqu'au \0 final
+    if (*p >= 'a' && *p <= 'z') // on ne change que les lettres
+      *p = ((*p - 'a' + 13) % 26) + 'a';
+      // on commence par remettre la lettre courante sur [0;25] avec "- 'a'"
+      // on applique ROT13 avec "(X +13) % 26"
+      // on retourne de l'intervale [0;25] à ['a';'z'] avec "+ 'a'" à la fin
+      // (les lettres sont des entiers en C; leur valeur numérique est sans intéret)
+    p++; // on regarde la lettre suivante
+  }
+}    
+  \end{Verbatim}
+\end{Reponse}
+
+\Question (3pts) Écrivez un programme \texttt{rot13} prenant deux arguments. Le
+premier est le nom d'un fichier à crypter par ROT13, et le second est le nom du
+fichier dans lequel écrire le résultat.
+
+\begin{Reponse}
+  \begin{Verbatim}
+int main(int argc, char *argv[]) {
+  if (argc != 3) {
+    fprintf(stderr, "Usage: rot13 input output\n");
+    return 1;
+  }
+  FILE *in = fopen(argv[1], "r");
+  FILE *out= fopen(argv[2], "w");
+  if (in == NULL || out == NULL) {
+    fprintf(stderr, "Erreur à l'ouverture des fichiers\n");
+    return 1;
+  }
+  char * ligne = NULL;
+  size_t longueur = 0;
+
+  while (getline(&ligne, &long, in) != -1) {
+    rot13(ligne);              // on utilise la fonction de la question d'avant
+    fprintf(out, "%s", ligne); // on écrit le résultat dans le fichier de sortie
+    // note: ne pas passer ligne directement en 2ieme argument de fprintf 
+    // car si y'a '%s' dedans par hasard, on va avoir un gros probleme
+  }
+
+  if (ligne)
+    free(ligne);
+  fclose(in);
+  fclose(out);
+}    
+  \end{Verbatim}
+\end{Reponse}
+
+\medskip\noindent \textit{Indication}: la fonction \run{int getline(char
+  **ligne\_ptr,int *lgr\_ptr, FILE *flux)} permet de lire un fichier
+ligne à ligne comme le montre l'extrait de code suivant:
+
+\noindent\begin{minipage}{.5\linewidth}
+\begin{Verbatim}
+char * ligne = NULL;
+size_t longueur = 0;
+
+while (getline(&ligne, &long, in) != -1) {
+  // utiliser ligne
+}
+
+// libérer ligne
+\end{Verbatim}
+  
+\end{minipage}~~\begin{minipage}{.5\linewidth}
+Si \texttt{ligne} == NULL, la fonction alloue automatiquement un espace
+mémoire avec \texttt{malloc()} et fait pointer \texttt{ligne}
+dessus. \texttt{longueur} indique la taille du bloc. Si
+\texttt{ligne} != NULL, cela doit pointer sur un bloc de
+taille \texttt{longueur}. \texttt{getline} peut alors utiliser cet espace, ou
+allouer un bloc plus gros au besoin (auquel cas, \texttt{ligne} et
+\texttt{longueur} sont mises à jour).
+\end{minipage}
+
+\smallskip Tout cela pour dire qu'il suffit de mettre le code utilisant la
+\texttt{ligne} lue à l'intérieur de la boucle \texttt{while}.
+\end{Exercice}
+
+\end{document}
+
+% LocalWords:  Makefile strings
+%%% Local Variables:
+%%% coding: utf-8

@@ -1,0 +1,518 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+%\usepackage{esial}\CSH\1A
+\usepackage[correction]{esial}\CSH\1A
+\newcommand{\cd}[1]{\medskip\noindent\file{\null\hspace{-1em}[#1] }}
+\newcommand{\touche}[1]{\hbox{$<$#1$>$}}
+\newcommand{\ctrl}[1]{\touche{ctrl-#1}}
+\newcommand{\tab}{\touche{TAB}}
+\sloppy
+\usepackage{textcomp,amstext}
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\BoxRep}{\ifcorrection{\boxtimes}{\Box}}
+
+\newcommand{\boite}{$\Box$\xspace}
+\newcommand{\boiteRep}{$\BoxRep$\xspace}
+
+\title{Devoir surveillé du 19 mai 2008}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{quote}
+  Tous documents interdits. Les exercices sont indépendants. La correction
+  tiendra compte de la qualité de la rédaction et de la présentation.
+\end{quote}
+
+\begin{Exercice} \textbf{(2 pts)}
+Écrire un script shell prenant un nombre en argument et calculant la somme
+arithmétique de ce nombre (\textit{i.e.,} 1+2+3+\ldots+n).
+
+\begin{Reponse}
+  \begin{Verbatim}
+#!/bin/sh
+n=$1
+somme=$1
+while [ $n -gt 1 ]
+do
+  n=`expr $n - 1`
+  somme=`expr $somme + $n`
+done
+echo "Somme = $somme."
+  \end{Verbatim}
+\end{Reponse}
+\end{Exercice}
+
+\begin{figure}[b]
+  \begin{minipage}{.48\linewidth}   
+  \begin{Verbatim}[label=Programme de l'exercice 2]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct fiche {
+   char *nom;
+   char *prenom;
+   int age;
+};
+
+typedef struct fiche type_fiche;
+
+void main() {   
+  type_fiche *fiche;
+  fiche->nom = malloc(sizeof(char));
+  strcpy(fiche->nom, "Bon");
+  strcpy(fiche->prenom, "Jean");
+  fiche->age = 3;
+  printf("Nom : %s\n", fiche->nom);
+  printf("Prenom : %s\n", fiche->prenom);
+  printf("Age : %s\n", fiche->age);
+}
+      \end{Verbatim}
+    \end{minipage}\hfill  %
+  \begin{minipage}{.48\linewidth}   
+  \begin{Verbatim}[label=Script de l'exercice 3]
+#!/bin/sh
+
+var2="expr 1 + 1"
+a='$2'
+
+pretty_print(){
+  echo "Le pere noël est une $var1"
+  var1=légende
+}
+
+echo est ce que '$1 + $1 = $'"$2 ?"
+echo non plutot \$1 + '$1' = \$$1 
+echo en effet $a n\'est pas egal à `$var2`
+
+var1=$4
+echo Conclusion :
+pretty_print
+echo "mais est-ce une $var1?"
+  \end{Verbatim}
+\end{minipage}
+\end{figure}
+
+\begin{Exercice} \textbf{(2 pts)} Lorsque l'on exécute le programme ci-dessous,
+  on obtient le message d'erreur suivant: \run{Erreur de
+    segmentation}. Pourquoi? Corrigez les (nombreux) problèmes.
+
+  \noindent
+  \begin{minipage}{.5\linewidth}   
+  \end{minipage}
+
+  \begin{Reponse}
+    \begin{itemize}
+    \item Il faut faire un malloc de fiche en ligne 13
+    \item Il faut malloc()er plus de une case en ligne 14:
+      \run{malloc(sizeof(char)*200)}
+    \item Il faut un malloc sur le champ prenom de la structure
+    \item Pour afficher un entier, on utilise \%d, pas \%s
+    \item Il manque les free, et il faudrait tester le retour des malloc
+    \end{itemize}
+
+    (+0.25 par erreur trouvée)
+  \end{Reponse}
+\end{Exercice}
+
+\begin{Exercice} \textbf{(2 pts)} Le script ci-dessous est correct et s'exécute
+  sans erreur.  Quel affichage obtient-on lorsque on 
+  l'exécute de la façon suivante : \run{script 2 3 1 ordure} ?
+
+  \begin{Reponse}
+    \begin{Verbatim}
+est ce que $1 + $1 = $3 ?
+non plutot $1 + $1 = $2
+en effet $2 n'est pas egal à 2
+Conclusion :
+Le pere noël est une ordure
+mais est-ce une légende?      
+    \end{Verbatim}
+    (.5pt par ligne juste, maximisé à 2pts)
+  \end{Reponse}
+\end{Exercice}
+
+\begin{Exercice}\textbf{(1 pt)}
+  Écrivez un petit script shell permettant de remplacer dans un fichier texte
+  tous les nombres flottants par leur partie entière. On considère que les
+  nombres flottants sont écrits sans exposant (c'est-à-dire qu'on écrit le
+  nombre mille sous la forme 1000 et pas 1E3, ou encore qu'un millième s'écrit
+  0.0001 et non pas 1E-3).
+
+  \begin{Reponse}
+    \begin{Verbatim}
+sed 's/\([0-9]\)\.[0-9]+/\1/g'      
+    \end{Verbatim}
+  \end{Reponse}
+\end{Exercice}
+
+\begin{Exercice}\textbf{(4 pts)}
+  On suppose que l'on dispose d'un fichier calepin.txt, contenant des noms et
+  des numéros de téléphone rangés de la manière suivante :
+  \begin{Verbatim}[label=calepin.txt,gobble=4]
+    DUPONT Jean,05.61.75.18.47,21/08/1975,jean.dupont@free.fr
+    MARTIN Yvonne,02.23.34.45.56,26/02/1977,yvonne.martin@cegetel.fr
+    ...
+  \end{Verbatim}
+
+  \Question \textbf{(\textonehalf pt)} Écrire une commande restituant le numéro
+  de téléphone des SCHOTT.
+  \begin{Reponse}
+cat calepin.txt $|$ grep -i shott $|$ cut -f2 -d,
+  \end{Reponse}
+  \Question \textbf{(\textonehalf pt)} Écrire une commande qui
+  compte les gens habitant dans le sud-est (numéro en 04)
+  \begin{Reponse}
+     cat calepin.txt $|$ cut -f3 -d' ' $|$ cut -f1 -d'.' $|$ grep '04' $|$ wc -l
+  \end{Reponse}
+
+  \Question \textbf{(3 pts)} Écrire une commande envoyant un message
+  éléctronique contenant ``Bon anniversaire'' à toutes les personnes dont c'est
+  l'anniversaire aujourd'hui.
+
+  \noindent \textit{Indication}: \run{date +\%d/\%m} affiche la date du jour
+  sous la forme: jj/mm
+\end{Exercice}
+
+\begin{Exercice}\textbf{(6 pts)} 
+La commande head permet (par défaut) d'afficher à l'écran les 10 premières
+lignes d'un fichier dont le nom lui est passé en argument. Par exemple,
+pour afficher les 10 premières lignes du fichier truc.c: \run{head truc.c}
+%
+Écrire un programme C ayant le même comportement que cette commande.
+ 
+\begin{Reponse}
+  \begin{Verbatim}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char* argv[]) {
+
+   if (argc != 2) {
+      fprintf(stderr, "Pas assez d'arguments");
+      exit(1);
+   }
+ 
+   FILE *in = fopen(argv[1],"r");
+   if (in == NULL) {
+      fprintf(stderr, "Pas possible d'ouvrir %s",argv[1]);
+      exit(2);
+   }
+      
+   int seen = 0;
+   while (seen < 10 && !feof(in)) {
+      char c;
+      fscanf(in,"%c",&c);
+      if (c == '\n') 
+	seen ++;
+      printf("%c",c);
+   }
+   fclose(in);
+   return 0;
+}
+\end{Verbatim}
+
+\end{Reponse}
+\end{Exercice}
+
+\newpage
+\lhead{\LARGE NOM:}
+\chead{\LARGE PRÉNOM:}
+
+\begin{Exercice} \textbf{QCM (3 pts)} Répondez sur la feuille fournie. Il peut
+  y avoir plusieurs cases valides par question; les réponses fausses seront
+  pénalisées.
+
+
+\begin{itemize}
+\item[$\bullet$] Le langage C a été inventé chez $\ldots$
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ AT\&T &
+    \boite~    bell &
+    \boite~    IBM &
+    \boite~    Sun
+  \end{tabular}
+
+\item[$\bullet$] Quel est l'équivalent de \run{chmod u=rw,go=r fich}?\smallskip
+  
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    chmod 600 fich &
+    \boite~    chmod 640 fich &
+    \boiteRep~ chmod 644 fich &
+    \boite~    chmod 755 fich 
+  \end{tabular}
+
+\item[$\bullet$] Pour debugger un script shell, que faut il ajouter au début?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    set -dg &
+    \boite~    set -u  &
+    \boiteRep~ set -x  &
+    \boite~    set -w 
+  \end{tabular}
+
+\item[$\bullet$] En cas de succès, que doit retourner la fonction main?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ 0~~   &
+    \boite~    1~~   &
+    \boite~    -1    &
+    \boite~    void  
+  \end{tabular}
+
+\item[$\bullet$] Quel caractère termine classiquement les chaînes en mémoire en
+  C ?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    '$\backslash$n'   &
+    \boiteRep~ '$\backslash$0'   &
+    \boite~    '.'               &
+    \boite~    '$\backslash$END'
+  \end{tabular}
+
+\item[$\bullet$] Que vaut 7/9*9 en C?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ 0       &
+    \boite~    0.08642 &
+    \boite~    1       &
+    \boite~    42       
+  \end{tabular}
+
+\item[$\bullet$] Si p est de type short* et de valeur 0x1000, que vaut p+1?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    0x1001  &
+    \boiteRep~ 0x1002  &
+    \boite~    0x1003  &
+    \boite~    0x1004
+  \end{tabular}
+
+\item[$\bullet$] En C, a[i] est équivalent à $\ldots$
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    \&(a+i)&
+    \boite~     a+i   &
+    \boiteRep~ *(a+i) &
+    \boite~    a[0] + i
+  \end{tabular}
+
+\item[$\bullet$] On obtient l'adresse de la variable v avec $\ldots$
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ \&v&
+    \boite~    *v &
+    \boite~    @v &
+    \boite~    \#v
+  \end{tabular}
+
+\item[$\bullet$] Quelle(s) commande(s) \textbf{ne ramene(nt) pas}
+  l'utilisateur toto dans son répertoire principal?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    cd          &
+    \boiteRep~ cd \url{/~} &
+    \boite~    cd \url{~}  &
+    \boite~    cd \url{~toto}
+  \end{tabular}
+
+\item[$\bullet$] Quelle(s) commande(s) affiche le contenu des fichiers dont le
+  nom commence par le caractère «a», et fini par un point suivi de deux
+  caractères suivis d'un chiffre?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    ls a*.??[0-9]    &
+    \boite~    ls a*.??\#       &
+    \boiteRep~ cat a*.??[0-9]    &
+    \boite~    cat a*.??\#       
+  \end{tabular}
+
+\item[$\bullet$] Par quel caractère doit commencer une ligne de commande dans
+  un Makefile?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    un dollard     &
+    \boite~    une dièse      &
+    \boite~    une espace     &
+    \boiteRep~ une tabulation 
+  \end{tabular}
+
+% An array declared as
+% int exforsys[100];
+% The first element of the array is in
+%              exforsys
+%              exforsys[1]
+%              exforsys[0]
+%              None of the Above
+
+\end{itemize}
+\begin{Reponse}
+  \begin{itemize}
+  \item +0.25 par case cochée à juste titre
+  \item -0.25 par case cochée à tord
+  \item 0 si blanc
+  \end{itemize}
+\end{Reponse}
+\end{Exercice}
+
+\end{document}
+
+\begin{Exercice}\textbf{(3pts)} % Pour chacune des questions suivantes, vous répondrez en une
+%  seule ligne de commande.
+%   \begin{enumerate}
+%   \item Envoyer la liste détaillée des fichiers du répertoire courant à toto@loria.fr
+%   \item Idem, mais on ne souhaite pas afficher les informations concernant les
+%     répertoires. 
+%   \end{enumerate}
+  On suppose que l'on dispose d'un fichier calepin.txt, contenant des noms et
+  des numéros de téléphone rangés de la manière suivante :
+  \begin{Verbatim}[label=calepin.txt,gobble=4]
+    DUPONT Jean,05.61.75.18.47,21/08/1975,jean.dupont@free.fr
+    MARTIN Yvonne,02.23.34.45.56,26/02/1977,yvonne.martin@cegetel.fr
+    ...
+  \end{Verbatim}
+
+  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+  effectue la recherche des personnes s'appelant DURAND et qui restitue leur
+  addresse éléctronique.
+
+  \begin{Reponse}
+cat calepin.txt $|$ grep -i durand $|$ cut -f4 -d,
+  \end{Reponse}
+
+%  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+%  compte les gens habitant dans le sud-est (numéro en 04)
+%  \begin{Reponse}
+%     cat calepin.txt | cut -f3 -d' ' | cut -f1 -d'.' | grep '05' | wc -l
+%  \end{Reponse}
+  \Question \textbf{(\textonehalf pt)} Écrire un script (ou une commande) qui
+  compte les gens ayant 20 ans cette année.
+  \begin{Reponse}
+    cat calepin.txt $|$ cut -f3 -d, $|$ cut -f3 -d'/' $|$ grep -c 1987
+  \end{Reponse}
+
+%  \Question \textbf{(1pt)} Écrire un script (ou une commande) envoyant un
+%  message éléctronique contenant ``Bonne Année'' à tout le monde.
+  \Question \textbf{(2 pts)} Écrire un script (ou une commande) classant les
+  personnes de la plus vieille à la plus jeune.
+  \begin{Reponse}
+    \begin{Verbatim}
+cat calepin.txt | \
+  sed 's|^\([^,]*,[^,]*\),\(..\)/\(..\)/\(....\)|\4/\3/\2,\1,\2/\3/\4|' | \
+  sort -r | \
+  sed 's|^[^,],||'
+    \end{Verbatim}
+    \begin{itemize}
+    \item On écrit les lignes sous la forme:\\
+      1975/08/21,DUPONT Jean,05.61.75.18.47,21/08/1975,jean.dupont@free.fr
+    \item On les trie
+    \item On retire le début qui nous a servi à trier
+    \end{itemize}
+  \end{Reponse}
+
+%  \Question \textbf{(1pt)} Écrire un script (ou une commande) envoyant un
+%  message éléctronique contenant ``Bon anniversaire'' à toutes les personnes
+%  dont c'est l'anniversaire.
+%
+%  \noindent \textit{Indication}: \run{date +\%d/\%m} affiche la date du jour
+%  sous la forme: jj/mm
+
+  \noindent \textit{Indication}: \run{sort -r} trie les lignes passées entrée
+  standard dans l'ordre décroissant.
+\end{Exercice}
+
+%\chead{}
+\lhead{\LARGE NOM:}
+\chead{\LARGE PRÉNOM:}
+\newpage
+\begin{Exercice}
+  Voici un programme C. Il compile et s'exécute normalement sans erreur.
+
+  \begin{minipage}{.35\linewidth}
+
+\end{Exercice}
+
+      
+
+% \begin{Exercice} \textbf{(3pts)}
+%   %
+%   L'administrateur d'une machine souhaite être prévenu lorsque le nombre
+%   d'utilisateurs d'une machine dépasse une certaine valeur N.  Il souhaite donc
+%   écrire un programme qui lui affiche un message chaque fois que cette valeur
+%   est dépassée.
+
+%   Pour connaître le nombre courant d'utilisateurs il dispose de la commande
+%   \fich{uptime}:
+
+% \begin{Verbatim}
+% {administrateur} 27 >uptime
+%   9:16am  up 99 day(s), 23:08,  2 users,  load average: 1.47, 1.60, 1.52
+% {administrateur} 28 >
+% \end{Verbatim}
+
+% \Question \textbf{(\textonehalf pt)} Écrivez un fichier de commande
+% \fich{uptime.sh} qui exécute la commande \fich{uptime} toutes les 10 minutes.
+
+% \Question \textbf{(2pt)} Écrivez un programme C qui sera compilé sous le nom
+% \fich{uptime\_vers\_users}.  Ce programme prend en argument sur la ligne de
+% commande un entier N et une adresse email.  Il lit en permanence au clavier le
+% résultat de la commande \fich{uptime} et envoie un couriel lorsque le nombre
+% d'utilisateurs dépasse N. 
+
+% \noindent \textit{Indication:} La fonction C \underline{\texttt{int
+%     system(char *cmd)}} permet d'exécuter la commande \texttt{cmd} dans un
+% shell. On peut utiliser le programme \texttt{mail} dans cette commande.
+
+% \Question \textbf{(\textonehalf pt)} Quelle commande doit exécuter notre
+% administrateur pour recevoir un couriel chaque fois qu'il y a plus de 15
+% utilisateurs sur la machine ?
+% \end{Exercice}
+
+\end{document}
+
+
+
+\subsection*{Exercice 6}
+
+L'option {\tt -o} du compilateur {\tt gcc} permet d'indiquer le nom du 
+programme exécutable que l'on souhaite générer. Cette option est ``dangereuse''
+dans le sens où le compilateur ne fait aucune vérification sur le nom de ce 
+programme exécutable. Ainsi la commande suivante efface silencieusement
+le fichier source \fich{max2.c}~: \\
+	\unix{gcc max2 -o max2.c}
+
+Pour éviter ce genre de problème à un utilisateur débutant, on propose de 
+lui écrire une nouvelle commande de nom \fich{compile}, qui accepte les mêmes 
+arguments que \fich{gcc}, et qui~: 
+\begin{itemize}
+\item affiche un message d'avertissement si la commande proposée risque 
+	d'effacer un fichier source ;
+\item exécute normalement la commande standard \fich{gcc} dans le cas contraire.
+\end{itemize}
+~ \\
+
+On suppose que cet utilisateur n'écrit et ne compile que des programmes constitués 
+d'un seul fichier source. Il utilisera donc la commande \fich{compile} de deux 
+manière possible : \\
+	\unix{compile -o \mbox{{\em fichier1}} \mbox{{\em fichier2}}} \\
+ou \\
+	\unix{compile \mbox{{\em fichier1}} -o \mbox{{\em fichier2}}} 
+
+
+{\bf 1.} 
+Ecrivez la commande \fich{compile} sous la forme d'un fichier de commande.
+
+{\bf 2.} 
+Ecrivez la commande \fich{compile} sous la forme d'un programme C.
+
+
+% LocalWords:  Makefile Laurel strings
+%%% Local Variables:
+%%% coding: utf-8
