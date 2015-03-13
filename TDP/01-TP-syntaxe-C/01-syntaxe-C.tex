@@ -24,6 +24,9 @@
   S'ils veulent utiliser un clicodrome pour écrire leur code, c'est possible,
   mais ils doivent savoir compiler en ligne de commande. Pensez à les inciter à
   ajouter -Wall à la compilation.
+
+  Lorsqu'il leur manquent un header pour une fonction, ne pas hésiter à leur
+  conseiller de consulter la commande "man 3 \emph{fonction}".
 \end{Reponse}
 \Exercice \textbf{Premier programme, et entrées/sorties.}
 \Question Écrivez un programme C qui calcule le maximum de 3 entiers saisis au
@@ -112,6 +115,91 @@ l'esthétique des affichages.
 \begin{Reponse}
   en fait, le jeu ici est de leur faire saisir une chaine de caractères, vu que
   ca se fait pas pareil au scanf.
+
+\bigskip\noindent\begin{minipage}{\linewidth}
+  \begin{Verbatim}[label=Reponse aux 3 questions de l'exercice 2 proposee par Julien]
+#include <stdio.h> // scanf, printf
+#include <stdlib.h> // EXIT_SUCCESS, EXIT_FAILURE
+
+#define NB_SIGNES 12
+#define NB_JOURS 7
+
+int main() {
+  int j, m, a, mj, w, wmod, t, b, c, d;
+  int dates[] = { 119, 218, 320, 419, 520, 620, 721, 822, 922, 1022, 1121, 1221,
+	1231 };
+  char* signes[] = { "Capricorne", "Verseau", "Poisson", "Belier", "Taureau",
+	"Gemeaux", "Cancer", "Lion", "Vierge", "Balance", "Scorpion", "Sagitaire" };
+  char* jours[] = { "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi",
+	"Samedi" };
+  int i = 0, ok = 0; 
+  int exitcode = EXIT_SUCCESS;
+  char prenom[100];
+
+  /* Demande le prenom */
+
+  printf("Prénom : ");
+  scanf("%s", prenom);
+
+  /* Trouver le signe */
+
+  while(!ok) {
+    printf("Date de naissance (jj/mm/aaaa) : ");
+    scanf("%d/%d/%d", &j, &m, &a);
+  
+    // differencier les 30 et 31 demande aussi de differencier les 27 et 28 pour
+    // fevrier, et donc de calculer les annees bissextiles, ce qui devient trop
+    // long pour le TP
+    if(j < 1 || j > 31 || m < 1 || m > 12) {
+      fprintf(stderr, "ERR: Le format de la date est mauvais.\n");
+
+    } else {
+      ok = 1;
+    }
+  }
+
+  printf("\n");
+
+  mj = m * 100 + j;
+  ok = 0;
+
+  for(i = 0; i < NB_SIGNES && !ok; i++) {
+    if(mj <= dates[i]) {
+      printf("%s, tu es du signe %s\n", prenom, signes[i%NB_SIGNES]);
+      ok = 1;
+    }
+  }
+
+  /* Trouver le jour de la semaine */
+
+  if(!ok) {
+    fprintf(stderr, "ERR: Je n'ai pas pu trouver ton signe :(.\n");
+    exitcode = EXIT_FAILURE;
+
+  } else {
+    t = (m <= 2) ? m + 10 : m - 2;
+    b = (m <= 2) ? a - 1 : a;
+    c = b / 100;
+    d = b - 100 * c;
+
+    w = j + (2.6 * t - 0.2) + d + (d / 4) + (c / 4) + 5 * c;
+    wmod = w % 7;
+
+    if(wmod < 0 || wmod >= NB_JOURS) {
+      fprintf(stderr, "ERR: Je ne trouve pas ton jour de la semaine. :(.\n");
+      exitcode = EXIT_FAILURE;
+
+    } else {
+      printf("et ton jour de la semaine est le %s.\n", jours[wmod]);
+    }
+  }
+
+  return exitcode;
+}
+  \end{Verbatim}
+\end{minipage}\hfill
+
+
 \end{Reponse}
 
 % \medskip
