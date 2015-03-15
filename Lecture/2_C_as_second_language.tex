@@ -179,11 +179,15 @@
       \structure{long}   &64 bits&32 or 64 bits\\
       \structure{float}  &32 bits&32 bits\\
       \structure{double} &64 bits&64 bits\\\cline{1-3}
-      \structure{boolean}& 1 bit &--&No such thing in C, use int (or bit fields)\\
+      \structure{boolean}& 1 bit(?) &--&No such thing in C, use int (or bit fields)\\
+      % https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
+      % This data type represents one bit of information, but its
+      % ``size'' isn't something that's precisely defined.
       \structure{byte}   & 8 bits&--&Doesn't exist, use char\\
       \structure{long long}&--   &64 bits&This type is not standard/unofficial\\
       \structure{long double}&-- &80, 96 or 128 bits&this one either\\\cline{1-3}
     \end{tabular}}
+
 
   \begin{block}{Type domains also naturally vary}\medskip
   \resizebox{\linewidth}{!}{
