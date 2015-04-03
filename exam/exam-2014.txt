@@ -1,0 +1,148 @@
+* Devoir surveillé de C, 13 mai 2014
+
+Tous documents interdits à l'exception d'une page A4 recto, manuscrite de votre
+  main. La correction tiendra compte de la qualité de l'argumentaire et de la
+  présentation. Le barème indiqué est approximatif.
+
+* Exercise: Compter les voyelles (chaînes de caractères et fichiers -- 4pts)
+
+On souhaite écrire un programme affichant le décompte des voyelles présentes
+dans une chaîne de caractères donnée.
+
+** Question 
+Écrivez un programme complet prenant une chaîne de caractères à analyser en
+argument de la ligne de commande, de la manière suivante (2pts).
+
+$ ./compte-voyelles "Bonjour. Bon courage pour ce partiel."
+Nombre de a: 2
+Nombre de e: 3
+Nombre de i: 1
+Nombre de o: 5
+Nombre de u: 3
+Nombre de y: 0
+
+
+** Question 
+Modifiez votre programme afin qu'il lise le texte à analyser depuis un fichier
+dont le nom est passé en argument de la ligne de commandes (2pt).
+
+* Exercice: Gestion de parc locatif (programmation structurée, POO -- 6pts)
+
+Pour gagner en efficience, un loueur de voitures décide de concevoir son propre
+progiciel de gestion intégré (ERP) pour gérer son parc. Chaque voiture est
+définie par sa catégorie (Citadine, Berline, Familiale, Utilitaire), sa plaque
+d'immatriculation et son prix par jour. Chaque voiture peut également être
+actuellement disponible, ou bien déjà louée.
+
+** Question 
+Écrivez une structure de données *voiture_t* contenant toutes les informations
+relatives à une voiture donnée. Vous suivrez l'approche plutôt orientée objet
+vue en cours. (1/2 pt)
+
+** Question
+Écrivez une fonction *voiture_new()*, prenant en arguments les informations
+initiales, et retournant une référence à un «objet», c'est-à-dire un pointeur
+sur une nouvelle structure *voiture_t* (1pt).
+
+** Question
+Écrivez une fonction *voiture_free()*, prenant une référence à une voiture pour
+la détruire en libérant la mémoire qu'elle occupait (1/2 pt).
+
+** Question
+Écrivez une fonction *voiture_est_libre()* retournant si oui ou non la voiture
+en paramètre est libre. Écrivez une fonction *voiture_loue()* qui s'assure que
+la voiture en paramètre n'est plus libre (1/2 pt).
+
+** Question
+Écrivez la déclaration d'un tableau nommé *voitures*, permettant de stocker les
+informations relatives à toutes les voitures du loueur. Une variable
+*nb_voitures* stockera la taille de ce tableau (1/2 pt).
+
+** Question
+Écrivez une fonction *voiture_achete()* créant une nouvelle voiture grâce à
+*voiture_new()* ci-dessus et qui l'ajoute au tableau. Comment être sûr que le
+tableau est assez grand ? (2pt)
+
+** Question
+Écrivez une fonction qui étant donné une catégorie de voitures,
+retourne un pointeur vers la première voiture de cette catégorie qui ne soit
+pas encore louée, ou NULL si aucune n'est disponible (1pt).
+
+* Exercice: Questions de cours (4pts)]
+
+** Question
+Que signifient les messages d'erreur suivants? Quand arrivent-ils,
+et comment les corriger? (2pts).
+
+*** Control reaches end of non void function
+*** Implicit declaration of function toto
+
+** Question
+Expliquez les problèmes posés par ces morceaux de programmes, puis proposez des
+solutions (2pts).
+
+*** Programme a
+char *truc;
+*truc = 'x'; 
+
+*** Programme b
+char *truc = "constant";
+truc[0] = 'x'; 
+free(truc);          
+
+*** Programme c
+int *make_buff(int a) {
+  int buff[SIZE], cpt;
+  for (cpt=0; cpt<SIZE; cpt++) 
+    buff[cpt] = a;
+  return buff;
+}    
+
+* Exercice Lecture de code (6pts)
+
+Indiquez ce qu'affiche l'exécution des programmes
+C suivants, qui compilent et s'exécutent sans erreur.
+
+** Programme 4.1
+
+#include <stdlib.h>
+#include <stdio.h>
+void f1 ( int a, int *b ) {
+  a = *b;
+}
+void f2 ( int *b, int c ) {
+  *b = c;
+}
+void f3 ( int *a, int c ) {
+  f4 ( &a, c );
+}
+void f4 ( int **b, int a ) {
+  **b = a;
+}
+
+int main () {
+  int x = 5, y = 7, z = 9;
+  f1 ( x, &y );
+  printf ( "x = %d, y = %d, z = %d\n", x, y, z );
+  f2 ( &x, y );
+  printf ( "x = %d, y = %d, z = %d\n", x, y, z );
+  f3 ( &y, z );
+  printf ( "x = %d, y = %d, z = %d\n", x, y, z );
+  return 0;
+}    
+
+
+** Programme 4.2 
+#include <stdio.h>
+int main(int argc, char **argv) {
+
+  int a[] = {12, 23, 34, 45, 56, 67, 78, 89, 90, 100};
+  int *p = a;      
+
+  printf("a: %d\n", *p+2);
+  printf("b: %d\n", *(p+2));
+  printf("c: %d\n", &p+1);
+  printf("d: %d\n", a+3);
+  printf("e: %d\n", &a[7]-p);
+  printf("f: %d\n", p+(*p-10));
+}

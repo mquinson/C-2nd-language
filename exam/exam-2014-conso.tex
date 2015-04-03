@@ -1,0 +1,317 @@
+\documentclass[10pt, sansserif,
+               firstcolor=color1,
+               secondcolor=color2,
+               logo=logo-TN, 
+               footband=bandeau-TN]{TelecomNancy}
+\usepackage[utf8]{inputenc}
+\author{AZE}
+%\usepackage{esial}\CSH\1A
+%\usepackage[correction]{esial}\CSH\1A
+\newcommand{\cd}[1]{\medskip\noindent\file{\null\hspace{-1em}[#1] }}
+\newcommand{\touche}[1]{\hbox{$<$#1$>$}}
+\newcommand{\ctrl}[1]{\touche{ctrl-#1}}
+\newcommand{\tab}{\touche{TAB}}
+\sloppy
+\usepackage{textcomp,amstext,wasysym}
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\BoxRep}{\ifcorrection{\boxtimes}{\Box}}
+\newenvironment{Reponse}{}{}
+\let\Reponse=\comment  \let\endReponse=\endcomment
+\newcommand{\run}[1]{\fbox{\texttt{#1}}}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newcommand{\file}[1]{{\bf \em #1}}
+\newcommand{\result}[1]{\texttt{#1}}
+\usepackage{fancyvrb}
+\fvset{frame=single, numbersep=5pt}
+
+\coursename{Première année}
+\studentlevel{Langage C et Shell}
+\doctitle{Consolidation de C, 10 juin 2014~~~}
+\definecolor{color1}{HTML}{6C2466}
+\definecolor{color2}{HTML}{EF8A26}
+
+\begin{document}
+\globalinstructions[\vspace{-\baselineskip}~]{ %
+  \hspace{-2em} Tous documents interdits à l'exception d'une page A4 recto,
+  manuscrite de votre main. La correction tiendra compte de la qualité de
+  l'argumentaire et de la présentation. Le barème indiqué est approximatif.}
+
+\nextExercise[Debugger les problèmes mémoire (2pts)]{ %
+  Lorsque l'on exécute le programme ci-dessous, on obtient le message d'erreur
+  suivant: \run{Erreur de segmentation}. Pourquoi? Corrigez les (nombreux)
+  problèmes.}  
+
+\bigskip
+\begin{minipage}{.48\linewidth}   
+  \begin{Verbatim}[numbers=left]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct fiche {
+   char *nom;
+   char *prenom;
+   int age;
+} fiche_t ;
+
+void maj_fiche(int no, fiche_t *fich){
+  if (no>1999) 
+    no=no % 2000;  
+  *(fich.no_fiche) = no;
+}
+\end{Verbatim}
+    \end{minipage}\hfill  %
+\begin{minipage}{.48\linewidth}   
+  \begin{Verbatim}[firstnumber=16,numbers=right]
+void main() {   
+  fiche_t *fiche;
+  fiche->nom = malloc(sizeof(char));
+  strcpy(fiche->nom, "Bon");
+  strcpy(fiche->prenom, "Jean");
+  fiche->age = 3;
+  printf("Nom : %s\n", fiche->nom);
+  printf("Prenom : %s\n", fiche->prenom);
+  printf("Age : %s\n", fiche->age);
+}
+  \end{Verbatim}
+\end{minipage}
+
+\newcommand{\boite}{$\Box$\xspace}
+%\newcommand{\boiteRep}{$\boxtimes$\xspace}
+\newcommand{\boiteRep}{$\Box$\xspace} 
+
+\vspace{-.5\baselineskip}
+\nextExercise[Manipuler des chaînes de caractères (3pts)]{
+Écrivez un programme C \fich{min\_maj.c}, compilé sous le nom \fich{min\_maj},
+qui affiche à l'écran ses arguments en convertissant toutes les lettres 
+minuscules en lettres majuscules (les autres caractères étant inchangés).
+
+\begin{itemize}\setlength{\itemsep}{0pt}
+\item[] \run{min\_maj bOnNE nUIt LES petits ...} 
+  affiche à l'écran : 
+  \texttt{BONNE NUIT LES PETITS ...}
+\item[] \run{min\_maj lE c, tROp 3ll3t}  
+  affiche à l'écran : 
+   \texttt{LE C, TROP 3LL3T}
+\end{itemize}
+\noindent \textit{Indication}: le décallage entre les majuscules et
+les minuscules est donné par l'expression \texttt{'A'-'a'}.
+}
+
+%%%%%%%%%%%%%
+\vspace{-.5\baselineskip}
+\nextExercise[Lire un fichier (3pts)]{
+  La commande \fich{strings} permet d'étudier les parties lisibles d'un fichier
+  binaire dont le nom est passé en argument. Elle n'affiche à l'écran que les
+  caractères du fichier dont les codes Ascii sont dans l'intervalle \mbox{$[32,
+    126]$} (ce sont les caractères ``affichables'', les autres étant des
+  des codes de contrôle).
+
+\noindent{\it Exemple~:}
+si \fich{fichier} contient les caractères de codes Ascii 
+$(12, 33, 65, 69, 5, 4, 77, 89, 14, 35, 101, 102)$\\
+alors \run{strings fichier} affichera les caractères:
+$(33, 65, 69, 77, 89, 35, 101, 102)$. Soit: \run{!AEMY\#ef}
+}
+\vspace{-.6\baselineskip}\nextQuestion{Écrivez cette comande en C.}
+
+ %%%%%%%%%%%%
+\newpage\fancyhead{}\fancyhead[l]{\Large Nom:}
+%\null\vspace{-7\baselineskip}
+
+\nextExercise[QCM (2pts)]{Répondez sur la feuille fournie (indiquez votre
+  nom). Il peut y avoir plusieurs cases valides par question; les réponses
+  fausses seront pénalisées.}
+\begin{itemize}
+\item[$\bullet$] Le langage C a été inventé chez $\ldots$
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ AT\&T &
+    \boite~    bell &
+    \boite~    IBM &
+    \boite~    Sun
+  \end{tabular}
+
+\item[$\bullet$] En cas de succès, que doit retourner la fonction main?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ 0~~   &
+    \boite~    1~~   &
+    \boite~    -1    &
+    \boite~    void  
+  \end{tabular}
+
+\item[$\bullet$] Quel caractère termine classiquement les chaînes en mémoire en
+  C ?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    '$\backslash$n'   &
+    \boiteRep~ '$\backslash$0'   &
+    \boite~    '.'               &
+    \boite~    '$\backslash$END'
+  \end{tabular}
+
+\item[$\bullet$] Que vaut 7/9*9 en C?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ 0       &
+    \boite~    0.08642 &
+    \boite~    1       &
+    \boite~    42       
+  \end{tabular}
+
+\item[$\bullet$] Si p est de type short* et de valeur 0x1000, que vaut p+1?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    0x1001  &
+    \boiteRep~ 0x1002  &
+    \boite~    0x1003  &
+    \boite~    0x1004
+  \end{tabular}
+
+\item[$\bullet$] En C, a[i] est équivalent à $\ldots$
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    \&(a+i)&
+    \boite~     a+i   &
+    \boiteRep~ *(a+i) &
+    \boite~    a[0] + i
+  \end{tabular}
+
+\item[$\bullet$] On obtient l'adresse de la variable v avec $\ldots$
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boiteRep~ \&v&
+    \boite~    *v &
+    \boite~    @v &
+    \boite~    \#v
+  \end{tabular}
+
+\item[$\bullet$] Par quel caractère doit commencer une ligne de commande dans
+  un Makefile?
+
+  \begin{tabular}{*{4}{p{.2\linewidth}}}
+    \boite~    un dollard     &
+    \boite~    une dièse      &
+    \boite~    une espace     &
+    \boiteRep~ une tabulation 
+  \end{tabular}
+
+% An array declared as
+% int exforsys[100];
+% The first element of the array is in
+%              exforsys
+%              exforsys[1]
+%              exforsys[0]
+%              None of the Above
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\end{document}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\begin{Exercice} \textbf{QCM}
+Répondez sur la feuille fournie. Il peut y avoir plusieurs cases valides par
+ligne; les réponses fausses seront pénalisées.
+
+\Question \textbf{(2 pts)} Quel est le type de chacune des variables dans cet
+extrait de programme?
+
+\noindent\hspace{-.8em}\begin{minipage}{.28\linewidth}
+\begin{Verbatim}
+int *a,b;
+char **c, *d[12];
+
+typedef struct {
+  char *marque;
+  int nb_places;
+  float consomation;
+} voiture_t, *voiture; 
+
+voiture_t e,f[12];
+voiture   g,h[12];
+\end{Verbatim}  
+\end{minipage}~\begin{minipage}{.7\linewidth}
+\begin{tabular}{|l|c|c|c|c|c|c|}\hline
+  variable & entier & flottant & structure & pointeur & tableau & 
+  $\left(\!\!\begin{array}{c}
+    \text{écriture}\\
+    \text{invalide}
+  \end{array}\!\!\right)$ \\\hline
+  a & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$\\\hline
+  b & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  c & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$\\\hline
+  d & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$\\\hline
+  e & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  e.nb\_places    & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  e-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  f & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$\\\hline
+  f.nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  f-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  f[0].nb\_places    & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  f[0]-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  g & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$ & $\Box$\\\hline
+  g.nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  g-$>$nb\_places & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+  h & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$ & $\Box$\\\hline
+  h.nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  h-$>$nb\_places & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  h[0].nb\_places    & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\BoxRep$\\\hline
+  h[0]-$>$nb\_places & $\BoxRep$ & $\Box$ & $\Box$ & $\Box$ & $\Box$ & $\Box$\\\hline
+\end{tabular}
+\end{minipage}
+\begin{Reponse}
+  \begin{itemize}
+  \item +0.1 par réponse juste
+  \item -0.1 par réponse fausse
+  \item 0 si blanc ou une réponse juste et une réponse fausse sur la ligne
+  \item arrondi au quart supérieur
+  \end{itemize}
+\end{Reponse}
+
+\Question \textbf{(1 pt)}
+\begin{itemize}
+\item[$\bullet$] Si dans un fichier \textit{makefile} on trouve la ligne suivante :
+  \run{toto: tutu}
+  \begin{itemize}
+  \item[$\BoxRep$] cela veut dire qu'il faut reconstruire \texttt{toto} chaque
+    fois que \texttt{tutu} change
+  \item[$\Box$] cela veut dire qu'il faut reconstruire \texttt{tutu} chaque
+    fois que \texttt{toto} change
+  \end{itemize}
+\item[$\bullet$] Dans un fichier d'entêtes (.h), on peut trouver:
+  \begin{itemize}
+  \item[$\Box$] Des définitions de fonctions
+  \item[$\BoxRep$] Des prototypes de fonctions
+  \item[$\BoxRep$] Des définitions de types
+  \end{itemize}
+\item[$\bullet$] L'expression \run{if [ -x toto -a -d toto ]} teste si:
+  \begin{itemize}
+  \item[$\Box$] on a le droit d'exécuter et d'effacer \texttt{toto}
+  \item[$\Box$] on a le droit d'exécuter \texttt{toto} et si sa taille est non nulle
+  \item[$\Box$] \texttt{toto} est un répertoire dont on peut lire le contenu
+  \item[$\BoxRep$] \texttt{toto} est un répertoire dans lequel on peut entrer
+  \end{itemize}
+\end{itemize}
+\begin{Reponse}
+  \begin{itemize}
+  \item +0.25 par case cochée à juste titre
+  \item -0.25 par case cochée à tord
+  \item 0 si blanc
+  \end{itemize}
+\end{Reponse}
+
+\end{Exercice}
+
+      
+\end{document}
+
+
+
+% LocalWords:  Makefile Laurel strings
+%%% Local Variables:
+%%% coding: utf-8
