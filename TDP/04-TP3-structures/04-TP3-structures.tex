@@ -1,0 +1,145 @@
+\documentclass[10pt]{article}\usepackage[correction,nu]{esial}
+\CSH\unA\sloppy
+\usepackage[utf8]{inputenc}
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+
+\title{TP3 : Structures en C}
+\begin{document}
+
+\maketitle
+
+\begin{Reponse}
+Le but de cet exercice est d'introduire en douceur les structures et
+le passage de paramètres par adresse aux fonctions.
+
+J'ai choisi une structure simple dans laquelle on n'a que des nombres
+contrairement à l'exercice ``annuaire'' qui utilise des chaînes de
+caractères.
+\end{Reponse}
+
+\begin{Question} Écrire une fonction \framebox{\texttt{symetrique}} qui prend
+en argument :
+\begin{itemize}
+\item l'abscisse ($x \in \mathbb R$) d'un point,
+\item son ordonnée ($y \in \mathbb R$),
+\item et une option parmi {XX,YY,ORIG} selon laquelle, la fonction
+  {\em symetrique} modifie les coordonnées d'un point avec celles de
+  son symétrique par rapport à l'axe des x, des y ou par rapport à
+  l'origine respectivement.
+\end{itemize}
+On utilise une énumération pour déclarer les différentes options
+possibles. La fonction retourne 1 si l'opération se déroule
+correctement, 0 sinon.
+\end{Question}
+
+\Question Dans la suite, un point est à définir par une structure {\em
+  Point} avec les champs suivants :
+\begin{itemize}
+\item id : un nombre entier, identifiant du point,
+\item x  : un nombre réel (float), l'abscisse du point,
+\item y : un nombre réel (float), l'ordonnée du point.
+\end{itemize}
+
+\Question Écrire une fonction qui permet d'afficher les différents
+champs d'une structure {\em Point} avec le format {\em id(x,y)}. La
+fonction prend en argument une structure Point.
+
+\Question Écrire une fonction qui permet d'initialiser un point et qui
+prend comme argument une structure Point. 
+
+\Question Récrire la fonction \framebox{\texttt{symetrique}} de telle
+sorte qu'elle prenne en argument en plus de l'option, les coordonnées
+du point sous forme d'une structure.
+
+\Question Écrire une fonction qui permet de définir un segment de
+droite comme un tableau de MAX points situés entre deux points
+(extrémités) A et B. On utilisera \#define pour définir la valeur de
+MAX.
+
+\Question Pour afficher l'information sur l'ensemble des points
+constituant le segment de droite, écrire une fonction
+\framebox{\texttt{afficheSegment}} et qui fait appel à une fonction que
+  vous avez déjà écrite.
+
+\Question On s'intéresse maintenant à la taille de la structure
+Point. Afficher la taille de la structure et vérifier bien que sa
+taille correspond à la somme des tailles des différents éléments qui la
+composent.
+
+\Question On définit une structure Point2 similaire à Point mais qui a
+son identifiant codé comme étant {\bf short}. Même question pour cette
+nouvelle structure. Que constate -t- on ?
+
+\Question Afin de comprendre comment la structure est stockée en
+mémoire, écrire une macro OFFSET(x,Y) qui donne pour un élément x de
+la structure Y, son adresse relative par rapport à l'adresse de début
+de la structure. Afficher l'offset de chaque élément dans les 2
+structures. Conclure !
+
+\begin{Reponse}
+Le but de ces dernières questions et de les faire sensibiliser aux
+problèmes d'alignements et les optimisations qu'un compilateur pourra
+mettre en place pour optimiser le nombre d'accès mémoire ...
+
+Aussi, c'est l'occasion de leur parler de la différence entre une
+macro et une fonction.
+\end{Reponse}
+
+\newpage
+
+\bigskip\bigskip\Exercice
+~
+\begin{Reponse}
+  Le carnet est à déclarer en global avant le main(). Sinon, il faut
+  le passer en retour des fonctions, aussi, pour que la modification
+  sur la copie soit repropagée à l'original.
+\end{Reponse}
+
+On souhaite créer un programme en C gérant un annuaire très simplifié qui
+associe à un nom de personne un numéro de téléphone.
+
+\Question Créer une structure Personne pouvant contenir ces informations (nom
+et téléphone). Le nom peut contenir 32 caractères et le numéro 16
+caractères.
+
+\Question Créer une nouvelle structure qui va représenter le carnet d'adresses.
+Cette structure Carnet contiendra un tableau de 20 Personne et un compteur
+indiquant le nombre de personnes dans le tableau.
+
+\Question Créer ensuite une fonction qui renvoie une structure Personne en
+prenant en argument un nom et un téléphone.
+
+\Question Rajouter une fonction qui affiche les informations contenues dans la
+structure Personne passée en argument.
+
+\Question Créer une fonction qui ajoute une personne dans un carnet.
+
+\Question Créer une fonction qui affiche un carnet.
+
+\Question À partir des étapes précédentes, faire programme gérant un carnet
+d'adresse. Créer un menu qui propose d'ajouter une nouvelle personne,
+d'afficher le carnet ou de quitter.
+
+\medskip
+Une extension possible serait d'ajouter une fonction de sauvegarde de
+l'annuaire dans un fichier, et de faire en sorte que les données sauvegardées
+puissent être lues automatiquement au démarrage. 
+
+\bigskip\bigskip\Exercice
+
+Écrire un programme C qui permette de lire au clavier une suite de
+caractères représentant la plaque minéralogique (ancien format!) d'un véhicule
+(comme \texttt{982 BZZ 54}) et qui affiche à l'écran les plaques des 20
+véhicules immatriculés à la suite de celui-ci (dans le même département).
+
+Ainsi, si la chaîne lue est «{\tt 998 BZZ 54}», alors le programme affichera\\
+«{\tt 999 BZZ 54}», «{\tt 001 CAA 54}», «{\tt 002 CAA 54}», \dots,  
+«{\tt 019 CAA 54}».
+
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% coding: utf-8
