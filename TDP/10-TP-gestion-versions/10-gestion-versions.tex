@@ -1,0 +1,412 @@
+\documentclass[10pt]{article}\usepackage[nu]{esial}
+\CSH\unA\sloppy
+\usepackage{url,moreverb}
+\usepackage[utf8]{inputenc}
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+
+\sloppy
+\begin{document}
+\title{TP7: Gestion de versions}
+\maketitle
+
+\newcommand{\I}{\hspace{1.5em}}
+
+À la fin de ce TP vous saurez:
+\begin{itemize}
+\item Créer un dépôt svn et darcs
+\item Versionner un projet avec ces deux logiciels
+\item Collaborer à plusieurs sur un même projet
+\end{itemize}
+\bigskip
+
+Les fichiers à utiliser tout au long du TP sont dans {\tt /home/depot/1A/CSH/TP6/}.
+Tout le reste du TP se fait dans votre répertoire {\tt $\sim$/gestionversions}.
+
+Attention, les commandes citées dans ce TP ne sont pas toujours complètes ! À vous parfois
+de les compléter avec un nom de fichier si besoin.
+
+\begin{part}{Subversion}
+\begin{Exercice} \textbf{Mise en place}
+
+Créez le répertoire {\tt $\sim$/gestionversions} et placez-vous dedans.
+
+Faites \run{svnadmin create svndepot} pour créer le dépôt {\tt svndepot}.
+
+Utilisez la commande \run{svn checkout} pour obtenir une copie de travail
+du nom de {\tt svncopie1} dans ce même répertoire, issu de {\tt svndepot}.
+
+Copiez le fichier \file{hello.c} de {\tt /home/depot/...} dans cette copie de travail,
+et utilisez \run{svn add} pour le faire surveiller par svn. Vérifiez avec \run{svn status}.
+Enregistrez votre premier commit avec \run{svn commit -m"ajout de hello.c"}.
+
+Vérifiez l'historique avec \run{svn log}. Que constatez-vous ?
+Faites un \run{svn up}
+\footnote{svn a des raccourcis, par exemple
+{\tt up} pour {\tt update}, {\tt co} pour {\tt checkout} ou {\tt ci} pour {\tt commit}.}
+suivi de \run{svn log}. Quelle différence y a-t-il ?
+Cela est dû au comportement par défaut des commandes {\tt commit} et {\tt log}.
+\end{Exercice}
+
+\begin{Exercice} \textbf{Édition dans la copie de travail}
+
+Ajoutez à la fin du {\tt main} de \file{hello.c} cette ligne : {\tt return 0;}\\
+
+Qu'affiche \run{svn status} ? \run{svn diff} ?
+Committez votre changement avec un nom de commit éloquent.
+
+Récupérez les fichiers \file{Makefile} et \file{README} de {\tt /home/depot/...}.
+Faites-les surveiller par svn avec \run{svn add}.
+Quelle est la syntaxe exacte pour faire ceci?
+
+Committez séparément l'ajout de chacun de ces fichiers
+avec \run{svn commit FICHIER -m "message"}.
+
+Actualisez votre copie de travail et
+vérifiez l'historique du dépôt. Quel est le numéro de la dernière révision ?
+\end{Exercice}
+
+
+\begin{Exercice} \textbf{Récupération d'une version ancienne du dépôt} 
+
+En lisant \run{svn help checkout}, découvrez comment obtenir une révision
+ancienne d'un dépôt. Récupérez la révision 1 de {\tt svndepot}
+dans une nouvelle copie de travail nommée {\tt svncopie2}.
+
+Votre répertoire {\tt $\sim$/gestionversions} devrait maintenant contenir ceci:
+\begin{verbatim}
+|-- svncopie1
+|-- svncopie2
+`-- svndepot
+\end{verbatim}
+
+Entrez dans ce nouveau répertoire. Ajoutez un commentaire au tout début de \file{hello.c},
+avant la ligne du {\tt \#include}.
+Commitez. Que se passe-t-il ? Faites en sorte de pouvoir commiter ce changement.
+
+Avec \run{cat hello.c} constatez les changements effectués. Commitez.
+\end{Exercice}
+
+
+
+\begin{Exercice} \textbf{Provoquer un conflit}
+
+Ouvrez un deuxième terminal afin d'avoir un terminal
+ouvert dans chaque copie de travail.
+
+Disons que deux personnes veulent rendre le programme \file{hello.c}
+un peu plus international en disant bonjour dans plusieurs langues.
+
+Dans un dépôt, ajoutez {\bf sous} la ligne du {\tt printf} la ligne :\hfill
+{\tt printf("Guten tag!");}
+
+Dans l'autre, faites de même en ajoutant : \hfill {\tt printf("Hola!");}
+
+Puis, provoquez un conflit en tentant de commiter indépendemment ces modifications. 
+
+Résolution: dans la copie de travail qui n'a pas pu commiter, faites un \run{svn up}.
+On vous propose plusieurs options : choisissez le choix {\tt p} pour régler le conflit
+à la main. Constatez avec \run{svn status}.
+
+Dans le cas présent, la fusion à effectuer consiste simplement à garder les trois messages
+de {\tt printf}. Éditez convenablement le fichier \file{hello.c}. Signalez à svn le conflit
+comme résolu avec \run{svn resolved hello.c} et commitez.
+\end{Exercice}
+
+\end{part}
+
+
+
+\begin{part}{Darcs}
+
+\begin{Exercice} \textbf{Mise en place}
+
+Renseignez d'abord votre nom et e-mail pour ne pas que Darcs vous
+le redemande pour chaque dépôt :
+\begin{verbatim}
+mkdir ~/.darcs
+echo "Nom Prenom <nom.prenom@esial.uhp-nancy.fr>" > ~/.darcs/author
+\end{verbatim}
+
+Dans {\tt $\sim$/gestionversions}, créez le répertoire {\tt darcsstable} et faites
+\run{darcs init} dedans. Vérifiez avec \run{ls}.
+
+Copiez-y \file{hello.c} de {\tt /home/depot/...} et
+faites surveiller ce fichier par Darcs avec \run{darcs add}.
+
+Que produit \run{darcs whatsnew} ? Et \run{darcs whatsnew -sl} ?
+
+Tapez simplement \run{darcs record}, choisissez les éléments à enregistrer
+et saisissez un nom de patch. Répondez non à la question vous demandant d'entrer
+une description longue du patch.
+
+Vérifiez ce que vous avez fait avec \run{darcs changes}.
+\end{Exercice}
+
+\begin{Exercice}{\bf S'organiser avec plusieurs dépôts}
+
+Remontez dans {\tt $\sim$/gestionversions}.
+
+Avec \run{darcs get}, créez un clone de {\tt darcsstable} nommé {\tt darcsdev}
+et placez-vous dedans.
+
+Copiez les fichiers \file{Makefile} et \file{README} de {\tt /home/depot/...} et
+faites-les surveiller par darcs.
+
+Créez un patch pour chaque ajout de fichier, en utilisant directement
+\run{darcs record -m "nom"}.
+
+Listez les patchs de votre dépôt pour vérifier ce que vous avez fait.
+
+Envoyez ces nouveaux patchs au dépôt parent avec \run{darcs push} :
+vous pouvez commencer par dire "non" à tout, puis "oui" juste à un des patchs,
+etc.
+\end{Exercice}
+
+\begin{Exercice}{\bf Ne pas tout transmettre}
+
+Nous allons voir comment n'enregistrer et ne publier que ce que vous voulez
+rendre public.
+
+Dans \file{hello.c}, ajoutez la ligne suivante à la fin du {\tt main} :\hfill
+{\tt return 0;}\\
+et la ligne suivante avant le {\tt \#include} :\hfill
+{\tt // TODO vérifier avec gcc -Wall}\\
+Vérifiez la présence de ces changements avec \run{darcs w}
+\footnote{La commande darcs, comme svn, accepte des raccourcis. Elle accepte
+tout préfixe non ambigü, par exemple {\tt w} pour {\tt whatsnew},
+{\tt rec} pour {\tt record} ou {\tt rev} pour {\tt revert}.}.
+
+Enregistrez un patch qui ne contient que l'ajout du {\tt return 0;}.
+Vérifiez que vous avez réussi avec \run{darcs w} et \run{darcs changes}.
+Envoyez ce dernier patch à {\tt darcsstable}.
+\end{Exercice}
+
+\begin{Exercice}{\bf Correction de patches}
+
+Dans \file{hello.c}, changez {\tt main()} en {\tt int main()} et
+créez pour ce changement patch nommé "meilleur prototype". Ne l'envoyez pas au dépôt
+stable!
+
+Changez à nouveau la ligne {\tt int main()} en {\tt int main(int argc, char ** argv)}
+et utilisez la commande \run{darcs amend-record} pour modifier le dernier patch que vous
+avez créé. Envoyez cette nouvelle version du patch au dépôt stable.
+
+Attention, n'utilisez {\tt amend-record} que sur des patchs non publiés! Pourquoi ?
+\end{Exercice}
+
+\begin{Exercice}{\bf Travail en binôme : préparation}
+
+Nous allons voir comment travailler en binôme avec Darcs
+sans avoir besoin de créer de nouvel utilisateur ou groupe Unix pour
+que tout le monde commite dans le même répertoire.
+
+Par défaut, vos dossiers personnels ne sont pas accessibles
+aux autres utilisateurs. Une petite préparation est nécessaire. 
+Faites \run{ls -l $\sim$/..|grep monlogin}.
+Vous obtenez une ligne similaire à:
+\begin{verbatim}
+drwx------  42 monlogin esial1 4096 mar 24 10:00 monlogin
+\end{verbatim}
+
+Faites \run{chmod go+x $\sim$} pour permettre à tout le monde de traverser
+votre répertoire personnel:
+
+\begin{verbatim}
+drwx--x--x  42 monlogin esial1 4096 mar 24 10:00 monlogin
+\end{verbatim}
+
+Mettez-vous en binôme.
+Si {\tt xyz} est le login de votre binôme, faites \run{ls -l $\sim$xyz/gestionversions/}.
+Si vous pouvez lister le contenu de ce répertoire, c'est bon.
+\end{Exercice}
+
+\begin{Exercice} {\bf Mise en place des dépôts}
+
+Parmi le binôme, attribuez-vous les rôles A et B.
+Vous allez mettre en place un nouveau projet. Le principe est que chaque personne
+travaille sur un dépôt privé et expose un dépôt public à son binôme :
+
+\begin{enumerate}
+\item A crée dans {\tt $\sim$/gestionversions} un répertoire {\tt darcscourses}
+      et y initialise un dépôt darcs (dépôt public A)
+\item A crée un clone {\tt darcscoursesprive} de ce répertoire (dépôt privé A)
+\item B crée un clone de {\tt $\sim$A/gestionversions/darcscourses} dans son {\tt $\sim$/gestionversions},
+      nommé également {\tt darcscourses} (dépôt public B)
+\item B crée un clone {\tt darcscoursesprive} tout comme A à l'étape 2.
+      (dépôt privé B)
+\end{enumerate}
+
+
+\noindent\begin{minipage}[b]{.6\textwidth}
+
+Au total quatre dépôts vont servir. Les règles du jeu sont:
+
+\begin{itemize}
+\item on ne travaille que dans son dépôt privé
+\item chaque personne ne voit de l'autre que le dépôt public
+\item on récupère les changements de l'autre avec {\tt pull} de son dépôt public
+\item on publie ses changements avec {\tt push} vers son dépôt public
+\end{itemize}
+
+\bigskip
+
+\end{minipage}\hfill\begin{minipage}[b]{.38\textwidth}
+Du point de vue de la personne A :
+\begin{small}
+\begin{verbatim}
+[dépôt public A]   [dépôt public B]
+  /|\                    |
+   | p                  p|
+   | u                  u|
+   | s                  l|
+   | h                  l|
+   |                     |
+[dépôt privé A] <--------+
+\end{verbatim}
+\end{small}
+\end{minipage}
+
+\end{Exercice}
+
+
+\begin{Exercice} {\bf Travail en binôme}
+Vous allez travailler sur un fichier \file{listecourses}
+dans lequel vous mettez deux sections, "aliments" et "autres",
+et un article à acheter par ligne, par exemple:
+\begin{Verbatim}
+aliments
+========
+pommes
+lait
+fromage
+
+autres
+======
+ampoule
+cartes postales
+\end{Verbatim}
+
+Attention, Darcs se rappelle
+automatiquement de l'adresse du dernier dépôt avec lequel vous
+avez communiqué, donc
+vous devez donnez aux commandes le chemin du dépôt avec
+lequel vous voulez communiquer, ie
+\run{darcs push ../darcscourses/} et \run{darcs pull $\sim$monbinome/gestionversions/darcscourses}.
+
+Utilisez {\tt darcs changes} et
+{\tt cat listecourses} fréquemment pour vérifier ce qui se passe.
+
+Reproduisez le scénario suivant :
+
+\begin{enumerate}
+\item B crée le fichier \file{listecourses}, et un premier patch l'ajoutant.
+      B publie ce patch.
+\item A récupère ce patch. 
+\item B et A ajoutent quelques articles : B dans la partie "aliments", A dans la
+      partie "autres". Ils finissent par synchroniser leurs dépôts.
+\item B le récupère.
+\item B crée un patch ajoutant les articles "stylos" et "papier"
+      à la fin de la section "autres", et le publie.
+\item A le récupère, puis annule cette récupération avec \run{darcs unpull}.
+\end{enumerate}
+
+\bigskip
+
+Maintenant, on continue comme si A n'était pas au courant
+de l'existence du dernier patch de B :
+\begin{enumerate}
+\item A ajoute "gomme" et "ciseaux" à la fin de la section "autres"
+\item A crée un patch et le rend public
+\item B récupère ce patch
+\end{enumerate}
+
+Que se passe-t-il ?
+
+\begin{enumerate}
+\item B édite le fichier afin intégrer tous les changements, et crée
+      un patch qui enregistre cette édition.
+\item B publie le patch et A récupère le tout.
+\end{enumerate}
+\end{Exercice}
+
+\begin{Exercice} {\bf Travail avec un seul dépôt public}
+
+Voyons comment faire pour gérer un projet similaire au précédent, de sorte
+qu'une seule dépôt soit public.
+Par exemple, on décide que le dépôt de référence du projet est situé à
+{\tt $\sim$A/gestionversions/darcscourses/}, sachant que seul A peut écrire dedans.
+Comme A se voit confier le rôle de "garder" le dépôt du projet,
+A doit approuver ou désapprouver les patchs qu'on lui propose.
+
+Lisez l'aide de \run{darcs send} et \run{darcs apply}.
+
+Faites en sorte que B envoie un patch par courrier électronique à A et que A
+l'applique d'abord à son dépôt privé, puis le propage à son dépôt public
+\footnote{le flag {\tt -o} de {\tt darcs send} sera utile}.
+\end{Exercice}
+
+
+\end{part}
+
+\begin{part}{Retour sur svn et darcs}
+
+\begin{Exercice} {\bf }
+
+Nouvelles étapes du scénario de l'exercice 10 :
+
+\begin{enumerate}
+\item A ajoute un article dans la section "autres", crée un patch et le rend public.
+      B récupère ce patch.
+\item A change d'avis et utilise \run{darcs rollback} pour créer
+      un patch inverse de ce dernier patch, et le rend public.
+      Attention à ce que {\tt rollback} demande !
+\end{enumerate}
+
+Dans quelles situations {\tt unpull} et {\tt rollback} servent-ils ?
+\end{Exercice}
+
+\begin{Exercice} {\bf Rendre un projet avec svn et darcs}
+
+En utilisant \run{svn export} (lisez l'aide) et la commande \run{tar czf projet.tar.gz projet}
+qui crée une archive \file{projet.tar.gz} à partir d'un répertoire \file{projet},
+créez une archive de la dernière version de votre dépôt svn.
+
+Quelle est la principale différence entre {\tt svn checkout} et {\tt svn export} ?
+
+Lisez l'aide de \run{darcs dist} pour en faire de même avec un de vos dépôt Darcs.
+\end{Exercice}
+
+\begin{Exercice}
+Lisez l'aide de \run{darcs unrecord}. En quoi cette commande diffère-t-elle de
+\run{darcs amend-record} ?
+Quelle est la différence entre {\tt unpull} et {\tt unrecord} ?
+\end{Exercice}
+
+
+\begin{Exercice} {\bf Checkouter un dépot SVN par le web}
+
+Placez-vous dans {\tt /tmp} .
+
+Cherchez avec un moteur de recherche comment obtenir la version svn
+du "svn book".
+
+Checkoutez le dépôt trouvé. Affichez l'historique (utilisez \run{svn log | less}).
+
+\end{Exercice}
+
+\begin{Exercice} {\bf Cloner un dépot Darcs par le web}
+
+Placez-vous dans {\tt /tmp} .
+
+Cherchez avec un moteur de recherche comment obtenir la version darcs
+du programme Rubber (sa description est "rubber, a wrapper for LaTeX").
+
+Dans le dépot cloné, listez les tags (voir l'aide de {\tt darcs show}).
+Comment obtenir un dépot correspondant à un tag donné ?
+Créez un dépot correspondand au tag {\tt 1.0} avec {\tt darcs get}.
+
+\end{Exercice}
+
+\end{part}
+\end{document}
+
