@@ -52,10 +52,17 @@
 
   Si on se sent l'humeur taquine, on peut faire remarquer qu'il est
   probable que les différentes chaines de caractères soient
-  consécutives en mémoire. Cela donne le schéma suivant:\\
+  consécutives en mémoire. Cela donne le schéma suivant: \\
 
   \noindent
   \includegraphics[width=\linewidth]{memoire-couleur2.pdf}
+
+  J'ai séparé les chaines de caractère litérales des tableaux car dans
+  l'espace d'adressage du processus, les chaines vont être dans les
+  globales constantes (avec le code), et les variables vont être dans
+  les globales modifiables si ce sont des globales, ou dans la pile si
+  ce sont des variables locales. A vous de voir si vous voulez dire
+  l'entière vérité ou pas.
 \end{Reponse}
 
 \Question Que  désigne {\tt couleur + 2}?
@@ -253,12 +260,12 @@ suivantes\,:
 
  
 
-
+\newpage
 \bigskip\bigskip\Exercice {\bf Chaînes de caractères.}
 %--------------------------------------
 
 \Question
-Ecrire une fonction {\tt PremierCar(\ldots)} qui renvoie l'adresse de
+Écrire une fonction {\tt PremierCar(\ldots)} qui renvoie l'adresse de
 la première occurence du 
 caractère {\tt c} dans une chaîne de caractères dont l'adresse (du
 premier caractère) est passé à l'argument {\tt ptrCar}\,:
@@ -266,23 +273,16 @@ premier caractère) est passé à l'argument {\tt ptrCar}\,:
 \run{char *PremierCar(char c, char *ptrCar)}
 
 \Question
-Ecrire la fonction {\tt int main(int argc, char *argv[])} permettant
-de tester la fonction. Un exemple d'exécution est\,:
+Écrire la fonction {\tt int main(int argc, char *argv[ ])} permettant
+de tester la fonction. Voici un exemple d'exécution:
 
 \medskip
 
 \begin{boxedverbatim}
-./occurence  o Bonjour
-\end{boxedverbatim}
-
-\medskip
-
-Le résultat affiché est le suivant\,:
-
-\medskip
-
-\begin{boxedverbatim}
+$ ./occurence o Bonjour
 La premiere occurence de 'o' dans 'Bonjour' est en position 1
+$ ./occurence z Bonjour
+'z' n'est pas dans Bonjour.
 \end{boxedverbatim}
 
 \begin{Reponse}
@@ -294,27 +294,28 @@ La premiere occurence de 'o' dans 'Bonjour' est en position 1
 #include <stdio.h>
 
 char *PremierCar(char c, char *ptrCar){
-  do
+  do {
     if (*ptrCar == c)
-      return (ptrCar);
-  while (*ptrCar++);
+      return ptrCar;
+  } while (*(ptrCar++));
 
-  return (NULL);
+  return NULL;
 }
 
 int main(int argc, char * argv[]){
 
   char c, *str, *adrPremCar;
 
-  c = argv[1][0]; //argv[1] étant un pointeur vers une chaine de car.
+  c = argv[1][0]; // argv[1] étant un pointeur vers une chaine de car.
                   // argv[1][0] est le premier car de cette chaine
   str = argv[2];
+  adrPremCar = PremierCar(c,str);
 
-  if ( (adrPremCar = PremierCar(c,str)) == NULL) 
+  if (adrPremCar == NULL) 
     printf ("'%c' n'est pas dans %s.\n",c,str);
   else
-    printf ("La premiere occurence de '%c' dans %s est en position
-    %d.\n", c,str,adrPremCar - str);
+    printf ("La premiere occurence de '%c' dans %s est en position %d.\n",
+            c, str, adrPremCar - str);
 }
 \end{boxedverbatim}
 \end{Reponse}
@@ -326,19 +327,15 @@ int main(int argc, char * argv[]){
 %--------------------------------
 
 Sous Unix, il existe un ensemble de pointeurs représentant la
-filiation des  processus\,: 
-
-Dans la figure \ref{filiation}, {\tt fils A} est le premier processus
+filiation des  processus. 
+%
+Dans la figure~\ref{filiation}, {\tt fils A} est le premier processus
 fils créé par le processus père, {\tt fils B} est le deuxième fils
 créé par le processus père \ldots etc.
 Chaque fils peut évidemment créer des fils, et le père est également le
 fils d'un autre processus.
-
-Nous supposons pour simplifier que chaque processus est caractérisé
-par un numéro (entier positif).
-%Il n'existe qu'une seule filiation par machine, tous les processus
-%appartiennent donc à cette unique filiation.
-
+%
+Chaque processus est caractérisé par un numéro (un entier positif).
 
 \bigskip\bigskip
 \begin{figure}[h]
@@ -349,28 +346,27 @@ par un numéro (entier positif).
 \end{figure}
 \bigskip
 
-\Question  Représenter schématiquement, sous la
-forme d'une structure de données, un n\oe ud (c'est à dire un
-processus) de cette filiation, puis écrire la définition de cette
-structure en langage C.
+\Question Représenter schématiquement, sous la forme d'une structure
+de données, un n\oe ud (c'est à dire un processus) de cette filiation,
+puis écrire la définition de cette structure en C.
 
-\Question  Le processus repéré par la variable
-pointeur {\tt p} vient de créer un processus fils de numéro {\tt no}.
-Ecrire en langage C la fonction {\tt maj} qui met à jour la filiation
-des processus.
+\Question Le processus repéré par la variable pointeur {\tt p} vient
+de créer un processus fils de numéro {\tt no}.  Écrire en C la
+fonction {\tt maj} qui met à jour la filiation des processus.
 
 \begin{Reponse}
 \vspace{-.7cm}
 \begin{verbatim}
-struct proc{
+
+
+typedef struct proc {
   unsigned int noproc;
   struct proc *pere, *frere_g, *frere_d, *dernier_fils;
-  
-};
+} proc_t;
 
-void maj(struct proc *p, int no){
-  struct proc *fils;
-  fils = (struct proc *) malloc ((unsigned int)(sizeof(struct proc)));
+void maj(proc_t *p, int no){
+  proc_t *fils;
+  fils = (proc_t *) malloc (sizeof(proc_t));
 
   fils->noproc = no;
   fils->pere = p;
