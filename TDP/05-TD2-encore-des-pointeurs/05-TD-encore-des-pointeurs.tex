@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}\usepackage[nu]{esial}
+\documentclass[10pt]{article}\usepackage[nu,correction]{esial}
 \CSH\sloppy
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -20,33 +20,71 @@
 \medskip
 
 \begin{boxedverbatim}
-  char *couleur[6] = {"rouge", "vert", "bleu", "blanc", "noir","jaune"};
+  char *couleur[6] = {"rouge", "vert", "bleu", "blanc", "noir", "jaune"};
+
+  char **pcoul = couleur;
 \end{boxedverbatim}
 
-\Question Que représente {\tt couleur}\,?
+\Question Que représente {\tt couleur}? Et \texttt{pcoul}?
 
 \begin{Reponse}
-  C'est un tableau de 6 pointeurs vers des chaines de caractères. Un
-  schéma au tableau permet de mieux expliquer cela et ce qui suit
-  \ldots
+  C'est un tableau de 6 pointeurs vers des chaines de caractères. 
+
+  Du moins, c'est l'explication classique, mais en fait pas tout à
+  fait. J'ai dit en amphi que la différence entre \verb+char*+ et
+  \verb+char[]+ est l'une des choses les plus obscures du langage C,
+  l'une des seules choses qui file des remords aux concepteurs. 
+
+  \textbf{La vérité, c'est que le standard dit que quand on utilise un
+    tableau dans une expression, il se fait passer pour un pointeur
+    vers la première case du tableau} (sauf en argument de
+  \verb+sizeof()+, de \verb+&+ ou quand c'est une chaine de caractères
+  pour initialiser un pointeur). Cette page l'explique très bien:
+  \url{http://openclassrooms.com/courses/la-verite-sur-les-tableaux-et-pointeurs-en-c}
+
+  Donc, couleur est bien un tableau de pointeurs comme sur le schéma
+  ci-dessous, mais quand on utilise couleur dans une expression, il se
+  fait passer pour l'adresse de sa première case.  C'est assez
+  différent de \texttt{pcoul}, qui lui est un pointeur, un vrai. C'est
+  donc un bout de mémoire où est écrit une adresse.
+
+  \includegraphics{memoire-couleur.pdf}
+
+  Si on se sent l'humeur taquine, on peut faire remarquer qu'il est
+  probable que les différentes chaines de caractères soient
+  consécutives en mémoire. Cela donne le schéma suivant:\\
+
+  \noindent
+  \includegraphics[width=\linewidth]{memoire-couleur2.pdf}
 \end{Reponse}
 
-\Question Que  désigne {\tt couleur + 2}\,?
+\Question Que  désigne {\tt couleur + 2}?
 
-\Question Quelle est la valeur de {\tt *couleur}\,?
+\begin{Reponse}
+  C'est l'adresse de la seconde case du tableau, c'est-à-dire
+  \verb|&(couleur[2])|
+\end{Reponse}
+
+\Question Quelle est la valeur de {\tt *couleur}?
+
+\begin{Reponse}
+  C'est \verb|couleur[0]|, c'est à dire l'adresse de la chaîne
+  \texttt{"rouge"}, qui se trouve quelque part dans le segment data du
+  processus (là où il y a le code et les globales).
+\end{Reponse}
 
 \Question Quelle est la valeur de {\tt *couleur + 2}\,?
 
 \begin{Reponse}
 \begin{verbatim} 
-    couleur + 2 = &couleur[2] et *(couleur+2)=couleur[2]=''bleu''
-    *couleur = couleur [0] = ``rouge''
-    *couleur+2 = ``uge''
+    couleur + 2 = &couleur[2] et *(couleur+2)=couleur[2]="bleu"
+    *couleur = couleur[0] = "rouge"
+    *couleur+2 = "uge"
 \end{verbatim}
 
 \noindent\verb?*couleur? pointe sur le premier élément de la chaine ``rouge''
-soit 'r'. Si on rajoute 2 ($= 2 \times sizeof(char)$), ça pointera sur 'u'. La
-fin de la chaine est après 'e' de ``rouge''.
+soit 'r'. Si on rajoute 2, on décale de deux cases, et ça pointera sur
+'u'. La fin de la chaine est après 'e' de "rouge".
 \end{Reponse}
 
 \Question Quelle est la valeur de {\tt *(*(couleur + 5) +3)}\,? (Même
@@ -56,8 +94,8 @@ question avec +4, +5, +6).
 \begin{verbatim} 
    *(*(couleur + 5) +3) = 'n' 
    En effet : 
-     *(couleur + 5) = ``jaune'' , ``jaune'' étant situé à couleur[5] 
-     *(couleur + 5) +3 = ``ne''
+     *(couleur + 5) = "jaune" , "jaune" étant situé à couleur[5] 
+     *(couleur + 5) +3 = "ne"
 
    *(*(couleur + 5) +4) = 'e' 
    *(*(couleur + 5) +5) = '\0' 
@@ -72,81 +110,106 @@ question avec +4, +5, +6).
 \bigskip\bigskip\Exercice {\bf Pointeurs et structures.}
 %----------------------------------------
 
-Soit le type suivant\,:
+Soit le type suivant:
 
 
 \medskip
 
 \begin{boxedverbatim}
   typedef struct {
-    char nomPlanete[MAX_CAR];
+    char nom[MAX_CAR];
     int  rayon;  
-  } Planete;
+  } planete_t;
 \end{boxedverbatim}
 
 
-\Question Quelle est l'instruction qui permet de créer une variable
-{\em pointeur sur Planete}\,?
+\Question Écrire un constructeur pour ce type \texttt{planete\_t}.
 
 \begin{Reponse}
   \begin{boxedverbatim} 
-    Planete *p1;
-    p1 = (Planete *) malloc (sizeof(Planete));
-  \end{boxedverbatim}
+planete_t *planete_create(char *nom, int rayon) {
+    planete\_t *p1;
+    p1 = (planete_t *) malloc (sizeof(planete_t));
+    strcpy(p1->nom, nom);
+    p1->rayon = rayon;
+    return p1;
+}  \end{boxedverbatim}
 ~
 \end{Reponse}
 	  
-\Question Ecrire une fonction qui saisit les données relatives à une
-planète.
+\Question Écrire une fonction qui saisit les données relatives à une
+planète, et crée une planète en conséquence.
 
 \begin{Reponse}
   \begin{boxedverbatim} 
-    void Saisir(Planete *p){
-  
-      printf("Donner nom planète : ");
-      scanf ("%s",p->nomPlanete);
-      printf("Donner son rayon : ");
-      scanf ("%d",&p->rayon);
-    } 
-  \end{boxedverbatim}
+planete_t *planete_saisir(){
+  char nom[32];
+  int rayon;
+
+  printf("Donner nom planète : ");
+  scanf ("%s",nom);
+  printf("Donner son rayon : ");
+  scanf ("%d",&rayon);
+  return planete_create(nom,rayon);
+}  \end{boxedverbatim}
 ~
 \end{Reponse}
 
-\Question Ecrire une fonction qui duplique une planète. 
+\Question Écrire une fonction qui duplique une planète (un
+\textit{copy constructor}). 
 
 \begin{Reponse}
+  \noindent
   \begin{boxedverbatim} 
-    Planete* Dupliquer(Planete p){
+// Version compliquée
+
+planete_t* planete_dup(planete_t *p){
+
+  planete_t *res;
+  res=(planete_t*)
+      malloc(sizeof(planete_t));
   
-      Planete *p1;
-      p1 = (Planete *) malloc (sizeof(Planete));
-      
-      strcpy(p1->nomPlanete, p.nomPlanete);
-      p1->rayon = p.rayon;
-      
-      return (p1);
-    }
-    
-  \end{boxedverbatim}
+  strcpy(res->nom, p->nom);
+  p1->rayon = p->rayon;
+  
+  return p1;
+} \end{boxedverbatim}
+~~~
+  \begin{boxedverbatim} 
+// Version simple
+
+planete_t* planete_dup(planete_t *p){
+
+  return planete_create(p->nom, 
+                        p->rayon);
+} 
+
+
+
+
+
+
+\end{boxedverbatim}
 ~
 \end{Reponse}
 
 \Question  Soit l'extrait suivant permettant de tester les fonctions
-précédentes\,;
+précédentes;
 
 
 \medskip
 
 
 \begin{boxedverbatim}
-void main()
-{
-  Planete p;
-  Planete *ptr_p;
-  Saisir(&p);
-  printf("%s %d \n", p.nomPlanete, p.rayon);
-  ptr_p = Dupliquer(p);
-  printf("%s %d \n", ptr_p->nomPlanete, ptr_p->rayon);
+void main() {
+
+  planete_t p;
+  planete_t *ptr_p;
+  ptr_p = planete_saisir();
+  p = *ptr_p;
+  printf("%s %d \n", p.nom, p.rayon);
+  ptr_p = planete_dup(p);
+  printf("%s %d \n", ptr_p->nom, ptr_p->rayon);
 }
 \end{boxedverbatim}
 
@@ -158,15 +221,15 @@ suivantes\,:
 
 \begin{tabular}{|p{.2\linewidth}|p{.3\linewidth}|}
   \hline
-  Référence  &             Type         \\\hline
-  \verb+ptr_p+     &               \\\hline                  
-  \verb+*ptr_p+         &         \\\hline            
-  \verb+ptr_p->nomPlanete+& \\\hline
-  \verb+ptr_p->rayon+& \\\hline
-  \verb+p+& \\\hline
-  \verb+&p+& \\\hline
-  \verb+p.nomPlanete+& \\\hline
-  \verb+p.rayon+& \\\hline
+  Référence          &   Type  \\\hline
+  \verb+ptr_p+       &         \\\hline                  
+  \verb+*ptr_p+      &         \\\hline            
+  \verb+ptr_p->nom+  &         \\\hline
+  \verb+ptr_p->rayon+&         \\\hline
+  \verb+p+           &         \\\hline
+  \verb+&p+          &         \\\hline
+  \verb+p.nom+       &         \\\hline
+  \verb+p.rayon+     &         \\\hline
 \end{tabular}
 
 
@@ -174,15 +237,15 @@ suivantes\,:
 
 \begin{tabular}{|p{.2\linewidth}|p{.3\linewidth}|}
   \hline
-  Référence  &             Type         \\\hline
-  \verb+ptr_p+     &      Planete *         \\\hline                  
-  \verb+*ptr_p+         &  Planete       \\\hline            
-  \verb+ptr_p->nomPlanete+& char []\\\hline
+  Référence          &          Type         \\\hline
+  \verb+ptr_p+       &  \verb+planete_t *+         \\\hline                  
+  \verb+*ptr_p+      &  \verb+planete_t+           \\\hline            
+  \verb+ptr_p->nom+  &  \verb+char []+\\\hline
   \verb+ptr_p->rayon+& int\\\hline
-  \verb+p+& Planete\\\hline
-  \verb+&p+& Planete*\\\hline
-  \verb+p.nomPlanete+& char []\\\hline
-  \verb+p.rayon+& int\\\hline
+  \verb+p+           & \verb+planete_t+\\\hline
+  \verb+&p+          & \verb+planete_t*+\\\hline
+  \verb+p.nom+       & \verb+char []+\\\hline
+  \verb+p.rayon+     & \verb+int+\\\hline
 \end{tabular}
 ~
 \end{Reponse}
