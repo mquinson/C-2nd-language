@@ -8,6 +8,12 @@
 
 \maketitle
 
+\Exercice \textbf{Gestion de points sur le plan.}
+
+L'objectif de cet exercice est de définir un module de programme
+gérant les points du plan en s'inspirant du design de code donné dans
+le chapitre 4 du cours au sujet de la programmation modulaire en C.
+ 
 \begin{Reponse}
 Le but de cet exercice est d'introduire en douceur les structures et
 le passage de paramètres par adresse aux fonctions.
@@ -17,58 +23,57 @@ contrairement à l'exercice ``annuaire'' qui utilise des chaînes de
 caractères.
 \end{Reponse}
 
-\begin{Question} Écrire une fonction \framebox{\texttt{symetrique}} qui prend
-en argument :
-\begin{itemize}
-\item l'abscisse ($x \in \mathbb R$) d'un point,
-\item son ordonnée ($y \in \mathbb R$),
-\item et une option parmi {XX,YY,ORIG} selon laquelle, la fonction
-  {\em symetrique} modifie les coordonnées d'un point avec celles de
-  son symétrique par rapport à l'axe des x, des y ou par rapport à
-  l'origine respectivement.
-\end{itemize}
-On utilise une énumération pour déclarer les différentes options
-possibles. La fonction retourne 1 si l'opération se déroule
-correctement, 0 sinon.
-\end{Question}
-
-\Question Dans la suite, un point est à définir par une structure {\em
-  Point} avec les champs suivants :
-\begin{itemize}
-\item id : un nombre entier, identifiant du point,
-\item x  : un nombre réel (float), l'abscisse du point,
-\item y : un nombre réel (float), l'ordonnée du point.
-\end{itemize}
+\Question Définir une structure de données \texttt{point\_t} décrivant
+un point et écrire une fonction constructeur ainsi qu'une fonction
+destructeur. Vous ajouterez un champ \texttt{id} à votre structure,
+contenant un entier unique identifiant chaque point, entier choisi par
+le constructeur à la création de l'objet.
 
 \Question Écrire une fonction qui permet d'afficher les différents
-champs d'une structure {\em Point} avec le format {\em id(x,y)}. La
-fonction prend en argument une structure Point.
+champs d'une structure \texttt{point\_t} avec le format {\em
+  id(x,y)}. La fonction prend en argument un pointeur vers une
+structure \texttt{point\_t}.
 
-\Question Écrire une fonction qui permet d'initialiser un point et qui
-prend comme argument une structure Point. 
+\Question Écrire un ensemble de tests dans un nouveau fichier (qui ne
+chargera que le .h de votre module) et effectuant quelques actions sur
+les points que vous définierez. Vous augmenterez cette classe de tests
+au fur et à mesure de votre avancée dans les questions ci-dessous.
 
-\Question Récrire la fonction \framebox{\texttt{symetrique}} de telle
-sorte qu'elle prenne en argument en plus de l'option, les coordonnées
-du point sous forme d'une structure.
+\Question Définir un \textit{copy constructor}, c'est-à-dire une
+fonction prenant un pointeur vers une structure \texttt{point\_t} et
+créant un nouvel objet étant la copie conforme du premier.
 
-\Question Écrire une fonction qui permet de définir un segment de
-droite comme un tableau de MAX points situés entre deux points
-(extrémités) A et B. On utilisera \#define pour définir la valeur de
-MAX.
+\begin{Question} Écrire une fonction \framebox{\texttt{symetrique}}
+  qui prend en argument un pointeur vers un \texttt{point\_t} ainsi
+  qu'une option parmi {XX,YY,ORIG} selon laquelle, la fonction {\em
+    symetrique} modifie les coordonnées d'un point avec celles de son
+  symétrique par rapport à l'axe des x, des y ou par rapport à
+  l'origine respectivement.
 
-\Question Pour afficher l'information sur l'ensemble des points
-constituant le segment de droite, écrire une fonction
-\framebox{\texttt{afficheSegment}} et qui fait appel à une fonction que
-  vous avez déjà écrite.
+  On utilise une énumération pour déclarer les différentes options
+  possibles. La fonction retourne 0 si l'opération se déroule
+  correctement, et un code d'erreur sinon (1 par défaut, mais vous
+  pouvez définir différents code de retour pour différents types
+  d'erreurs).
+\end{Question}
 
-\Question On s'intéresse maintenant à la taille de la structure
-Point. Afficher la taille de la structure et vérifier bien que sa
-taille correspond à la somme des tailles des différents éléments qui la
-composent.
+\Question Définissez et testez la fonction
+\texttt{point\_translate(point\_t p, double dx, double dy)}.
 
-\Question On définit une structure Point2 similaire à Point mais qui a
-son identifiant codé comme étant {\bf short}. Même question pour cette
-nouvelle structure. Que constate -t- on ?
+\Question Définissez une structure \texttt{polygone\_t} définie par un
+ensemble de point constituant ses sommets. On pourra avoir au maximum
+MAX sommets par polygone (avec MAX défini par un \#define dans le code).
+
+\Question Écrivez un constructeur, un destructeur et une fonction
+d'affichage pour \texttt{polygone\_t}.  Définissez et testez la
+fonction \texttt{polygone\_translate(polygone\_t p, double dx, double
+  dy)}.
+
+\Question Calculez taille de la structure \texttt{point\_t} avec
+l'opérateur \texttt{sizeof()}. Comparez cette taille à la somme des
+tailles des différents éléments qui la composent. Que se passe-t-il si
+le champ \texttt{id} est placé devant et devient de type
+\texttt{short} ou \texttt{char}? 
 
 \Question Afin de comprendre comment la structure est stockée en
 mémoire, écrire une macro OFFSET(x,Y) qui donne pour un élément x de
@@ -85,8 +90,6 @@ Aussi, c'est l'occasion de leur parler de la différence entre une
 macro et une fonction.
 \end{Reponse}
 
-\newpage
-
 \bigskip\bigskip\Exercice
 ~
 \begin{Reponse}
@@ -98,19 +101,15 @@ macro et une fonction.
 On souhaite créer un programme en C gérant un annuaire très simplifié qui
 associe à un nom de personne un numéro de téléphone.
 
-\Question Créer une structure Personne pouvant contenir ces informations (nom
-et téléphone). Le nom peut contenir 32 caractères et le numéro 16
-caractères.
+\Question Créer une structure \texttt{personne\_t} pouvant contenir
+ces informations (nom et téléphone). Le nom peut contenir 32
+caractères et le numéro 16 caractères. Écrivez le constructeur, le
+destructeur et la fonction d'affichage de cette structure.
 
-\Question Créer une nouvelle structure qui va représenter le carnet d'adresses.
-Cette structure Carnet contiendra un tableau de 20 Personne et un compteur
-indiquant le nombre de personnes dans le tableau.
-
-\Question Créer ensuite une fonction qui renvoie une structure Personne en
-prenant en argument un nom et un téléphone.
-
-\Question Rajouter une fonction qui affiche les informations contenues dans la
-structure Personne passée en argument.
+\Question Créer une nouvelle structure qui va représenter le carnet
+d'adresses.  Cette structure \texttt{carnet\_t} contiendra un tableau
+de 20 Personne et un compteur indiquant le nombre de personnes dans le
+tableau. Écrivez le constructeur et le destructeur de cette structure.
 
 \Question Créer une fonction qui ajoute une personne dans un carnet.
 
@@ -120,24 +119,29 @@ structure Personne passée en argument.
 d'adresse. Créer un menu qui propose d'ajouter une nouvelle personne,
 d'afficher le carnet ou de quitter.
 
-\medskip
-Une extension possible serait d'ajouter une fonction de sauvegarde de
-l'annuaire dans un fichier, et de faire en sorte que les données sauvegardées
-puissent être lues automatiquement au démarrage. 
+\Question Quelques  extensions possibles:
+\begin{itemize}
+\item Ajout d'une fonction de sauvegarde de l'annuaire dans un
+  fichier: Les données sauvegardées doivent être lues automatiquement
+  au démarrage.
+\item Taille dynamique de carnet: trouver une solution permettant
+  d'avoir un nombre variable de personnes dans son carnet d'amis,
+  potentiellement supérieur à 20.
+\end{itemize}
 
-\bigskip\bigskip\Exercice
+% \bigskip\bigskip\Exercice
 
-Écrire un programme C qui permette de lire au clavier une suite de
-caractères représentant la plaque minéralogique (ancien format!) d'un véhicule
-(comme \texttt{982 BZZ 54}) et qui affiche à l'écran les plaques des 20
-véhicules immatriculés à la suite de celui-ci (dans le même département).
+% Écrire un programme C qui permette de lire au clavier une suite de
+% caractères représentant la plaque minéralogique (ancien format!) d'un véhicule
+% (comme \texttt{982 BZZ 54}) et qui affiche à l'écran les plaques des 20
+% véhicules immatriculés à la suite de celui-ci (dans le même département).
 
-Ainsi, si la chaîne lue est «{\tt 998 BZZ 54}», alors le programme affichera\\
-«{\tt 999 BZZ 54}», «{\tt 001 CAA 54}», «{\tt 002 CAA 54}», \dots,  
-«{\tt 019 CAA 54}».
+% Ainsi, si la chaîne lue est «{\tt 998 BZZ 54}», alors le programme affichera\\
+% «{\tt 999 BZZ 54}», «{\tt 001 CAA 54}», «{\tt 002 CAA 54}», \dots,  
+% «{\tt 019 CAA 54}».
 
 
-
+% ;
 
 \end{document}
 
