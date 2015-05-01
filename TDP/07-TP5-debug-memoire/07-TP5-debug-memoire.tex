@@ -161,15 +161,15 @@ facilitent l'obtention d'informations sur les programmes.
   variable i (\cmd{print i}). Vous pouvez également le faire continuer
   (commande \cmd{continue}), et le réinterrompre. Corrigez le problème.
 
-  \textit{Indice:} ce premier bug se trouve ligne 7.
+  \textit{Indice:} ce premier bug se trouve ligne 8.
 
   \Question Maintenant que le programme s'exécute jusqu'à la fin, on constate
-  que l'affichage de la ligne 20 indique que l'affectation du tableau ne
-  s'effectue pas correctement, puisque les cases valent 0 au lieu du 1
-  attendu. Réexécutez votre programme pas à pas pour comprendre le problème,
-  puis corrigez le.
+  que l'affichage d'une des cases de \cmd{tab} après un arrêt à la ligne 21
+  indique que l'affectation du tableau ne s'effectue pas correctement,
+  puisqu'elles valent 0 au lieu du 1 attendu. Réexécutez votre programme pas à
+  pas pour comprendre le problème, puis corrigez le.
 
-  \textit{Indice:} ce second bug se trouve ligne 9.
+  \textit{Indice:} ce second bug se trouve ligne 10.
 \end{Exercice}
 
 \begin{Exercice}\textbf{le debugger GNU: gdb (utilisation avec les fonctions)}
@@ -261,33 +261,33 @@ facilitent l'obtention d'informations sur les programmes.
   problèmes:
   \begin{Verbatim}
 ==10816== Invalid write of size 4
-==10816==    at 0x8048429: initialise (boucle.c:11)
-==10816==    by 0x8048476: main (boucle.c:18)
+==10816==    at 0x8048429: initialise (boucle.c:12)
+==10816==    by 0x8048476: main (boucle.c:20)
 ==10816==  Address 0x41a7c68 is 0 bytes after a block of size 40,000 alloc'd
 ==10816==    at 0x402601E: malloc (vg_replace_malloc.c:207)
-==10816==    by 0x8048465: main (boucle.c:17)    
+==10816==    by 0x8048465: main (boucle.c:19)    
   \end{Verbatim}
 
-  La ligne \texttt{boucle.c$:$11} tente d'écrire 4 octets à un endroit
+  La ligne \texttt{boucle.c$:$12} tente d'écrire 4 octets à un endroit
   invalide. De plus, cet endroit est localisé juste après un gros bloc mémoire
-  alloué en \texttt{boucle.c$:$17}. Corrigez ce problème (indice: le bug est en
-  ligne 9).
+  alloué en \texttt{boucle.c$:$19}. Corrigez ce problème (indice: le bug est en
+  ligne 10).
 
   \Question Relancez \cmd{valgrind} sur le programme \texttt{boucle}.  À la fin
   de l'exécution, valgrind affiche:
   \begin{Verbatim}
-==394== LEAK SUMMARY:
-==394==    definitely lost: 0 bytes in 0 blocks.
-==394==      possibly lost: 0 bytes in 0 blocks.
-==394==    still reachable: 400 bytes in 1 blocks.
-==394==         suppressed: 0 bytes in 0 blocks.
-==394== Reachable blocks (those to which a pointer was found) are not shown.
-==394== To see them, rerun with: --show-reachable=yes    
+==21800== LEAK SUMMARY:
+==21800==    definitely lost: 0 bytes in 0 blocks
+==21800==    indirectly lost: 0 bytes in 0 blocks
+==21800==      possibly lost: 0 bytes in 0 blocks
+==21800==    still reachable: 40,000 bytes in 1 blocks
+==21800==         suppressed: 0 bytes in 0 blocks
+==21800== Rerun with --leak-check=full to see details of leaked memory
   \end{Verbatim}
   
-  Il y a donc un bloc de mémoire (de 400 octets) obtenu par \texttt{malloc},
-  mais jamais restitué au système avec \texttt{free}.  Ajoutez l'option
-  nécessaire pour voir lequel et corrigez le problème.
+  Il y a donc un bloc de mémoire (de 40 ko) obtenu par \texttt{malloc},
+  mais jamais restitué au système avec \texttt{free}. Ajoutez les options
+  nécessaires pour voir lequel et corrigez le problème.
 \end{Exercice}
 \end{document}
 
