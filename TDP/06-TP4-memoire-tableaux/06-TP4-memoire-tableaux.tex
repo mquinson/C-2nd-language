@@ -129,8 +129,10 @@ Moi : 3 5 4 4 5
 Vous: 3 3 6 1 2
     \end{Verbatim}
   \end{minipage}
-  Vous utiliserez une fonction \run{void affiche(char *name, int hand[5])} pour
-  afficher chaque ligne.
+  
+  Cette fonction doit renvoyer 0 pour l'instant, jusqu'à la question
+  5.  Vous utiliserez une fonction \run{void affiche(char *name, int
+    hand[5])} pour afficher chaque ligne.
 
   \Question Réalisez une fonction \run{int identifie(int hand[5])} retournant
   l'identificateur du type de main obtenu (voir la colonne Id ci-dessus).
@@ -192,6 +194,7 @@ JE GAGNE !
         ayant cette fréquence &   &   &   &   &   &   &   &   &   &   \\\hline
       \end{tabular}
     }
+  \vspace{-.6\baselineskip}
   \end{figure}
   
   Un \textit{full} d'une main de 9 dés a la table de fréquence des fréquences
@@ -204,7 +207,7 @@ JE GAGNE !
   paires et d'un groupe de cinq valeurs identiques) tandis que le full est
   $X^9$.
 
-  \bigskip Nous voila prêts à modifier la fonction \texttt{affiche()} pour
+  \smallskip Nous voila prêts à modifier la fonction \texttt{affiche()} pour
   donner une forme textuelle de la combinaison obtenue. On utilisera les
   abréviations grecques ou latines pour les valeurs supérieures à 4. La main
   précédente est ``2 paires, 1 penta'' tandis que $X^4 + X^6$ est ``1 carré, 1
