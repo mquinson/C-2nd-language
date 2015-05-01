@@ -52,7 +52,9 @@
 
   Si on se sent l'humeur taquine, on peut faire remarquer qu'il est
   probable que les différentes chaines de caractères soient
-  consécutives en mémoire. Cela donne le schéma suivant: \\
+  consécutives en mémoire. C'est surtout très pratique pour exprimer
+  les valeurs numériques des pointeurs dans la correction. 
+  Cela donne le schéma suivant: \\
 
   \noindent
   \includegraphics[width=\linewidth]{memoire-couleur2.pdf}
@@ -69,7 +71,7 @@
 
 \begin{Reponse}
   C'est l'adresse de la seconde case du tableau, c'est-à-dire
-  \verb|&(couleur[2])|
+  \verb|&(couleur[2])| c'est à dire 8.
 \end{Reponse}
 
 \Question Quelle est la valeur de {\tt *couleur}?
@@ -77,16 +79,17 @@
 \begin{Reponse}
   C'est \verb|couleur[0]|, c'est à dire l'adresse de la chaîne
   \texttt{"rouge"}, qui se trouve quelque part dans le segment data du
-  processus (là où il y a le code et les globales).
+  processus (là où il y a le code et les globales). Dans mon schéma,
+  c'est 25.
 \end{Reponse}
 
 \Question Quelle est la valeur de {\tt *couleur + 2}\,?
 
 \begin{Reponse}
 \begin{verbatim} 
-    couleur + 2 = &couleur[2] et *(couleur+2)=couleur[2]="bleu"
-    *couleur = couleur[0] = "rouge"
-    *couleur+2 = "uge"
+    couleur + 2 = &couleur[2] = 8 et *(couleur+2)=couleur[2]=36="bleu"
+    *couleur = couleur[0] = 25 = "rouge"
+    *couleur+2 = 25+2 = 27 = "uge"
 \end{verbatim}
 
 \noindent\verb?*couleur? pointe sur le premier élément de la chaine ``rouge''
@@ -95,7 +98,7 @@ soit 'r'. Si on rajoute 2, on décale de deux cases, et ça pointera sur
 \end{Reponse}
 
 \Question Quelle est la valeur de {\tt *(*(couleur + 5) +3)}\,? (Même
-question avec +4, +5, +6).
+question avec +4, +5, +6).x
 
 \begin{Reponse}
 \begin{verbatim} 
@@ -215,7 +218,7 @@ void main() {
   ptr_p = planete_saisir();
   p = *ptr_p;
   printf("%s %d \n", p.nom, p.rayon);
-  ptr_p = planete_dup(p);
+  ptr_p = planete_dup(&p);
   printf("%s %d \n", ptr_p->nom, ptr_p->rayon);
 }
 \end{boxedverbatim}
@@ -293,13 +296,17 @@ $ ./occurence z Bonjour
 \begin{boxedverbatim}
 #include <stdio.h>
 
-char *PremierCar(char c, char *ptrCar){
-  do {
-    if (*ptrCar == c)
-      return ptrCar;
-  } while (*(ptrCar++));
+char *PremierCar(char c, char *str){
+  char *p = str;
+  while (1) { // On va sortir avec les return ci-dessous
+    if (*p == c)
+      return p;
+    if (*p == '\O')
+      return NULL;
+    p++;
+  }
 
-  return NULL;
+  return NULL; // juste pour faire plaisir au compilo, on y arrivera jamais
 }
 
 int main(int argc, char * argv[]){
