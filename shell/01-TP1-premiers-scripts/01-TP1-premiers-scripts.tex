@@ -1,0 +1,174 @@
+%----------------------------------------------------------------------------
+%                 
+%                        
+%
+%                                       TP1 sh 
+%                         écriture de script - début shell 
+%                          %
+%------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage[french,english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{alltt}
+\usepackage{t1enc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+
+%------------
+
+ 
+\setlength{\oddsidemargin}{2mm}
+\setlength{\oddsidemargin}{2mm}
+\setlength{\evensidemargin}{2mm}
+\setlength{\textwidth}{154mm}
+\setlength{\textheight}{230mm}
+\setlength{\topmargin}{-3mm}
+\setlength{\parskip}{1mm}
+\setlength{\unitlength}{1mm}
+\setlength{\parindent}{0mm}
+
+
+\begin{document}
+
+
+
+\parbox{3cm}
+{\includegraphics[width=2.5cm]{/home/collin/svn-collin/ENSEIGNEMENT/Telecom_Nancy_logo_Q_CS4.eps}}
+% \ \hfill \
+
+
+\begin{center}
+\fbox{
+{\Large\sffamily\bfseries  TP shell (1)\,: if, for, while\ldots}
+}
+\end{center}
+
+% une macro de double trait 
+
+\long\def\dtrait{\vspace{-1.6 cm}
+\rule[-15 mm]{\textwidth}{0.5 mm}\\
+\rule[15 mm]{\textwidth}{0.2mm}
+\vspace{-2 cm}}
+
+% une macro de réponse
+\long\def\reponse{\hspace{5cm} \hrulefill}
+
+\dtrait       
+
+\section*{\sffamily\bfseries EXERCICE 1\,: Premier script.} 
+%---------------------------------------------------------
+
+Ecrire un script contenant la séquence de commandes suivante\,:
+\begin{enumerate}
+ \item créer un répertoire temporaire {\tt C\_FILE},
+
+ \item  créer dans ce répertoire le fichier {\tt c\_liste} contenant
+ la liste des noms des fichiers du répertoire de travail dont le nom
+ se termine par l'extension {\tt .c} ou {\tt .o},
+ 
+ \item recopier le fichier correspondant au dernier nom de cette liste
+ dans   {\tt C\_FILE},
+
+ \item liste le contenu du  fichier {\tt c\_liste}.
+\end{enumerate}
+
+Rendre exécutable le fichier contenant ce script. Vérifier qu'il
+fonctionne bien, en contrôlant l'existence du répertoire {\tt C\_FILE}
+et d'un fichier dans ce répertoire dont le nom porte l'extension {\tt
+  .c} ou {\tt .o}. 
+
+\section*{\sffamily\bfseries EXERCICE 2\,: Commande laquelle} 
+%---------------------------------------------------------
+
+Écrire une commande {\tt laquelle} à un argument qui, en explorant le
+path, retrouve la situation de cet argument dans l'arborescence.
+La commande n'a qu'un seul argument : le nom de l'exécutable que l'on
+recherche, qui ne comporte aucun {\tt /}, ni {\tt ..}, ni {\tt.}
+
+Exemple d'exécution\,: {\tt laquelle grep} doit vous retourner {\tt
+  /bin/grep} et  {\tt laquelle gcc} vous retourne {\tt /usr/bin/gcc}.\\
+Cette commande est la commande {\tt which} simplifiée.
+
+
+\section*{\sffamily\bfseries EXERCICE 3\,: Commande suffixer} 
+%---------------------------------------------------------
+
+
+Écrire une commande {\tt suffixer} avec deux arguments, le premier
+  est une chaîne de caractères, considérée comme un suffixe, le deuxième
+  est un nom de fichier ou de répertoire.  Cette commande ajoute le suffixe
+  à la fin du nom du fichier ou du répertoire.
+
+Pour simplifier l'écriture du {\it script}, on suppose que le nom du
+répertoire est donné sans le / terminal.
+
+L'exécution de la commande :
+\vspace{-2mm}
+\begin{center}
+{\tt suffixer chaine nom}
+\end{center}
+a pour effet de renommer le fichier ou le répertoire {\tt $<$nom$>$}
+en {\tt $<$nom$>$.$<$chaine$>$}.
+
+Par exemple :
+\vspace{-2mm}
+\begin{center}
+{\tt suffixer old prg.c}
+\end{center}
+renomme le fichier {\tt prg.c} en {\tt prg.c.old}
+
+{\tt
+\begin{tabbing}
+{\it  Exemples d'utilisation :}  ~~~ \= \% suffixer \\
+\> usage :  suffixer suffixe nom\_de\_fichier\_ou\_de\_repertoire\\
+\\
+\> \% suffixer old toto.c \\
+\> suffixer: toto.c inexistant\\
+\\
+\> \% suffixer old fichier
+\end{tabbing}}
+On peut remarquer que lorsque la commande se passe bien, aucun message
+n'est affiché ; dans ce dernier cas, la commande renomme le fichier
+{\tt fichier} en {\tt fichier.old}.
+\vspace{-2mm}
+\begin{center} \begin{tabular}{|p{140mm}|}
+\hline
+{\em Conseil :} Lors de la mise au point d'un {\it script-shell},
+quel qu'il soit, il est intéressant de faire
+\underline{afficher} les actions effectuées au fur et à mesure
+de leur exécution. 
+% Cet affichage est contrôlé par la variable commutateur
+% prédéfinie {\tt echo} ;
+% pour tracer tout ou  partie de votre script, encadrez les lignes
+% concernées par :
+% {\tt set echo}
+% {\it  -- toutes les commandes situées entre ces deux lignes seront affichées
+% \underline{et} exécutées --}
+% {\tt unset echo}
+
+Cet affichage est possible en mettant l'instruction {\tt  set -x} au
+début du script.
+\\
+\hline
+\end{tabular} \end{center}
+
+Modifier cette commande de façon à ce qu'elle s'applique à une
+liste de noms de fichiers : le suffixe (en premier argument) est ajouté à
+chacun des fichiers (suite des arguments).
+
+Par exemple, la commande suivante permet d'ajouter le suffixe {\tt old} aux
+trois fichiers {\tt droits}, {\tt toto} et {\tt ville1.txt}, s'ils
+existent :
+{\tt
+\begin{tabbing}
+coucou \= \kill
+\> \% suffixer old droits toto ville1.txt\\
+\>  suffixer: toto inexistant
+\end{tabbing}}
+La commande {\tt suffixer} poursuit son exécution même si l'un des fichiers
+de la liste n'existe pas.
+
+
+\end{document}
+

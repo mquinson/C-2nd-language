@@ -1,0 +1,324 @@
+%----------------------------------------------------------------------------
+%                 
+%                        
+%
+%                             TP2 sh 
+%                         écriture de script : find  et grep 
+%                               
+%
+%------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage[french,english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{alltt}
+\usepackage{t1enc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+
+%------------
+
+ 
+\setlength{\oddsidemargin}{2mm}
+\setlength{\oddsidemargin}{2mm}
+\setlength{\evensidemargin}{2mm}
+\setlength{\textwidth}{154mm}
+\setlength{\textheight}{230mm}
+\setlength{\topmargin}{-3mm}
+\setlength{\parskip}{1mm}
+\setlength{\unitlength}{1mm}
+\setlength{\parindent}{0mm}
+
+
+\begin{document}
+
+
+
+\parbox{3cm}
+{\includegraphics[width=3cm]{/home/collin/svn-collin/ENSEIGNEMENT/Telecom_Nancy_logo_Q_CS4.eps}}
+% \ \hfill \
+
+
+\begin{center}
+\fbox{
+{\Large\sffamily\bfseries  TP shell (2)\,: find, grep }
+}
+\end{center}
+
+% une macro de double trait 
+
+\long\def\dtrait{\vspace{-1.6 cm}
+\rule[-15 mm]{\textwidth}{0.5 mm}\\
+\rule[15 mm]{\textwidth}{0.2mm}
+\vspace{-2 cm}}
+
+% une macro de réponse
+
+\long\def\reponse{\hspace{5cm} \hrulefill}
+
+\dtrait       
+
+
+\section*{\sffamily\bfseries EXERCICE 1\,: commande supprimeDouble.} 
+%---------------------------------------------------------
+%exercice 2 page 82/101 du poly laurent 
+
+Ecrire un script {\sffamily supprimeDouble}  de supprimer tous les
+fichiers existant en plusieurs exemplaires dans un répertoire donné\,;
+on ne conservera qu'un seul exemplaire de chaque fichier.
+
+~\\
+{\em Indication\,:} utiliser la commande {\sffamily cmp} et pour
+tester votre script, et évitez {\sffamily  rm -i} dans un premier temps
+(testez avec echo "fichier à supprimer ", ce qui est plus prudent\ldots)
+
+\section*{\sffamily\bfseries EXERCICE 2\,: la commande find.} 
+%---------------------------------------------------------
+
+\begin{enumerate}
+
+%\item Recopiez chez vous le contenu du répertoire  {\tt
+%    /users/\ifthenelse{\boolean{etu}}{lice}{esial1}/=pot/=epdp}.
+
+\item Syntaxe de la commande {\tt find} :
+\begin{center}
+{\tt find chemins expression}
+\end{center}
+
+La commande {\tt find} effectue une exploration récursive dans chaque
+chemin mentionné pour chercher les fichiers qui répondent à l'expression
+booléenne indiquée.
+
+Par exemple, la commande : \hspace{1cm}
+{\tt find} $\underbrace{\mbox{\tt .}}_{\mbox{chemin}} \underbrace{\mbox{\tt
+    -name '*.txt' -print}}_{\mbox{expression}}$ \\
+affiche ({\tt print}) les noms des fichiers dont le nom ({\tt name})
+concorde avec {\tt *.txt}
+
+\item La variable \$HOME contient votre {\it home directory} (répertoire
+  d'accueil). Essayez :
+{\tt
+\begin{tabbing}
+coucou \= \kill
+\> echo \$HOME \\
+\> find \$HOME -name '*.txt' -print
+\end{tabbing}}
+
+\item L'opérateur {\tt -o} représente l'opérateur logique {\tt ou} :
+{\tt
+\begin{tabbing}
+coucou \= \kill
+\> find \$HOME -name '*.txt' -o -name 'd*' -print
+\end{tabbing}}
+
+Attention, dans cet exemple, l'action {\tt print} est seulement effectuée
+sur les noms des fichiers concordant avec le \underline{deuxième}
+nom.
+\begin{description}
+\item [{\it Complément}] {\it : si un fichier a un nom qui répond aux deux
+    sélections, ici {\tt *.txt} et {\tt d*}, seule la première sélection a
+    son action exécutée. 
+    % Par exemple, le fichier {\tt ville1.txt} n'est pas
+    % affiché car il concorde avec la première sélection dont l'action est
+    % \underline{vide}.
+    }
+\end{description}
+On peut alors :
+\begin{enumerate}
+\item soit donner une action à chaque définition de nom de fichier :
+{\tt
+\begin{tabbing}
+coucou \= \kill
+\> find \$HOME -name '*.txt' -print -o -name 'd*' -print
+\end{tabbing}}
+\item soit factoriser le traitement :
+{\tt
+\begin{tabbing}
+coucou \= \kill
+\> find \$HOME $\backslash$( -name '*.txt' -o -name 'd*' $\backslash$)
+-print
+\end{tabbing}}
+Les caractères {\tt ( )} ont une signification particulière pour le
+shell. Pour que ces caractères soient envoyés à la commande {\tt find} qui
+en a besoin pour comprendre la factorisation de la commande {\tt print}, il
+faut les précéder chacun par le caractère $\backslash$. Le caractère
+$\backslash$ demande simplement au shell d'ignorer le caratère qui suit.
+
+Attention, il faut placer un \verb*+ + devant la chaîne {\tt -name} sinon,
+il se produit une erreur : {\tt segmentation fault} ou {\tt find: invalid
+  predicate `(-name'}
+\end{enumerate}
+
+\item D'autres actions peuvent être exécutées sur les fichiers trouvés, par
+  exemple :
+{\tt
+\begin{tabbing}
+coucou \= \kill
+\> find \$HOME -name '*.txt' -exec ls -l \{\} $\backslash$;
+\end{tabbing}}
+\vspace{-2mm}
+où :
+\begin{itemize}
+\item on demande l'exécution ({\tt exec}) d'une et une seule commande Unix
+  particulière, ici {\tt ls -l} qui affiche les caractéristiques d'un
+  fichier ;\\
+cette commande ne doit comporter ni {\tt ;} ni {\tt |}
+
+\item les accollades {\tt \{} {\tt \}} permettent de passer en
+argument de la commande Unix le nom de fichier courant (trouvé par la
+commande {\tt find}) ;
+
+\item il faut terminer la commande demandée par {\tt exec} par un {\tt ;}
+  De plus, ce caractère {\tt ;} doit être précédé par le caractère
+  \verb+\+, afin que le {\tt ;} ne soit pas interprété par le {\it shell}
+  comme un séparateur entre deux commandes.
+\end{itemize}
+
+{\bf Remarques :}
+\begin{itemize}
+\item bien mettre des espaces \verb*+ + devant chaque entité utilisée dans la
+  commande {\tt find}, y compris devant~~{\tt $\backslash$;} \hfill
+\verb*+find $HOME -name '*.txt' -exec ls -l {} \;+
+\item il est aussi correct de spécifier les noms des fichiers entre
+guillemets à la place des quotes,
+\item les commandes spécifiées dans la commande {\tt exec} sont
+  interprétées par {\it  sh} ; aussi il n'est par exemple pas possible
+  d'utilier des commandes aliasées.
+\end{itemize}
+
+\end{enumerate} 
+
+% Écrire une commande {\tt menage} qui nettoie les répertoires de
+% l'utilisateur récursivement à partir de son {\it home directory} et utilise
+% la commande {\tt find}.
+
+% Par exemple, écrire la commande qui supprime les fichiers {\tt core}, {\tt
+%  *\~{}} et~~{\tt \#*\#} de tous vos répertoires (avec demande de confirmation
+% à chaque proposition de destruction).
+
+% Les noms des fichiers à détruire ne sont pas passés en argument de la
+% commande {\tt menage}, ils figurent en ``toutes lettres'' dans la commande
+% {\tt find}.
+
+
+\section*{\sffamily\bfseries EXERCICE 3\,: la commande menage.} 
+%---------------------------------------------------------
+
+Ecrire une commande {\sffamily menage} qui nettoie les répertoires de
+l'utilisateur, récursivement  à partir de son {\it home} et utilise la
+commande {\tt find}.
+Par exemple, cette commande supprime les fichiers {\tt core},  {\tt *\~{}},
+  {\tt \#*\#}  de tous vos répertoires avec demande de confirmation avant
+    chaque destruction.\\
+Les noms des fichiers à détruire ne sont pas passés en argument de la
+commande, mais figurent en ''toute lettre'' dans la commande.
+
+~\\
+Vous testerez votre commande de menage en écrivant  dans un premier
+  temps vos scripts avec  {\tt ls} et non pas {\tt rm -i} afin d'éviter
+  des destructions involontaires de fichiers\ldots 
+
+
+
+\section*{\sffamily\bfseries EXERCICE 4\,: Utilisation de grep -
+  recherche de motifs} 
+%---------------------------------------------------------
+
+
+Recopiez chez vous le fichier {\tt test\_grep.txt}
+et cherchez les commandes en ligne qui effectuent les recherches demandées.
+
+{\bf Remarque :} Les lignes affichées par la commande {\tt grep} seront
+précédées par le numéro de la question à laquelle elles répondent.
+Exactement 3 lignes par question doivent être affichées, éventuellement
+accompagnées par des réponses à d'autres questions.\\
+Pensez à utiliser  {\tt man grep}\ldots
+
+\begin{enumerate}
+
+\item recherche de toutes les occurrences du mot ~~~~{\tt oscilloscope}
+
+\reponse
+
+\item recherche de toutes les occurrences de la chaîne ~~~~{\tt
+L'oscilloscope}~~~~ avec affichage des numéros de ligne ;
+
+\reponse
+
+\item recherche de toutes les occurrences de la chaîne ~~~~{\tt theta}~~~~
+  en fin de ligne ;
+
+\reponse
+
+\item recherche de toutes les occurrences du caractère {\tt x} suivi d'un
+  caractère espace, suivi d'au moins un caractère numérique ;
+
+\reponse
+
+\item recherche de toutes les occurrences de la chaîne ~~~~\verb*+- Régler+
+
+\reponse
+
+\item recherche de toutes les lignes contenant indistinctement la
+chaîne ~~~~{\tt méthode}~~~~ en minuscules ou en majuscules ;
+
+\reponse
+
+\item recherche de toutes les occurrences du caractère {\tt f}, suivi
+d'une parenthèse ouvrante {\tt (}, suivi d'un nombre quelconque de
+caractères quelconques, suivi d'une parenthèse fermante {\tt )}
+
+\reponse
+
+\item recherche des mots ~~~~{\tt une trace}~~~~ séparés par au moins un
+caractère espace ;
+
+\reponse
+
+\item recherche de toutes les lignes contenant au moins 5 caractères
+numériques consécutifs ;
+
+\reponse
+
+\item recherche de toutes les lignes contenant au moins 5 caractères
+numériques, quelle que soit leur disposition dans la ligne ;
+
+\reponse
+
+\item recherche de toutes les lignes contenant la chaîne ~~~~{\tt
+omega}~~~~ ou la chaîne ~~~~{\tt phi}
+
+\reponse
+
+\item recherche de toutes les lignes contenant la chaîne ~~~~{\tt
+alpha}~~~~ et la chaîne ~~~~{\tt beta}~~~\underline{dans cet ordre};
+
+\reponse
+
+\item recherche de toutes les lignes contenant la chaîne ~~~~{\tt
+delta}~~~~ et la chaîne ~~~~{\tt gamma}~~~~ \\
+\underline{dans un ordre quelconque} ;
+
+\reponse
+
+\hyphenation{consécutifs}
+\item recherche de toutes les occurrences des lignes contenant exactement 12
+  chiffres consécutifs;
+
+\reponse
+
+%\item recherche de toutes les lignes qui ne contiennent pas au moins 3
+%    fois la chaîne {\tt ellipse} ... voir l'option {\tt -v} ... attention
+%    au résultat ;
+%
+%\reponse
+
+\item recherche de toutes les lignes contenant \underline{exactement} 2
+  fois la chaîne ~~~~{\tt ellipse}
+
+\reponse
+
+\end{enumerate}
+
+\end{document}
+

@@ -1,0 +1,314 @@
+%----------------------------------------------------------------------------
+%                 
+%                        
+%
+%                                 TP4 sh 
+%                         écriture de script : find - grep et sed
+%                                  ESIAL 1  - VERSION ELEVES
+%        --> tient sur deux séances
+%------------------------------------------------------------------------------
+
+\documentclass[a4paper,9pt]{article}
+\usepackage[french,english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{alltt}
+\usepackage{t1enc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{amsthm}
+\usepackage{latexsym}  % pour les petits carrés des math ...
+
+%------------
+ 
+\marginparwidth -15pt 
+\oddsidemargin -15pt 
+\evensidemargin -15pt
+\marginparsep 0pt
+\topmargin -55pt 
+\textwidth 6.9in 
+\textheight 10.2in
+\headsep 25pt
+\setlength{\parindent}{0.5cm}
+
+%------------
+\begin{document}
+
+\thispagestyle{empty}
+
+\parbox{3cm}
+{\includegraphics[width=3cm]{/home/collin/svn-collin/ENSEIGNEMENT/Telecom_Nancy_logo_Q_CS4.eps}}
+% \ \hfill \
+
+
+\begin{center}
+\fbox{
+{\Large\sffamily\bf  TP shell (4)\,: synthèse.}
+}
+\end{center}
+
+
+
+%---------------------
+
+\theoremstyle{remark}
+\newtheorem{definition}{Définition}
+
+\theoremstyle{definition}
+
+%-----------------
+
+\newcommand{\unix}[1]{\hspace*{2cm}{\tt #1}}
+\newcommand{\fich}[1]{{\bf \em #1}}
+
+\newcommand{\boite}{$\Box$\xspace}
+% \newcommand{\boiteRep}{$\BoxRep$\xspace}
+
+\newcommand{\I}{\hspace{1.5em}}
+
+\newcommand{\run}[1]{\fbox{\texttt{#1}}}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newenvironment{runblock}{\begin{texttt}\beginVerbatim}{\endVerbatim\end{texttt}}
+
+%-----------------
+
+\newtheorem{Question}{$\triangleright$ Question}
+\newtheorem{Exercice}{\setcounter{Question}{0}\hspace{-1.3em}{\Large $\star$} Exercice}
+
+%-----------------
+% une macro de double trait 
+
+\long\def\dtrait{\vspace{-1.6 cm}
+\rule[-15 mm]{\textwidth}{0.5 mm}\\
+\rule[15 mm]{\textwidth}{0.2mm}
+\vspace{-2 cm}}
+
+% une macro de réponse
+
+\long\def\reponse{\hspace{5cm} \hrulefill}
+
+% \dtrait       
+
+%----------------------------------------------------------------------
+
+\begin{Exercice}\textbf{Petit utilitaire de pense-bête.}
+
+  L'objectif est d'écrire un utilitaire permettant de stocker et retrouver
+  aisément des bribes d'informations dans un fichier. Par défaut, il stocke les
+  informations passées en argument dans le fichier {\tt
+  \~{}/.pensebete}. Si aucun 
+  argument n'est passé, il lit les informations au clavier et les stocke dans
+  le fichier avec la commande \run{cat - >> {\tt \~{}/.pensebete}}.
+%
+  Si le premier argument est \texttt{-c}, le script permet de rechercher des
+  informations dans le fichier. L'argument suivant est alors le motif à
+  chercher avec \texttt{grep}.
+  
+\end{Exercice}
+
+~\\
+%----------------------------------------------
+
+\begin{Exercice} \textbf{Inverser les lignes d'un fichier} (réimplémentation de
+  la commande \cmd{tac}).
+
+  On se propose d'écrire un script \texttt{inverse.sh}, qui réécrit un fichier
+  en inversant l'ordre de ses lignes. Ce script reçoit en paramètre le nom du
+  fichier à inverser. Ce paramètre peut être éventuellement suivi du nom d'un
+  autre fichier. Dans ce cas, l'inversion du fichier initial sera effectuée
+  dans le second fichier (le fichier initial n'étant pas modifié). On pourra
+  suivre, étape par étape, les indications suivantes pour parvenir à l'écriture
+  finale du script :
+
+  \begin{enumerate}
+  \item Écrire le script \texttt{inverse.sh} qui teste si le nombre de
+    ses paramètres 
+    est bien égal à 1 ou à 2. Dans le cas contraire, on affichera un message
+    d'erreur. Le code de retour indiquera si l'appel est incorrect.
+
+  \item Si le nombre de paramètres est égal à 2, recopier le fichier
+    correspondant au premier paramètre dans le second et relancer le script
+    \texttt{inverse.sh}, avec seulement le second paramètre en paramètre (appel
+    récursif). Afin de tester le bon fonctionnement du script, on affichera le
+    message \run{Un seul paramètre}, dans le cas où le script n'est lancé
+    qu'avec un seul paramètre. Dans le cas d'un appel avec deux paramètres, ce
+    message ne devra apparaître qu'une fois (après l'appel récursif).
+
+
+  \item Dans le cas où il n'y a qu'un seul nom de fichier en paramètre,
+    récupérer dans la variable \texttt{nblignes} le nombre de lignes
+    de ce fichier. Tester le script, en affichant la valeur de nblignes.
+
+
+  \item Mettre en place la boucle \texttt{while} qui permettra de
+    parcourir le fichier 
+    ligne par ligne. Pour la tester, on affichera la valeur décrémentée de
+    nblignes à chaque parcours de boucle.
+
+
+  \item À chaque parcours de boucle, envoyer les nblignes premières lignes du
+    fichier passé en paramètre dans le fichier temporaire
+    \texttt{.inv1} (on conseille 
+    d'utiliser la commande \texttt{head -n \$nblignes}, dans laquelle
+    l'argument qui 
+    suit l'option \texttt{-n} désigne le nombre de lignes à extraire
+    du fichier), puis 
+    concaténer la dernière ligne du fichier \texttt{.inv1} (extraite
+    avec \cmd{tail}) à  \texttt{.inv2}. Vérifier, en consultant le contenu de
+    \texttt{.inv2} après exécution du  script. Contrôler qu'il ne
+    manque pas de lignes (ni la première ni la  dernière). Effacer
+    \texttt{.inv2} après chaque test. 
+
+
+  \item Recopier \texttt{.inv2} dans le fichier passé en
+    paramètre. Effacer les fichiers  \texttt{.inv1} et \texttt{.inv2}
+  \end{enumerate}
+  Tester le script avec un, puis deux fichiers passés en paramètres.
+\end{Exercice}
+
+~\\
+%----------------------------------------------
+
+\begin{Exercice} \textbf{Affichage d'informations sur un répertoire.} 
+
+  On souhaite écrire un script donnant diverses indications sur le contenu d'un
+  répertoire. Appelé sans paramètre, ce script doit renvoyer la taille cumulée
+  des fichiers que contient le répertoire courant. Avec l'option -r, il doit
+  indiquer le nombre de sous-répertoires.  Avec l'option -f, il doit renvoyer
+  le nombre de fichiers.  Appelé avec un nom de répertoire en paramètre (après
+  les éventuelles options), les valeurs retournées concernent le répertoire
+  indiqué. On pourra suivre les indications suivantes étape par étape :
+
+  \begin{enumerate}
+  \item Initialisation :
+
+    \begin{enumerate}
+    \item Vérifier que le nombre de paramètres est compris entre 0 et 2.
+      Afficher un message d'erreur et produire un code de retour adéquat sinon.
+    \item Initialiser la variable \texttt{repertoire} à la valeur . (répertoire
+      courant). Initialiser deux variables \texttt{dofich} et \texttt{dorep} à
+      0.  S'il y a au moins un paramètre et si le premier paramètre commence
+      par un caractère - (on utilisera la commande cut), afficher le message :
+      \run{Traitement option}.
+    \item Si le premier paramètre commence par un caractère -, identifier les
+      options demandées en affectant la variable \texttt{dofich}
+      (respectivement \texttt{dorep}) à 1 si l'option \texttt{-f}
+      (respectivement \texttt{-r}) est active et en la laissant à 0 sinon.
+      Tester sur des exemples en affichant \texttt{dofich} et \texttt{dorep}.
+
+    \item Si la présence d'une option autre que \texttt{-f} ou \texttt{-t} est
+      détectée, afficher un message d'erreur.
+
+    \item En présence d'une option et s'il y a deux paramètres, affecter la
+      valeur du second à \texttt{repertoire}.
+    \item S'il n'y a qu'un seul paramètre (et pas d'option), affecter cette
+      valeur à la variable \texttt{repertoire}.
+    \item S'il y a deux paramètres, et s'il n'y a pas d'option, afficher un
+      message d'erreur.
+  \end{enumerate}
+\item Traitement :
+  \begin{itemize}
+  \item Si \texttt{dorep} vaut 1, alors :
+
+    \begin{itemize}
+    \item Initialiser \texttt{nbr} (variable qui désigne le nombre de
+      répertoires) à 0
+    \item Parcourir la liste du contenu du répertoire 
+    \item Si un élément \texttt{var} de la liste est un répertoire (on pourra
+      effectuer ce test à l'aide de la commande \run{test -d var}), incrémenter
+      \texttt{nbr}
+    \item Après la boucle, afficher \texttt{nbr} et sortir avec un code de
+      retour nul.
+    \end{itemize}
+  \item Procéder de même avec les fichiers si \texttt{dofich} vaut 1. Tester si
+    \texttt{var} est un fichier : \run{test -f var}.
+
+  \item Si ni \texttt{dorep} ni \texttt{dofich} ne valent 1, la commande doit
+    afficher la somme des tailles des \textit{fichiers}. On extraira avec
+    \cmd{cut} cette information de la liste détaillée des informations
+    concernant le contenu de repertoire dans une boucle while.
+    La somme se calcule avec \run{total=`expr \$total + \$cefichier`}.
+    Une fois calculée, afficher cette valeur.
+  \end{itemize}
+\end{enumerate}
+\end{Exercice}
+
+
+
+~\\
+%----------------------------------------------
+
+\begin{Exercice} \textbf{Et pour terminer\ldots Affichage d'une
+    arborescence de fichiers.} 
+  
+\noindent\begin{minipage}{.75\linewidth}
+  \I L'objectif est d'écrire un script \texttt{arbre.sh} permettant de
+  représenter de la forme suivante la sous-arborescence d'un répertoire passé
+  en paramètre.
+
+  \medskip  Voici une façon de procéder (ce n'est pas la seule):
+
+  \begin{itemize}
+  \item Écrire un script affichant tous les sous-répertoires du répertoire en
+    paramètre.
+  \item Le script doit être {\em récursif} et s'auto-appeler sur chaque
+    sous-répertoire.
+
+  \item Si le script est invoqué avec deux paramètres, le second est une chaîne
+    de caractères (entre guillemets) qui doit être affichée devant le nom d'un
+    sous-répertoire. Cette chaîne est composée d'espaces, de $|$, de - et de +
+
+  \item Lors d'un appel récursif, on ajoute "$|$\quad" au préfixe d'affichage
+    si le répertoire courant a d'autres fils à traiter après cet appel et
+    "$\;\;\;$" s'il s'agit du dernier.
+
+  \item Lors de l'appel initial, on écrit le nom du répertoire sans préfixe.
+    Cet appel est celui effectué par l'utilisateur (par opposition aux appels
+    récursifs). Le script n'a alors qu'un seul argument.
+  \end{itemize}
+
+
+\end{minipage}\hfill\begin{minipage}{.24\linewidth}
+  
+\begin{tabular}{|p{45mm}|}
+\hline
+\begin{verbatim}
+> arbre.sh TEST
+TEST
++- FILS1
+|  +- FILS11
+|  +- FILS12
+|  |  +- FILS121
+|  +- FILS13
+|     +- FILS131
+|     |  +- FILS1311
+|     +- FILS132
+|        +- FILS1321
++- FILS2
+|  +- FILS21
++- FILS3
+|  +- FILS31
++- FILS4
+   +- FILS41
+\end{verbatim}
+\\
+\hline
+\end{tabular}
+\end{minipage}
+
+\smallskip\noindent\textit{Attention} : Tester si un répertoire est accessible
+en lecture et en exécution avant d'y entrer.
+
+Pour vérifier que votre script fonctionne, comparez avec \texttt{diff} son
+affichage à \texttt{TP8/exo4/attendu}.
+
+\end{Exercice}
+
+
+\vfill
+\hrule \smallskip
+\noindent{\small Certains de ces travaux pratiques sont inspirés de ceux de A.
+  Crouzil, J.D. Durou et Ph. Joly de l'IRIT. Merci.}
+ 
+
+%---------------------------
+\end{document}

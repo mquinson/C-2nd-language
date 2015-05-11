@@ -1,0 +1,226 @@
+%----------------------------------------------------------------------------
+%                 
+%                        
+%
+%                                    TP3 sh 
+%                         écriture de script -  grep et sed
+%                           
+%------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage[french,english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{alltt}
+\usepackage{t1enc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+
+%------------
+
+ 
+\setlength{\oddsidemargin}{2mm}
+\setlength{\oddsidemargin}{2mm}
+\setlength{\evensidemargin}{2mm}
+\setlength{\textwidth}{154mm}
+\setlength{\textheight}{230mm}
+\setlength{\topmargin}{-3mm}
+\setlength{\parskip}{1mm}
+\setlength{\unitlength}{1mm}
+\setlength{\parindent}{0mm}
+
+
+\begin{document}
+
+
+\parbox{3cm}
+{\includegraphics[width=3cm]{/home/collin/svn-collin/ENSEIGNEMENT/Telecom_Nancy_logo_Q_CS4.eps}}
+% \ \hfill \
+
+
+\begin{center}
+\fbox{
+{\Large\sffamily\bfseries  TP shell (3)\,: grep, sed\ldots(suite)}
+}
+\end{center}
+
+% une macro de double trait 
+
+\long\def\dtrait{\vspace{-1.6 cm}
+\rule[-15 mm]{\textwidth}{0.5 mm}\\
+\rule[15 mm]{\textwidth}{0.2mm}
+\vspace{-2 cm}}
+
+% une macro de réponse
+
+\long\def\reponse{\hspace{5cm} \hrulefill}
+
+\dtrait       
+
+\section*{\sffamily\bfseries EXERCICE 1\,: commandes diverses. } 
+%--------------------------------------------------------------
+
+Ecrire une commande {\tt audit}  qui regarde dans votre {\it home} les
+fichiers exécutables par tous les utilisateurs et les affiche
+(utilisez {\tt find} et {\tt grep}).
+
+~\\
+Ecrire une commande  {\tt vire-ligne-vide} permettant de lister le
+contenu  d'un 
+fichier passé en argument de la commande, sans les lignes vides et en
+les numérotant. 
+
+
+~\\
+Ecrire une commande  {\tt grep-rec} qui recherche dans l'arborescence
+située sous le premier argument, toutes les lignes qui vérifient
+l'expression située en second argument, dans le fichier passé en
+troisième argument.\\
+Par exemple\,: 
+\begin{verbatim} 
+  grep-rec . "^#"  "*.c"
+\end{verbatim}
+
+
+Indication\,: utiliser {\tt xargs}.
+
+
+\section*{\sffamily\bfseries EXERCICE 2\,: affiche-session.}
+%---------------------------------------------------------
+
+Ecrire un script {\tt affiche-session} qui affiche la liste de tous
+les fichiers modifiés dans la journée.
+~\\
+On peut écrire cette commande à l'aide de {\em find}, {\em cut} et
+aussi {\em sed}.
+Ecrivez dans un premier temps une version avec {\em cut}, puis une
+version avec {\sffamily sed}. 
+
+
+\section*{\sffamily\bfseries EXERCICE 3\,: affiche} 
+%---------------------------------------------------------
+\begin{enumerate}
+\item Écrire une commande {\tt affiche} qui liste les noms des fichiers
+  dans le répertoire courant qui sont tels que :
+\begin{itemize}
+\item ils possèdent le suffixe {\tt .c}
+\item ils contiennent la ligne :
+
+\begin{center}
+{\tt \#include $<$stdio.h$>$}
+\end{center}
+\end{itemize}
+
+% \item Améliorer la commande pour autoriser les espaces et les tabulations
+%  entre toutes les entités.
+
+% \begin{center} \begin{tabular}{cccccccccc}
+% & {\tt \#} && {\tt include} && {\tt $<$} && {\tt stdio.h} && {\tt $>$} \\
+% $\uparrow$ && $\uparrow$  && $\uparrow$  && $\uparrow$ && $\uparrow$ \\
+% espaces && ici && ici && ici && ici \\
+% tabulations
+% \end{tabular} \end{center}
+
+\item Améliorer la commande afin de vérifier que la ligne ~~{\tt \#include
+    $<$stdio.h$>$} n'est présente qu'une seule fois et exclusivement sur la
+  première ligne du fichier.
+\end{enumerate}
+
+
+\section*{\sffamily\bfseries EXERCICE 4\,: replace} 
+%---------------------------------------------------------
+
+Ecrire une commande {\tt replace} qui est  un {\em sed}
+simplifié, à utiliser dans les cas simples.
+La syntaxe de cette commande est la suivante\,:  {\tt replace chaine1
+  chaine2 fich}.
+Elle a pour effet de  remplacer toute occurence de  {\tt chaine1} par
+{\tt chaine2} dans le fichier  {\tt fich}.
+
+Faites en sorte que cette commande fonctionne aussi dans le cas d'une
+liste de fichiers  (par exemple\,: {\tt replace chaine1
+  chaine2 '*.txt'}).
+
+
+\section*{\sffamily\bfseries EXERCICE 5\,: Commande chsuff.} 
+%---------------------------------------------------------
+
+Dans la page {\em man bash} on trouve l'extrait suivant qui vous
+sera utile d'appliquer dans l'exercice qui suit (plutôt que d'utiliser
+{\em sed})\,:
+
+\dtrait
+{\small
+\begin{verbatim}
+Given
+    a=/a/b/c/d
+    b=b.xxx
+
+    csh            bash        result
+    ---            ----        ------
+    $a:h            ${a%/*}        /a/b/c
+    $a:t            ${a##*/}       d
+    $b:r            ${b%.*}        b
+    $b:e            ${b##*.}       xxx 
+\end{verbatim}
+}
+\dtrait
+
+\begin{enumerate}
+
+\item Écrire une commande {\tt chsuff} à deux arguments, le premier
+est une chaîne de caractères représentant un suffixe ou le
+symbole\,{\tt -}, le deuxième est un nom de fichier ou de répertoire.
+
+L'exécution de la commande :
+\begin{center}
+{\tt chsuff chaîne nom}
+\end{center}
+\begin{tabbing}
+a pour \= effet : ~~~~~ \= $\bullet$ de remplacer le suffixe de {\tt
+  $<$nom$>$} par {\tt $<$chaîne$>$}, si {\tt $<$nom$>$} comporte un suffixe,\\
+\> ou \> $\bullet$ de renommer l'objet par {\tt $<$nom$>$.$<$chaîne$>$} sinon.
+\end{tabbing}
+
+L'exécution de la commande :
+\begin{center}
+{\tt chsuff - nom}
+\end{center}
+a pour effet de supprimer le suffixe de {\tt $<$nom$>$}, s'il existe.
+
+Exemples d'utilisation :
+\begin{tabbing}
+coucou \= \kill
+\> {\tt chsuff old prog.c} ~~~~~ \= renomme {\tt prog.c} en {\tt prog.old}
+~~~~ \= {\it  (changement de suffixe)} \\
+\> {\tt chsuff xx prog} \> renomme {\tt  prog} en {\tt prog.xx} \> {\it
+  (ajout d'un suffixe)} \\
+\> {\tt chsuff - prog.old} \> renomme {\tt prog.old} en {\tt prog} \> {\it
+  (suppression du suffixe)} \\
+\> {\tt chsuff - fichier} \> ne doit rien faire...
+\end{tabbing}
+
+\item Reprendre la commande de façon à ce qu'elle s'applique à une
+liste de noms de fichiers ou de répertoires.
+
+\item {\em Questions subsidiaires.}\\
+Quand on demande l'exécution de la commande :
+\begin{center}
+{\tt chsuff - fich}
+\end{center}
+il est possible qu'un message d'erreur de la commande {\tt mv} s'affiche :
+\begin{center}
+{\tt mv: fich and fich are identical}
+\end{center}
+
+Modifier votre {\it script} pour faire écrire le message par
+votre {\it script} et non pas par la commande {\tt mv}.
+
+\item Que se passe-t'il quand vous demandez la suppression du suffixe d'un
+  fichier commençant par le caractère point ?  Adaptez votre {\it script}
+  en conséquence.
+
+\end{enumerate}
+
+%-------------------------------------------------------------------------
+\end{document}
+
