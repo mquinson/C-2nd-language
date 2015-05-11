@@ -11,7 +11,7 @@ test: $(PROGRAMS)
 	done
 
 testsuite: $(PROGRAMS) $(DATAFILES)
-	@for file in `echo $^ | grep -v txt`;\
+	for file in `echo $^ | grep -v txt`;\
 	do ./$$file > $$file.result;\
 	done
 
