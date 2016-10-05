@@ -1075,20 +1075,42 @@ int main() \{\\
   \begin{block}{In C, \alert{Arrays are Pointers} (at least, most of the time)}
     \begin{itemize}
     \item Unfortunate heritage of C first years; One of the major pitfall for newcomers
-    \item \framebox{\texttt{char name[32];}} pointer to a \textbf{reserved} area of 32
+    \item \framebox{\texttt{char array[8];}} (pointer to) a \textbf{reserved} area of 8
       bytes
-    \item \framebox{\texttt{int ai[~] = \{0,1,2\};}} pointer to a reserved and
-      inited area of 3 ints
+      \begin{tikzpicture}[baseline]
+        \draw (0,-0.1) rectangle (2,0.35);
+        \foreach \i in {.25,.5,.75,1,1.25,1.5,1.75} {
+          \draw (\i,0.35) -- (\i,-0.1);
+        }
+      \end{tikzpicture}
+      \\
+      As if it were an automatic \texttt{\alert{\&}array}: in pointer
+      context, address of first cell
+    \item \framebox{\texttt{int ai[~] = \{0,1,2\};}} (pointer to) a reserved+inited
+       area of 3 ints
+    \item \framebox{\texttt{char *str="blah"};} 2 areas: pointer + array
+      \begin{tikzpicture}[baseline]
+        \draw (0,-0.1) rectangle (.25,0.35);
+        \draw (.75,-0.1) rectangle (2,0.35);
+        \foreach \i in {1,1.25,1.5,1.75} {
+          \draw (\i,0.35) -- (\i,-0.1);
+        }
+        \node [align=center] at (.875,.13) {\small b};
+        \node [align=center] at (1.125,.13) {\small l};
+        \node [align=center] at (1.375,.10) {\small a};
+        \node [align=center] at (1.625,.13) {\small h};
+        \node [align=center] at (1.875,.10) {\scriptsize$\backslash\!\emptyset$};
+
+        \draw[*-stealth'] (.1,.13) .. controls (.35,-0.3) and (.6,-0.3).. (.87,-.1);
+      \end{tikzpicture}
+
+    \medskip
     \item \framebox{\texttt{void max(int ai[~])}} $\approx$
-      \framebox{\texttt{void max(int *ai)}}  Expects an int pointer 
+      \framebox{\texttt{void max(int *ai)}}  Expects an int pointer \\[2pt]
+      Explains why strings don't take any \& in scanf: they already
+      are pointers
     \item \framebox{\texttt{void max(int ai[32])}} Similar, but whole array is
       copied on stack
-    \item When using \texttt{name} after \framebox{\texttt{char name[32]}} as
-      if it were an automatic \&\\
-      {\texttt{name}, when looked at as pointer, is the address of the first
-        array cell}
-    \item This explains why strings don't take any \& in scanf: they already
-      are pointers
     \end{itemize}
   \end{block}
 
