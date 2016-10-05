@@ -855,38 +855,6 @@
     \end{itemize}
   \end{block}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Pointers Pitfalls}
-  \Concept{There is reasons why students don't like pointers}
-  \medskip
-
-  \begin{block}{Pitfall \#1: * has a very heavy semantic}
-    \begin{itemize}
-    \item This little char is very loaded of semantic in C
-    \item Forget only one * somewhere, and you're running into the segfault\\
-      Same thing when writing a * too much
-    \end{itemize}
-  \end{block}\vspace{-.5\baselineskip}
-
-  \begin{block}{Pitfall \#2: * actually has two differing meanings}
-    \begin{itemize}
-    \item \framebox{\texttt{int *p}} declares a \textbf{\alert{pointer
-          variable}} \texttt{p} which is a pointer to an integer value
-    \item \framebox{\texttt{*p}} is then the \textbf{\alert{pointed value}},
-      interpreted according to the pointer type
-    \item (that's actually three meanings when counting $\times$, the multiplication)
-      \medskip
-    \item \framebox{\texttt{int *p; p=12;}} selects where it points in memory
-    \item \framebox{\texttt{int *p; *p=12;}} changes the memory in the pointed area
-      \medskip
-
-    \item Pascal was a bit more reasonable: \framebox{\texttt{INTEGER \^{}p}}
-      vs. \framebox{\texttt{p\^{}}} {\small(at least other order)}
-    \item In Java, there is no pointers, but reference to objects are close to
-      that concept
-    \end{itemize}
-  \end{block}
-\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Retrieving the address of something}
   \begin{block}{Motivation}
@@ -1043,6 +1011,64 @@ int main() \{\\
   \item<7-> Pointers are powerful tools (that's why they are dangerous)
   \end{itemize}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Pointers Pitfalls}
+  \Concept{There is reasons why students don't like pointers}
+  \medskip
+
+  \begin{block}{Pitfall \#1: * has a very heavy semantic}
+    \begin{itemize}
+    \item This little char is very loaded of semantic in C
+    \item Forget only one * somewhere, and you're running into the segfault\\
+      Same thing when writing a * too much
+    \end{itemize}
+  \end{block}\vspace{-.5\baselineskip}
+
+  \begin{block}{Pitfall \#2: * actually has two differing meanings}
+    \begin{itemize}
+    \item \framebox{\texttt{int *p}} declares a \textbf{\alert{pointer
+          variable}} \texttt{p} which is a pointer to an integer value
+    \item \framebox{\texttt{*p}} is then the \textbf{\alert{pointed value}},
+      interpreted according to the pointer type
+    \item (that's actually three meanings when counting $\times$, the multiplication)
+      \medskip
+    \item \framebox{\texttt{int *p; p=12;}} selects where it points in memory
+    \item \framebox{\texttt{int *p; *p=12;}} changes the memory in the pointed area
+      \medskip
+
+    \item Pascal was a bit more reasonable: \framebox{\texttt{INTEGER \^{}p}}
+      vs. \framebox{\texttt{p\^{}}} {\small(at least other order)}
+    \item In Java, there is no pointers, but reference to objects are close to
+      that concept
+    \end{itemize}
+  \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Pointer errors (and solutions)}
+  \begin{block}{Most common error: errant mem access}
+    \begin{itemize}
+    \item Pointers make it easy to read or write anywhere in memory
+    \item If the OS notices, program is sentenced an immediate death penalty
+    \item When not, things get only worse\ldots
+    \end{itemize}
+  \end{block}
+  \begin{block}{Memory errors are NASTY}
+    \begin{itemize}
+    \item Terse error message: "segmentation fault"
+    \item Hard to correlate Effect and Fault
+    \item To survive, you MUST know your tools: \underline{valgrind}
+      and gdb (see practical)
+    \end{itemize}
+  \end{block}
+  \begin{block}{Manipulating invalid pointers}
+    \begin{itemize}
+    \item The \texttt{NULL} value represents an invalid pointer. Often
+      defined to 0
+    \item Some pages at the beginning of the address space with no
+      read/write perm
+    \end{itemize}
+  \end{block}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Pointers vs. Arrays}
 \begin{frame}{Pointers vs. Arrays}
@@ -1142,7 +1168,7 @@ int main() \{\\
   \begin{block}{Pointers, Arithmetic, and Arrays}
     \begin{itemize}
     \item \framebox{\texttt{p[i]}} is equivalent to \framebox{\texttt{*(p+i)}}
-      ~~~(yes, C notations about arrays are messy)
+      ~~~(that is why we count elements from 0)
     \end{itemize}
   \end{block}
 \end{frame}
@@ -1157,7 +1183,7 @@ int main() \{\\
     \item It is used to convert something in a type into something else
     \item Two meanings, depending on whether it's applied on scalars or
       pointers
-    \item Quite the same story in Java, actually
+    \item Quite the same story in Java/C++, actually
     \end{itemize}
   \end{block}\vspace{-.5\baselineskip}
 
@@ -1195,13 +1221,13 @@ int main() \{\\
   \begin{block}<3->{Casting Pointers: Changing the semantic}
     \begin{itemize}\vspace{-.2\baselineskip}
     \item It's written exactly the same way \ldots\ but the meaning is very different
-    \item Let's look again at the Java semantic of reference casting
+    \item Let's look again at the Java/C++ semantic of reference casting
     \end{itemize}
   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Casting Objects in Java}
-  \begin{block}{Java Semantic Casting}
+\begin{frame}{Casting Objects in Java/C++}
+  \begin{block}{Java/C++ Semantic Casting}
     \begin{columns}
       \begin{column}{.3\linewidth}
         \framebox{\begin{minipage}{.3\linewidth}
@@ -1308,6 +1334,9 @@ Tutu tu = (Tutu)to;
       \end{tikzpicture}
     \end{column}    
   \end{columns}
+
+  \bigskip\bigskip
+  \concept{Types in C: no formal semantic, only denote size in memory}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Generic Pointers}
@@ -1528,7 +1557,8 @@ Tutu tu = (Tutu)to;
       \begin{itemize}
       \item The system assumes that this area is used where it's not anymore
       \item Ok to have a few memleaks. Too much of them will exhaust system resources
-      \item Slows everything down (swapping), and malloc() will eventually return NULL
+      \item Slows down (swap); malloc() eventually returns
+        NULL (or OOM killer)
       \end{itemize}
 
     \item If you call \texttt{free()} twice (\textbf{\alert{double free}}), strange things will occur
