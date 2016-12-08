@@ -226,9 +226,10 @@
       {\small\structure{Ex:} Colors; Cards in a deck; Direction
       (north/south/east/west)\ldots}
       \medskip
-    \item \structure{Unions:} Like structures, but stores everything at the
-      same memory location\\ 
-      {\small Advanced stuff, useful for strange memory tricks (data conversion)}
+    \item \structure{Unions:} Allow to look a given memory area with
+      several semantics\\
+      {\small Structures, w/ all fields at same memory
+        location (for mem conversion tricks)}
     \item \structure{Bit fields:} arrays of bits. Advanced stuff allowing
       direct access to memory\\
       {\small Useful to encode several booleans in a compact way}
@@ -434,9 +435,9 @@ enum color make_white(enum color c) \{
       \begin{column}{.3\linewidth}
         \begin{boitecode}{}
 struct point \{
-  double x;
-  double y;
-  int rank;    \};                  
+  float x;
+  float y;
+  short rank;    \};                  
         \end{boitecode}
       \end{column}
       \begin{column}{.6\linewidth}
@@ -447,7 +448,7 @@ struct point \{
     \begin{columns}
       \begin{column}{.3\linewidth}
         \begin{boitecode}{}
-int T[6]; 
+short T[6]; 
         \end{boitecode}
       \end{column}
       \begin{column}[t]{.6\linewidth}
@@ -462,9 +463,9 @@ int T[6];
       \begin{column}{.3\linewidth}
         \begin{boitecode}{}
 struct point \{
-  double x;
-  int rank;                  
-  double y;    
+  float x;
+  short rank;                  
+  float y;    
 \};
         \end{boitecode}
       \end{column}
