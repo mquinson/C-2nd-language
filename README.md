@@ -2,7 +2,8 @@ C second language
 =================
 
 This repository hosts the course "C as a second language", given each
-year at Telecom Nancy (http://www.telecomnancy.eu/) since 2008.
+year at Telecom Nancy (http://www.telecomnancy.eu/) between 2008 and
+2014. I partially use this content at ENS Rennes since 2015.
 
 There is many courses in C for absolute beginners out there, but this
 one targets advanced beginners that have been exposed to what
