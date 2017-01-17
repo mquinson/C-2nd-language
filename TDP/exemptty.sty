@@ -1,0 +1,217 @@
+% Petit package pour ecrire des Tds avec :
+%  - gestion des questions et des reponses.
+% Arnaud Legrand. 2001
+% Martin Quinson. 2001-2005
+% Gerald Oster. 2008
+% Martin Quinson. 2016
+%
+% E-mail Martin.Quinson@ens-rennes.fr
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{exemptty}
+
+%%%
+%%% Configuration
+%%%
+\newcommand{\@autor}{Martin Quinson et Al.}
+
+%%%
+%%% Dependances
+%%%
+
+\RequirePackage[french]{babel}
+
+\RequirePackage{ifthen}
+\RequirePackage{verbatim,fancyhdr,fancyvrb}
+\RequirePackage{amssymb}
+
+\RequirePackage{figlatex}
+\RequirePackage{graphics}
+\RequirePackage{hyperref}
+
+\usepackage[utf8]{inputenc}
+
+%%%
+%%% Mecanique pour les corrections
+%%%
+
+\newboolean{ENONCE@correction}
+\setboolean{ENONCE@correction}{false}
+
+\DeclareOption{correction}{
+  \setboolean{ENONCE@correction}{true}
+}
+\DeclareOption{enonce}{
+  \setboolean{ENONCE@correction}{false}
+}
+
+%%%
+%%% Autres options (logos, marges)
+%%%
+\newcommand{\TDnumber}[1]{\renewcommand{\@TDnumber}{#1}}
+\def\@TDnumber{??\@warning{*** Pas de numéro de TD, utilisez \string\TDnumber. ***}}
+\newcommand{\TDmodule}[1]{\renewcommand{\@TDmodule}{#1}}
+\def\@TDmodule{(module name)}
+
+\newboolean{TightMargin}
+\setboolean{TightMargin}{false}
+\DeclareOption{tightmargin}{
+  \setboolean{TightMargin}{true}
+}
+
+
+\ProcessOptions
+
+
+\ifthenelse{\boolean{ENONCE@correction}}{
+    \newenvironment{Reponse}%
+      {\noindent\color{red}%
+        \centerline{\framebox{\textbf{R\'eponse}}}
+
+        \vspace{-.5\baselineskip}\noindent\centerline{\vrule height1pt width.8\textwidth}
+
+      }{\par\noindent\centerline{\vrule height1pt width.8\textwidth}%
+        
+        \vspace{-.2\baselineskip}\centerline{\framebox{\textbf{Fin r\'eponse}}}
+
+                \color{black}}
+    \newenvironment{ReponseSansFin}%
+      {\noindent\color{red}%
+        \centerline{\framebox{\textbf{R\'eponse}}}
+
+        \vspace{-.5\baselineskip}\noindent\centerline{\vrule height1pt width.8\textwidth}
+
+      }{\color{black}}
+    \newcommand{\ifcorrection}[2]{#1}
+    \newcommand{\R}[1]{#1}
+  }{
+    \let\Reponse=\comment
+    \let\ReponseSansFin=\comment
+    \newcommand{\ifcorrection}[2]{#2}
+    \newcommand{\R}[1]{}
+  }
+
+%%%
+%%% Exercices et questions
+%%%
+
+\RequirePackage{amsthm}
+
+\theoremstyle{remark}
+\newtheorem{definition}{Définition}
+
+\newtheoremstyle{exo}% name
+ {3pt}% Space above
+ {3pt}% Space below
+ {}%  Body font
+ {}%  Indent amount (
+ {\bf}% Theorem head font
+ {:}% Punctuation after theorem head
+ {.5em}% Space after theorem head 2
+ {}% Theorem head spec (can be left empty, meaning ‘normal’)
+\theoremstyle{exo}
+\newtheorem{Question}{$\triangleright$ Question}
+\newtheorem{Exercice}{\setcounter{Question}{0}\hspace{-1.3em}$\bigstar$ Exercice}
+\newcommand{\PseudoExo}[1]{\setcounter{Question}{0}\noindent\hspace{-1.3em}$\bigstar$ \textbf{#1}\xspace}
+\newcommand{\QuestionCours}{\PseudoExo{Questions de cours.}}
+
+\newtheoremstyle{part}% name
+ {6pt}% Space above
+ {3pt}% Space below
+ {}%  Body font
+ {}%  Indent amount (
+ {\bf\Large}% Theorem head font
+ {:}% Punctuation after theorem head
+ {3pt}% Space after theorem head 2
+ {}% Theorem head spec (can be left empty, meaning ‘normal’)
+ 
+\theoremstyle{part}
+\newtheorem{Part}{%
+  \setcounter{Exercice}{0}%
+  \noindent\hspace{-1.5em}$\blacktriangleright$  %
+  Partie\xspace%
+}
+\newtheorem{Checkpoint}{\hspace{-1.3em}$\checkmark$ Checkpoint}
+
+
+%%%
+%%% Ce qu'il faut pour afficher du code avec Verbatim
+%%%
+
+\fvset{numbersep=2pt}
+\fvset{obeytabs=true}
+\fvset{resetmargins=true}
+\fvset{baselinestretch=0.7}
+\fvset{frame=single}
+\fvset{numbers=left}
+%\renewcommand{\FancyVerbFormatLine}[1]{\small{#1}}
+
+%%%
+%%% Modification des marges
+%%%
+
+\ifthenelse{\boolean{TightMargin}}{%
+  \usepackage[paper=a4paper,centering,margin=15mm]{geometry}%
+}{%
+  \usepackage[paper=a4paper,centering,margin=20mm]{geometry}%
+}
+
+%\renewcommand{\title}[1]{\renewcommand{\@title}{#1}}
+
+% Entete
+\pagestyle{fancy}
+\chead{ \vbox to\baselineskip{\fondecran}}\lhead{}
+\rhead{\footnotesize TP n\ensuremath{^\circ}{\@TDnumber}}%
+\fancyhead[L]{\footnotesize \@TDmodule}
+
+\newcommand{\fondecran}{
+  \ifthenelse{\boolean{ENONCE@correction}}{%
+    \vspace{2cm}%
+    \resizebox{\textwidth}{!}{\rotatebox{30.0}{\textcolor{couleurfond}{CORRECTION}}}%
+    \\%
+    \vspace{2cm}%
+    \resizebox{\textwidth}{!}{\rotatebox{30.0}{\textcolor{couleurfond}{CORRECTION}}}%
+  }{}}
+\definecolor{couleurfond}{rgb}{1.0,0.85,0.85}
+
+\newcommand{\titlebody}{%
+        \centering%
+        \ifthenelse{\equal{\@title}{}}{}{%
+          \textbf{\Large\@title}\par%
+          \medskip
+        }\par~
+}
+\renewcommand{\maketitle}{%
+%  \hypersetup{pdftitle=\@title,pdfsubject=\@module,pdfauthor=\@author}%
+  \thispagestyle{empty}%
+  \vbox to0pt{\fondecran}%
+  \newlength{\plopwidth}%
+  \setlength{\plopwidth}{\textwidth}%
+  \addtolength{\plopwidth}{25mm}%
+%  \null\vspace{-1.5cm}%
+%    \begin{minipage}[b]{.73\plopwidth}
+        \titlebody%
+        \centerline{\large\textbf{\@TDmodule}}\par\medskip%
+%     \end{minipage}%
+   \par\bigskip
+}
+
+\DeclareRobustCommand*{\BandeauCR}{%
+  \thispagestyle{empty}%
+  {\bf Noms~:} \hfill {\bf Groupe~:~~~~~~~~~~~~~~~~~~} 
+
+  \bigskip
+  \begin{center}%
+    \textbf{\Large \@title}%
+  \end{center}
+}
+
+%%%
+%%% Quelques macros que j'utilise par ci par la
+%%%
+\newcommand{\run}[1]{\fbox{\texttt{#1}}}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newcommand{\file}[1]{{\bf \em #1}}
+\newcommand{\result}[1]{\texttt{#1}}
+\newenvironment{runblock}{\begin{texttt}\beginVerbatim}{\endVerbatim\end{texttt}}
+
+\endinput

@@ -7,13 +7,13 @@ publish:: enonce correction
 	cp $(TARGET)-enonce.pdf $(TARGET)-correction.pdf $(DISTDIR)
 
 enonce:
-	echo \\documentclass[10pt]{article}\\usepackage{esial} > $(TARGET)-enonce.tex
+	echo \\documentclass[10pt]{article}\\usepackage{exemptty} > $(TARGET)-enonce.tex
 	grep -v documentclass $(TARGET).tex >> $(TARGET)-enonce.tex
 	$(MAKE) $(TARGET)-enonce.pdf
 	rm -rf `ls $(TARGET)-enonce.*|grep -v '^$(TARGET)-enonce.pdf$$'`
 
 correction:
-	echo \\documentclass[10pt]{article}\\usepackage[correction]{esial} > $(TARGET)-correction.tex
+	echo \\documentclass[10pt]{article}\\usepackage[correction]{exemptty} > $(TARGET)-correction.tex
 	grep -v documentclass $(TARGET).tex >> $(TARGET)-correction.tex
 	$(MAKE) $(TARGET)-correction.pdf
 	rm -rf `ls $(TARGET)-correction.*|grep -v '^$(TARGET)-correction.pdf$$'`
