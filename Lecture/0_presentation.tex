@@ -6,7 +6,7 @@
 \begin{frame}{Introduction}
   \begin{block}{Course Goals}
     \begin{itemize}
-    \item Help you mastering your third programming language
+    \item Help you mastering your second programming language
       \begin{itemize}
       \item Basics about the syntax
       \item Caveats (of memory management, amongst other)
@@ -24,49 +24,49 @@
 
   \begin{block}{Prerequisite}
     \begin{itemize}
-    \item Algorithmic Background: you cannot program without that
-    \item Scala/Java Programming: we won't learn to program, but how to write it in C
+%    \item Algorithmic Background: you cannot program without that
+    \item Python Programming: we won't learn to program, but how to write it in C
     \end{itemize}
   \end{block}
 
-  \begin{block}{Course Context at Telecom Nancy}
-    \begin{itemize}
-    \item Part of Programing Track (courses PPP, TOP, POO, SD, CSH)
-    \item Starts a new track on Operating System (courses CSH, RS, RSA)
-    \end{itemize}
-  \end{block}
+%   \begin{block}{Course Context at Telecom Nancy}
+%     \begin{itemize}
+%     \item Part of Programing Track (courses PPP, TOP, POO, SD, CSH)
+%     \item Starts a new track on Operating System (courses CSH, RS, RSA)
+%     \end{itemize}
+%   \end{block}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Administrativae}
-  \begin{block}{Module Time Table}
-    \begin{itemize}
-    \item Three lectures
-    \item 7 practical labs + 3 repetition sessions (+ exam): The C language 
-    \item 6 practical labs + 2 small group lectures (+ exam): Shell Scripting
-    \end{itemize}
-  \end{block}
-  \begin{block}{Evaluation}
-    \begin{itemize}
-    \item \structure{Test on table \textit{(partiel)} on C language}
-      \begin{itemize}
-      \item \structure{What:} Content of lectures and labs (of course)
-      \item \structure{When:} someday in march (check ADE agenda)
-      \item \structure{Allowed material during test:} one A4 sheet of paper only
-        \begin{itemize}
-        \item Hand-written (not typed)
-        \item From you (no photocopy)
-        \end{itemize}
-      \end{itemize}
-    \item \structure{Homework:} Do whatever you want (in C)
-    \item \structure{Test on table on Shell Scripting}\\
-      \begin{itemize}
-      \item \structure{When:} someday in may (check ADE agenda)
-      \item (Ask Suzanne Collin for details)
-      \end{itemize}
-    \end{itemize}
-  \end{block}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}{Administrativae}
+%   \begin{block}{Module Time Table}
+%     \begin{itemize}
+%     \item Three lectures
+%     \item 7 practical labs + 3 repetition sessions (+ exam): The C language 
+%     \item 6 practical labs + 2 small group lectures (+ exam): Shell Scripting
+%     \end{itemize}
+%   \end{block}
+%   \begin{block}{Evaluation}
+%     \begin{itemize}
+%     \item \structure{Test on table \textit{(partiel)} on C language}
+%       \begin{itemize}
+%       \item \structure{What:} Content of lectures and labs (of course)
+%       \item \structure{When:} someday in march (check ADE agenda)
+%       \item \structure{Allowed material during test:} one A4 sheet of paper only
+%         \begin{itemize}
+%         \item Hand-written (not typed)
+%         \item From you (no photocopy)
+%         \end{itemize}
+%       \end{itemize}
+%     \item \structure{Homework:} Do whatever you want (in C)
+%     \item \structure{Test on table on Shell Scripting}\\
+%       \begin{itemize}
+%       \item \structure{When:} someday in may (check ADE agenda)
+%       \item (Ask Suzanne Collin for details)
+%       \end{itemize}
+%     \end{itemize}
+%   \end{block}
+% \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \begin{frame}{About me}
   \begin{block}{Martin Quinson}
     \begin{itemize}
@@ -128,33 +128,6 @@
     \end{itemize}
     % \end{block}\vspace{-\baselineskip}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{frame}{References: Books}
-%   \begin{itemize}
-%   \item Coulouris, Jean et Kindberg. \structure{Distributed Systems:
-%       Concepts and Design}. %\\
-% %    Addison-Wesley, ISBN 0201-619-180 (ed. 3) et ISBN 0321263545 (ed. 4).
-%   \item Tannenbaum, Steen. \structure{Distributed Systems: Principles and
-%       Paradigms}.
-%   \item V. K. Garg. \structure{Elements of Distributed Computing.}
-%   \item Ralf Steinmetz, Klaus Wehrle (Eds): \structure{Peer-to-Peer
-%       Systems and Applications.}
-%     \url{http://www.peer-to-peer.info/}
-%   \end{itemize}
-%   \bigskip
-
-%   \centerline{%
-% %    \includegraphics[height=7\baselineskip]{img/cover-coulouris3.jpg}%
-% %    ~
-% %    \includegraphics[height=7\baselineskip]{img/cover-coulouris4.jpg}%
-%     ~~~~
-% %    \includegraphics[height=7\baselineskip]{img/cover-tannenbaum.jpg}%
-%     ~~~~
-% %    \includegraphics[height=7\baselineskip]{img/cover-garg.jpg}%
-%     ~~~~
-% %    \includegraphics[height=7\baselineskip]{img/cover-p2p.jpg}%
-%   }
-% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Table of contents}
 \begin{frame}[squeeze]{Table of Contents}
@@ -164,42 +137,43 @@
     \item Introduction; Motivation; History.
     \end{itemize}
     \medskip
-  \item[\numberedball{1}] \structure{\large Part I: C as Second Language}
-    \begin{itemize}
-    \item \structure{Syntax and Basic usage}
+%  \item[\numberedball{1}] \structure{\large Part I: C as Second Language}
+%    \begin{itemize}
+    \item \structure{\large Syntax and Basic usage}
       \begin{itemize}
       \item Introduction; First C program and compilation; Syntax, printf; C
         \textit{vs.} Java.
       \end{itemize}
       
-    \item \structure{Memory Management in C}
+    \medskip
+    \item \structure{\large Memory Management in C}
       \begin{itemize}
       \item Variable visibility, storage class; Malloc and friends; Debugging
         problems. 
       \end{itemize}
       
-    \item \structure{Advanced C Topics}
+    \medskip
+    \item \structure{\large Advanced C Topics}
       \begin{itemize}
       \item Modularity in C; Makefile; Performance tuning; Game programming.
       \end{itemize}
     \end{itemize}
-    \medskip
-  \item[\numberedball{2}] \structure{\large Part II: Shell Scripting}
-    \begin{itemize}
-    \item \structure{Low Script-fu knowledge}
-      \begin{itemize}
-      \item Introduction; First shell ``scripts''; Redirecting I/O \& Pipes;
-        basic commands.
-      \end{itemize}
-    \item \structure{Medium Script-fu knowledge}
-      \begin{itemize}
-      \item More Syntax for Advanced Scripts; Not so basic commands.
-      \end{itemize}
-    \item \structure{Advanced Script-fu knowledge}
-      \begin{itemize}
-      \item Shell functions; Variable Substitutions; Sub-shells; Arrays.  
-      \end{itemize}
-
-    \end{itemize}
-  \end{itemize}    
 \end{frame}
+%   \medskip
+%   \item[\numberedball{2}] \structure{\large Part II: Shell Scripting}
+%     \begin{itemize}
+%     \item \structure{Low Script-fu knowledge}
+%       \begin{itemize}
+%       \item Introduction; First shell ``scripts''; Redirecting I/O \& Pipes;
+%         basic commands.
+%       \end{itemize}
+%     \item \structure{Medium Script-fu knowledge}
+%       \begin{itemize}
+%       \item More Syntax for Advanced Scripts; Not so basic commands.
+%       \end{itemize}
+%     \item \structure{Advanced Script-fu knowledge}
+%       \begin{itemize}
+%       \item Shell functions; Variable Substitutions; Sub-shells; Arrays.  
+%       \end{itemize}
+%    \end{itemize}
+%  \end{itemize}    

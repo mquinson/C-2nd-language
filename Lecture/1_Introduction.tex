@@ -5,13 +5,13 @@
   \begin{block}{Let's go for a little poll, please}
     \begin{itemize}
     \item<+-> Who never heard the word ``Unix'' \textit{before arriving} at
-      Telecom Nancy?
+      ENS Rennes?
     \item<+-> Who in the room have Linux installed on a computer at home?
     \item<+-> Who have a network of Linux boxes at home?
     \end{itemize}
   \end{block}
 
-  \begin{block}<+->{Telecom Nancy population very heterogeneous}
+  \begin{block}<+->{Student population very heterogeneous}
     \begin{itemize}
     \item Usually about $\frac{1}{3}$ didn't heard about Unix before arriving,
       and $\frac{1}{3}$ use it already
@@ -74,9 +74,8 @@
 %  \begin{block}{Because it had a huge impact on programming languages}
     \begin{itemize}
     \item C++ is an object extension of C (you cannot master C++ without C)
-    \item Java is some sort of (safe) subset of C++;
-    C\# is a variation of Java
-    \item Several other languages have C-like syntax (Perl, Python, Ruby, PHP)
+    \item Python is some sort of (safe) subset of C++;
+    \item Several other languages have C-like syntax (C\#, Java, Perl, Ruby, PHP)
     \end{itemize}    
 %  \end{block}
   \vspace{-.8\baselineskip}
@@ -85,53 +84,53 @@
   \rotatebox{90}{\tiny See also \url{http://www.digibarn.com/collections/posters/tongues/}}}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Why should we study the C language? Widespread}
-    \begin{itemize}
-    \item \structure{De facto standard for System Programming:}
-      Windows, OS X, Linux, BSD  in C
-    \item \structure{Counting SourceForge projects.}
-      Java: 18\%; C++: 17.9\%;  C: 15.9\%
-    \begin{columns}
-      \begin{column}{.45\linewidth}
+% \begin{frame}{Why should we study the C language? Widespread}
+%     \begin{itemize}
+%     \item \structure{De facto standard for System Programming:}
+%       Windows, OS X, Linux, BSD  in C
+%     \item \structure{Counting SourceForge projects.}
+%       Java: 18\%; C++: 17.9\%;  C: 15.9\%
+%     \begin{columns}
+%       \begin{column}{.45\linewidth}
         
-        \centerline{\includegraphics[width=\linewidth]{img/intro-language-sourceforge.png}%
-        \rotatebox{90}{~~~\tiny\url{http://www.cs.berkeley.edu/}}
-        \rotatebox{90}{~~~~~~~~\tiny\url{~flab/languages.html}}}
+%         \centerline{\includegraphics[width=\linewidth]{img/intro-language-sourceforge.png}%
+%         \rotatebox{90}{~~~\tiny\url{http://www.cs.berkeley.edu/}}
+%         \rotatebox{90}{~~~~~~~~\tiny\url{~flab/languages.html}}}
         
-      \end{column}
-    \end{columns}
-\medskip
-  \item \structure{Counting SLOC in Debian.}
-    Quite different numbers...
-    \end{itemize}
+%       \end{column}
+%     \end{columns}
+% \medskip
+%   \item \structure{Counting SLOC in Debian.}
+%     Quite different numbers...
+%     \end{itemize}
 
-    \begin{columns}  
-      \begin{column}{.35\linewidth}
-        \setcounter{b}{0}
-        \begin{tikzpicture}[scale=1.25]
-          \foreach \p/\t/\c in {16/other/olive, 49/C/blue, 21/C++/green, 
-            9/shell/yellow, 5/Java/red}
-          {
-            \setcounter{a}{\value{b}}
-            \addtocounter{b}{\p}
-            \drawSlice{\thea/100*360}{\theb/100*360}
-            {\p\%}{\t}{\c}
-          }        
-        \end{tikzpicture}
-      \end{column}
-      \begin{column}{.5\linewidth}
-        {\scriptsize More details:\\
-        \url{http://debian-counting.libresoft.es/lenny/}\\
-        See also: \url{http://www.dwheeler.com/sloc/}}
+%     \begin{columns}  
+%       \begin{column}{.35\linewidth}
+%         \setcounter{b}{0}
+%         \begin{tikzpicture}[scale=1.25]
+%           \foreach \p/\t/\c in {16/other/olive, 49/C/blue, 21/C++/green, 
+%             9/shell/yellow, 5/Java/red}
+%           {
+%             \setcounter{a}{\value{b}}
+%             \addtocounter{b}{\p}
+%             \drawSlice{\thea/100*360}{\theb/100*360}
+%             {\p\%}{\t}{\c}
+%           }        
+%         \end{tikzpicture}
+%       \end{column}
+%       \begin{column}{.5\linewidth}
+%         {\scriptsize More details:\\
+%         \url{http://debian-counting.libresoft.es/lenny/}\\
+%         See also: \url{http://www.dwheeler.com/sloc/}}
 
-        \begin{itemize}
-        \item Big codes are in C/C++ 
-        \item Toy projects tend to be in Java
-        \end{itemize}
-        ~(but things change)
-      \end{column}
-    \end{columns}
-\end{frame}
+%         \begin{itemize}
+%         \item Big codes are in C/C++ 
+%         \item Toy projects tend to be in Java
+%         \end{itemize}
+%         ~(but things change)
+%       \end{column}
+%     \end{columns}
+% \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Why should we study the C language? Fast}
   \begin{itemize}
@@ -153,9 +152,9 @@
       most hardware
     \end{itemize}
   \end{block}
-  \begin{block}{Understanding C helps you writing better Java code}
+  \begin{block}{Understanding C helps you writing better Python code}
     \begin{itemize}
-    \item Java/.Net/Perl/etc hide underlying low-level mechanism
+    \item Python/Java/.Net/Perl/etc hide underlying low-level mechanism
     \item But these mechanism can be very important (to performance for example)
     \item To understand how objects get passed by ref, realize that they are
       pointers
@@ -266,9 +265,9 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{C as Second Language}\sectionpage
-\subsection{C vs. Java}
+\subsection{C vs. Python}
 \begin{frame}{C as Second Language}
-  \begin{block}{Similarities between C and Java}
+  \begin{block}{Similarities between C and Python}
     \begin{itemize}
     \item \structure{Operators}
       \begin{itemize}
@@ -288,7 +287,7 @@
         \end{column}
         \begin{column}{.45\linewidth}
           \begin{itemize}
-          \item \texttt{for(i=0; i<100; i++)\{ \}}
+          \item \texttt{for(int i=0; i<100; i++)\{ \}}
           \item \texttt{do \{ \} while( )}
           \item \texttt{break}, \texttt{continue}, \texttt{return}
           \end{itemize}
@@ -302,10 +301,12 @@
     \end{itemize}
   \end{block}\vspace{-\baselineskip}
 
-  \begin{block}{Differences between C and Java}
+  \begin{block}{Differences between C and Python}
     \begin{itemize}
-    \item \structure{No exception:} usually rely on int error code instead 
-      {\small(and usually a pain)}
+    \item \structure{Typed variables and curly braces:} \texttt{int a = 0; void
+        function(int b) \{\}} 
+%    \item \structure{No exception:} usually rely on int error code instead 
+%      {\small(and usually a pain)}
     \item \structure{No class/package/interface:} code modularity different
       {\small(not compiler-enforced)}
     \item \structure{No garbage collector:} alloc and free manually needed
@@ -315,21 +316,21 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[squeeze]{C as Second Language}
-  \begin{block}{C seems familiar when you know Java}
+  \begin{block}{C seems familiar when you know python}
     \begin{itemize}
-    \item Actually, that's Java which is highly inspired from C/C++
-    \item Feels like a Java without any object but with full access to
-      everything 
+    \item Actually, that's python which is highly inspired from C/C++
+    \item Like a python with curly braces, without objects, with full
+      access to memory
     \end{itemize}
   \end{block}
 
-  \begin{block}{C is like Java without comfort and without any protections}
+  \begin{block}{C is like Python without comfort and without any protections}
     \begin{itemize}
     \item Standard library is poor (but huge amount of extensions)
     \item Compiler is incredibly permissive (by default)
-    \item It's possible to shoot yourself in the foot in Java, that's common in
-      C
-    \item On error, Java displays a stack trace, C spits ``segfault'' or
+    \item It's possible to shoot yourself in the foot in Python,
+      that's common in C
+    \item On error, Python displays a stack trace, C spits ``segfault'' or
       ``invalid free'' errors
     \end{itemize}
   \end{block}
