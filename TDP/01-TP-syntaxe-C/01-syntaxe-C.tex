@@ -1,5 +1,8 @@
-\documentclass[10pt]{article}\usepackage[correction]{esial}
-\CSH\unA\sloppy
+%\documentclass[10pt]{article}\usepackage[correction,tightmargin]{exemptty}
+\documentclass[10pt]{article}\usepackage[enonce]{exemptty}
+
+\TDnumber{1}
+\TDmodule{C Seconde Langue}
 
 \usepackage[utf8]{inputenc}
 \hypersetup{colorlinks=false,pdfborder={0 0 0}}
@@ -249,7 +252,7 @@ Voici quelques exemples d'affichage pour différentes valeurs de N.
 \end{minipage}
 
 \Question Écrivez ce programme. Dans un premier temps, vous écrirez simplement
-la fonction \framebox{\texttt{int pascal(int i, int j)}} et vous calculerez
+la fonction \\\framebox{\texttt{int pascal(int i, int j)}} et vous calculerez
 chacune des valeurs de cette façon.
 
 L'approche choisie est relativement inefficace: Afficher le triangle de taille
@@ -308,11 +311,12 @@ un tableau d'adjectifs au masculin.
   ce qui donna le nom du jeu.
 \end{minipage}
 
-\Question Le premier problème a résoudre est de savoir comment stocker les
-morceaux de phrases qui seront combinés ensuite. Le plus simple est d'utiliser
-des tableaux statiques de chaines statiques. Vous avez deux possibilités,
-présentées dans les deux blocs suivants. Choisissez l'une d'entre elles, et
-écrivez le début de votre programme. 
+\Question Le premier problème a résoudre est de savoir comment stocker
+les morceaux de phrases qui seront combinés ensuite. Le plus simple
+est d'utiliser des tableaux statiques de chaines statiques. Vous avez
+deux possibilités parfaitement équivalentes, présentées dans les deux
+blocs suivants. Choisissez l'une d'entre elles, et écrivez le début de
+votre programme.
 
 \begin{Reponse}
   On pourrait aussi initialiser les chaines après coup, mais c'est plus
@@ -396,26 +400,27 @@ Une extension possible serait d'ajouter une fonction de sauvegarde de
 l'annuaire dans un fichier, et de faire en sorte que les données sauvegardées
 puissent être lues automatiquement au démarrage. 
 
-\Exercice \textbf{Pour aller plus loin: les pyramides en C.}
+% \Exercice \textbf{Pour aller plus loin: les pyramides en C.}
 
-Reprenez problème des pyramides vu en TD et en TP dans le module de
-TOP\footnote{Ces sujets sont disponibles sur la page
-  \url{http://www.loria.fr/~quinson/teach-prog.html}}. Implémentez la forme
-complète de ce problème, où les numéros des billes ne sont pas forcément des
-nombres successifs. Utilisez l'algorithme le plus efficace vu pour ce problème,
-c'est-à-dire le backtracking avec remplissage par diagonale (et utilisation de
-la fonction \texttt{propage()}).
+% Reprenez problème des pyramides vu en TD et en TP dans le module de
+% TOP\footnote{Ces sujets sont disponibles sur la page
+%   \url{http://www.loria.fr/~quinson/teach-prog.html}}. Implémentez la forme
+% complète de ce problème, où les numéros des billes ne sont pas forcément des
+% nombres successifs. Utilisez l'algorithme le plus efficace vu pour ce problème,
+% c'est-à-dire le backtracking avec remplissage par diagonale (et utilisation de
+% la fonction \texttt{propage()}).
 
-\Question Quel est le nombre entier $n$ le plus petit tel que l'on puisse
-remplir une pyramide de hauteur 6 avec toutes les numéros de billes utilisées
-inférieurs à $n$?
+% \Question Quel est le nombre entier $n$ le plus petit tel que l'on puisse
+% remplir une pyramide de hauteur 6 avec toutes les numéros de billes utilisées
+% inférieurs à $n$?
 
-\Question Quelle est la taille de pyramide maximale pour laquelle vous parvenez
-à trouver un remplissage? 
+% \Question Quelle est la taille de pyramide maximale pour laquelle vous parvenez
+% à trouver un remplissage? 
 
-\medskip\noindent\textit{Si vous parvenez à résoudre cet exercice,
-  bravo. Faites un mail à \url{Martin.Quinson@loria,fr} pour montrer votre
-  solution.}
+% \medskip\noindent\textit{Si vous parvenez à résoudre cet exercice,
+%   bravo. Faites un mail à \url{Martin.Quinson@loria,fr} pour montrer votre
+%   solution.}
+
 \end{document}
 
 %%% Local Variables:
