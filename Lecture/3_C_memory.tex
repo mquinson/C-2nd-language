@@ -1072,7 +1072,8 @@ int main() \{\\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Pointers vs. Arrays}
 \begin{frame}{Pointers vs. Arrays}
-  \begin{block}{In C, \alert{Arrays are Pointers} (at least, most of the time)}
+  \begin{block}{In C, \alert{Arrays are Pointers}. At least, most of
+  the time(*).}
     \begin{itemize}
     \item Unfortunate heritage of C first years; One of the major pitfall for newcomers
     \item \framebox{\texttt{char array[8];}} (pointer to) a \textbf{reserved} area of 8
@@ -1113,6 +1114,8 @@ int main() \{\\
       copied on stack
     \end{itemize}
   \end{block}
+  {\footnotesize (*) full disclosure (in French): \tiny
+  \url{https://openclassrooms.com/courses/la-verite-sur-les-tableaux-et-pointeurs-en-c}}
 
   \begin{block}{Considering Pointers as Arrays}
     \begin{itemize}
@@ -1121,7 +1124,6 @@ int main() \{\\
       {\small (no bound checking, as usual in C)}
     \end{itemize}
   \end{block}
-
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Pointer Arithmetic}
