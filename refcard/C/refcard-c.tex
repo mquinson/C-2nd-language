@@ -48,7 +48,7 @@
     switch (+textit[expression]) {
       case +textit[constante1]: +textit[instructions]+ldots break;
       case +textit[constante2]: +textit[instructions]+ldots break;
-      case +textit[default]: +textit[instructions]+ldots
+      +textit[default]: +textit[instructions]+ldots
     }
     while  (+textit[expression]) {+textit[bloc]}
     for (+textit[init] ; +textit[condition]; +textit[increment]) {+textit[bloc]}
@@ -156,7 +156,7 @@
   \begin{tabbing}
     ~~~\=\verb=atoi(s)  = \=\verb=atof(s)    =\=Chaîne vers \verb=int= ou \verb=double=\\
     \>\verb=abs(n)  = val absolue\>\>\verb=rand()  =nb pseudo-aléatoire\\
-    \>\verb=malloc(n)= \>\verb=calloc(n,n)= \>~Alloue $n$ octets\\
+    \>\verb=malloc(n)= \>\verb=calloc(1,n)= \>~Alloue $n$ octets\\
     \>\verb=realloc(p,n)=\>\>Redimensionne $p$\\
     \>\verb=free(p) = Libère bloc 
     \>\>\verb=exit(n)= Termine prog (code $n$)
@@ -265,7 +265,7 @@
   \centerline{\bf\large Pour savoir programmer en C,}
   \centerline{\bf\large il faut programmer en C.}
   \begin{itemize}[noitemsep]
-  \item Entraînez-vous, faites tous les TP et mini-projets.
+  \item Entraînez-vous, faites tous les TP et (mini--)projets.
   \item Maîtrisez vos outils: [c]make, valgrind, asan, gdb.
   \item Lisez les messages d'erreur pour les comprendre.
   \item Les logiciels libres comme terrain d'entraînement.
