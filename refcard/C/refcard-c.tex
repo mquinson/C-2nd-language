@@ -249,6 +249,18 @@
   \VerbatimInput[label=Premier programme, frame=single,
   numbers=left,numbersep=2pt]{premier_programme.c}
 
+  \begin{Verbatim}[label=Lecture d'un fichier ligne à ligne, gobble=4, frame=single,
+    numbers=left,numbersep=2pt]
+    char* ligne = NULL;
+    size_t lgr = 0;
+    ssize_t read
+
+    while ((read = getline(&ligne, &lgr, fh) != -1){
+      /* ce que vous voulez */
+    }
+    free(ligne);
+  \end{Verbatim}  
+
   \centerline{\bf\large Pour savoir programmer en C,}
   \centerline{\bf\large il faut programmer en C.}
   \begin{itemize}[noitemsep]
