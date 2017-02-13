@@ -1,0 +1,12 @@
+LDFLAGS=-g
+CFLAGS= -Wall -Wextra -Wno-unused-parameter
+CFLAGS= $(CFLAGS) -Werror
+prog: main.o point.o
+	gcc $(LDFLAGS) $^ -o $@
+main.o: main.c point.h
+	gcc $(CFLAGS) -c $<
+point.o: point.c point.h
+	gcc $(CFLAGS) -c $<
+clean:
+	rm -f main.o point.o prog
+.PHONY: clean   # Cible à faire toujours

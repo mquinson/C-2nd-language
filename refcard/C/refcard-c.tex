@@ -8,7 +8,8 @@
 \RequirePackage{graphics}
 \usepackage[utf8]{inputenc}
 
-\usepackage{multicol,url,enumitem}
+\usepackage{multicol,url,enumitem,hyperref}
+\hypersetup{hidelinks}
 \usepackage[margin=1cm]{geometry}
 \setlength{\parindent}{0pt}
 \setlength\columnseprule{0.5pt}
@@ -241,11 +242,66 @@
      ~~~~~v20170213
   }
 \end{minipage}
+
+\setlength\columnseprule{0pt}
+
+\begin{multicols}{3}
+  \VerbatimInput[label=Premier programme, frame=single,
+  numbers=left,numbersep=2pt]{premier_programme.c}
+
+  \centerline{\bf\large Pour savoir programmer en C,}
+  \centerline{\bf\large il faut programmer en C.}
+  \begin{itemize}[noitemsep]
+  \item Entraînez-vous, faites tous les TP et mini-projets.
+  \item Maîtrisez vos outils: make/cmake, valgrind, gdb.
+  \item Lisez les messages d'erreur pour les comprendre.
+  \item Les logiciels libres comme terrain d'entraînement.
+  \item Le C sous Windows, c'est encore plus dur.
+  \end{itemize}
+
+  \Subsection{Quelques bons livres sur le C:}
+  \begin{itemize}[noitemsep,nolistsep]
+  \item \href{https://fr.wikibooks.org/wiki/Programmation_C}{\tt fr.wikibooks.org/wiki/Programmation\_C}
+  \item \href{https://en.wikibooks.org/wiki/C_Programming}{\tt
+      en.wikibooks.org/wiki/C\_Programming}
+     
+  \item
+    \href{https://openclassrooms.com/courses/apprenez-a-programmer-en-c}
+    {{\it Apprenez à programmer en C} sur OpenClassRoom.}
+  \end{itemize}
+
+  \bigskip %
+  Merci d'aider à améliorer les wikibooks, et de m'indiquer comment
+  améliorer cette feuille.  %
+  \vfill
+
+  ~
+  \columnbreak %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \VerbatimInput[label=main.c,frame=single,numbers=left,numbersep=2pt]
+    {main.c}
+
+  \vfill
+  \VerbatimInput[label=point.h,frame=single,numbers=left,numbersep=2pt]
+    {point.h}
+
+  \vfill
+  \VerbatimInput[label=Makefile,frame=single,numbers=left,numbersep=2pt]
+    {Makefile.point}
+  
+  \vfill
+  \VerbatimInput[label=CMakeLists.txt (pour cmake),frame=single,numbers=left,numbersep=2pt]
+    {CMakeLists.txt}
+
+  \columnbreak %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \VerbatimInput[label=point.c,frame=single,numbers=left,numbersep=2pt]
+    {point.c}
+
+  \VerbatimInput[label=Exemple de session avec make,frame=single, numbers=left,
+    numbersep=2pt]{shell.make} 
+  \VerbatimInput[label=Exemple de session avec cmake,frame=single, numbers=left,
+    numbersep=2pt]{shell.cmake} 
+\end{multicols} 
 \end{document}
 
-\vfill
-\hfill(this space is for rent)
-
-\end{document}
 %%% Local Variables:
 %%% coding: utf-8
