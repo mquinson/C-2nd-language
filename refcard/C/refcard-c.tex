@@ -93,15 +93,15 @@
       char* key;
       unsigned int val;
     } KeyValType;
-    KeyValType klist[ ] = { "NSW", 0,  "Vic", 5 };
+    KeyValType klist[ ] = {{"NSW", 0}, {"Vic", 5}};
     void compute_ranking(int from);
   \end{Verbatim}  
   
-  \smallskip\Subsection{Exemples de litéraux} (= valeurs de variables)
+  \smallskip\Subsection{Exemples de littéraux} (= valeurs de variables)
   \vspace{-.5\baselineskip}
   \begin{tabbing}
-    ~~~\=\verb=123   -4   0xAf0C   057 = \= entiers (\verb=int=)\\
-    \>\verb=3.14159265   1.29e-23=   \> réels (\verb=double=)\\
+    ~~~\=\verb=123  0xAf0C  057  5L  3ul = \= entiers (\verb=int=)\\
+    \>\verb=3.1415   3f  1.29e-23=   \> réels (\verb=double=)\\
     \>\verb='x'   '\t'   '\033'=     \> caractères (\verb=char=)\\
     \>\verb="hello"  "abc\"\n"  ""=  \> chaînes (\verb=char *=)
   \end{tabbing}
