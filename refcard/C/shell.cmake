@@ -1,4 +1,4 @@
-$ cmake . # Écrase le Makefile
+$ cmake .   #  /!\ ceci écrase le Makefile
 (tests automatique du système)
 $ make
 (compilation des différents fichiers)

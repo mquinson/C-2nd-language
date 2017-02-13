@@ -30,7 +30,7 @@
   \item (2) édition de liens: \hfill\texttt{gcc aze.o toto.o -o prog}
   \end{itemize}
 
-  \medskip\Subsection{Pré-processeur} (= cherche/remplace automatiques)\\
+  \medskip\Subsection{Pré-processeur} (= cherche/remplace automatique)\\
   \verb=  /* bloc de commentaires */=   \\
   \verb=  // Commentaire jusqu'à la fin de ligne= \\
   \verb=  #include <libmodule.h>=\\
@@ -61,15 +61,15 @@
   \medskip\Subsection{Structure des programmes} (= contenu des fichiers)
   \begin{itemize}[noitemsep,nolistsep]
   \item Fichiers d'entête: que des déclarations\\
-    \verb=#include=, \verb=#define=, prototypes des fctions globales
+    \textcopyright, \verb=#include=, \verb=#define=, prototypes fctions globales
   \item Fichiers d'implém: déclarations et implémentations\\
-    \verb=#include=, \verb=#define=, prototypes des fctions
+    \textcopyright, \verb=#include=, \verb=#define=, prototypes fctions
     statiques, définition des fonctions
   \item Fichier principal: comme implem + fonction main\\
     \verb=int main(int argc, char **argv)=    
   \end{itemize}
 
-  \medskip\Subsection{Identificateurs} (= noms variables et fonctions)
+  \medskip\Subsection{Identificateurs} (= noms de variables et fonctions)
   \begin{itemize}[noitemsep,nolistsep]
   \item Lettre suivie par des lettres ou chiffres ou souligné\\
     \verb=[a-zA-Z][a-zA-Z0-9_]*=
@@ -159,7 +159,7 @@
     \>\verb=malloc(n)= \>\verb=calloc(n,n)= \>~Alloue $n$ octets\\
     \>\verb=realloc(p,n)=\>\>Redimensionne $p$\\
     \>\verb=free(p) = Libère bloc 
-    \>\>\verb=exit(n)= Termine prog. (code $n$)
+    \>\>\verb=exit(n)= Termine prog (code $n$)
   \end{tabbing}
   \columnbreak %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -175,7 +175,7 @@
     \multicolumn{2}{|c|}{sizeof() ~~  (\textit{type})}&
      taille d'objet, transtypage \hfill$\leftarrow$\\\hline
     * / \% & + - & Opérateurs arithmétiques\hfill$\rightarrow$ \\\hline
-    \multicolumn{2}{|c|}{$<<$ ~~ $>>$} &Décalage binaire à gauche/droite\hfill$\rightarrow$\\\hline
+    \multicolumn{2}{|c|}{$<<$ ~~~ $>>$} &Décalage binaire à gauche/droite\hfill$\rightarrow$\\\hline
     \multicolumn{2}{|c|}{$<$ ~ $<=$ ~ $>=$ ~ $>$} &Opérateurs relationnels\hfill$\rightarrow$\\\hline
     ==  != &  \& & Tests d'(in)égalité; ET binaire\hfill$\rightarrow$\\\hline
     \verb=^= & \verb=|= & OU exclusif (XOR); OU inclusif\hfill$\rightarrow$\\\hline
@@ -213,7 +213,7 @@
     \poptabs
   \end{tabbing}
   \vspace{-.8\baselineskip}
-  ~Format de printf: \%\textit{[largueur][}.\textit{precision]}\textit{type}
+  ~Format de printf: \%\textit{[largeur][}.\textit{precision]}\textit{type}
   \vspace{-.8\baselineskip}
   \begin{tabbing}
     ~~~~~\=$d$~~ \=entier~~~~~\=$o$~~\=octal~~~~~~ \=$x$~~\=hexadécimal\\
@@ -228,8 +228,8 @@
   \begin{tabbing}
     ~~\=\verb=strlen(s)   = \=longueur (sans le \verb=\0=)\\
     \>\verb=strcmp(s1,s2)=\>~~compare. ~~1:$<_{lex}$  ~~~0:$==_{lex}$ ~~~-1:$>_{lex}$\\
-    \>\verb=strcpy(d,s)=\>copie d$\leftarrow$s \verb=  strcat(d,s)= ajoute d$\leftarrow$s\\
-    \>\verb=strchr(s,c)=\>cherche $c$ \verb=   strstr(s,sub)= cherche $sub$\\
+    \>\verb=strcpy(d,s)=\>copie d$\leftarrow$s \verb=  strcat(d,s)= ajout d$\leftarrow$ds\\
+    \>\verb=strchr(s,c)=\>cherche $c$ \verb=   strstr(s,s2)= cherche $s2$\\
     \>\verb=strtok(s,delim) =Découpe $s$ en tokens
   \end{tabbing}
 \end{multicols}  
@@ -249,6 +249,7 @@
   \VerbatimInput[label=Premier programme, frame=single,
   numbers=left,numbersep=2pt]{premier_programme.c}
 
+  \smallskip
   \begin{Verbatim}[label=Lecture d'un fichier ligne à ligne, gobble=4, frame=single,
     numbers=left,numbersep=2pt]
     char* ligne = NULL;
@@ -265,7 +266,7 @@
   \centerline{\bf\large il faut programmer en C.}
   \begin{itemize}[noitemsep]
   \item Entraînez-vous, faites tous les TP et mini-projets.
-  \item Maîtrisez vos outils: make/cmake, valgrind, gdb.
+  \item Maîtrisez vos outils: [c]make, valgrind, asan, gdb.
   \item Lisez les messages d'erreur pour les comprendre.
   \item Les logiciels libres comme terrain d'entraînement.
   \item Le C sous Windows, c'est encore plus dur.
@@ -278,13 +279,16 @@
       en.wikibooks.org/wiki/C\_Programming}
      
   \item
+    \href{http://icube-icps.unistra.fr/index.php/File:ModernC.pdf}
+      {{\it Modern C}, livre libre par Jens Gustedt.}
+  \item
     \href{https://openclassrooms.com/courses/apprenez-a-programmer-en-c}
     {{\it Apprenez à programmer en C} sur OpenClassRoom.}
   \end{itemize}
 
   \bigskip %
-  Merci d'aider à améliorer les wikibooks, et de m'indiquer comment
-  améliorer cette feuille.  %
+  Merci d'aider à améliorer les ressources libres, et de m'indiquer
+  comment améliorer cette feuille.  %
   \vfill
 
   ~
