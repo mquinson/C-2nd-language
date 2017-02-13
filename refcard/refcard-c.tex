@@ -1,0 +1,251 @@
+\documentclass[a4paper,10pt,landscape]{article}
+\RequirePackage{verbatim}
+\RequirePackage{ifthen}
+\RequirePackage{fancyhdr}
+\RequirePackage{fancyvrb}
+
+\RequirePackage{figlatex}
+\RequirePackage{graphics}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multicol,url,enumitem}
+\usepackage[margin=1cm]{geometry}
+\setlength{\parindent}{0pt}
+\setlength\columnseprule{0.5pt}
+
+\newcommand{\Section}[1]{{\Large \textbf{#1}}}
+\newcommand{\Subsection}[1]{{\textbf{#1}}}
+
+
+\begin{document}\pagestyle{empty}
+\centerline{\Large\bf Mémento du langage C}
+\medskip
+\begin{minipage}{1.0\linewidth}
+\begin{multicols}{3}
+  \Subsection{Compiler} (= produire un exécutable)%\vspace{-.4\baselineskip}
+  \begin{itemize}[noitemsep,nolistsep]
+  \item Tout en un: \hfill\texttt{gcc -Wall -Wextra -g aze.c -o aze}
+  \item (1) compilation: \hfill\texttt{gcc -Wall -Wextra -g -c aze.c}
+  \item (2) édition de liens: \hfill\texttt{gcc aze.o toto.o -o prog}
+  \end{itemize}
+
+  \medskip\Subsection{Pré-processeur} (= cherche/remplace automatiques)\\
+  \verb=  /* bloc de commentaires */=   \\
+  \verb=  // Commentaire jusqu'à la fin de ligne= \\
+  \verb=  #include <libmodule.h>=\\
+  \verb=  #include "usermodule.h"=\\
+  \verb=  #define TAILLE 512=\\
+  \verb=  #define MAX(a,b) ((a)>(b)?(a):(b))=
+
+  \medskip\Subsection{Blocs d'instructions} (= morceaux de programme)
+  \vspace{-.3\baselineskip}
+  \begin{Verbatim}[gobble=2,commandchars=+\[\]]
+    [+textit[expression];          // instruction]
+    { +textit[instructions]+ldots }  // bloc
+    if (+textit[expression]) {+textit[bloc]}
+    if (+textit[expression]) {+textit[bloc]} else {+textit[bloc]}
+    switch (+textit[expression]) {
+      case +textit[constante1]: +textit[instructions]+ldots break;
+      case +textit[constante2]: +textit[instructions]+ldots break;
+      case +textit[default]: +textit[instructions]+ldots
+    }
+    while  (+textit[expression]) {+textit[bloc]}
+    for (+textit[init] ; +textit[condition]; +textit[increment]) {+textit[bloc]}
+    do  {+textit[bloc]} while  (+textit[cond]) // rarement utile
+    break; // termine le bloc (boucle ou switch)
+    continue; // prochaine itération
+    return +textit[expr]; // la fonction retourne la valeur
+  \end{Verbatim}
+
+  \medskip\Subsection{Structure des programmes} (= contenu des fichiers)
+  \begin{itemize}[noitemsep,nolistsep]
+  \item Fichiers d'entête: que des déclarations\\
+    \verb=#include=, \verb=#define=, prototypes des fctions globales
+  \item Fichiers d'implém: déclarations et implémentations\\
+    \verb=#include=, \verb=#define=, prototypes des fctions
+    statiques, définition des fonctions
+  \item Fichier principal: comme implem + fonction main\\
+    \verb=int main(int argc, char **argv)=    
+  \end{itemize}
+
+  \medskip\Subsection{Identificateurs} (= noms variables et fonctions)
+  \begin{itemize}[noitemsep,nolistsep]
+  \item Lettre suivie par des lettres ou chiffres ou souligné\\
+    \verb=[a-zA-Z][a-zA-Z0-9_]*=
+  \item Mots réservés~: {\small auto$\,$ break$\,$ case$\,$ char$\,$
+      const$\,$ continue default do double else entry enum extern float
+      for goto if int long register return short signed sizeof static
+      struct switch typedef union unsigned void volatile while}
+  \end{itemize}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \columnbreak
+  \Subsection{Déclarations, initialisations et prototypes} 
+  \vspace{-.6\baselineskip}
+  \begin{Verbatim}[gobble=2]
+    int i = 0;             char c = '\n';
+    char* str = "hello";   char buf[BUFSIZ];
+    double x = 3.14;       char* p = NULL;
+    double values[MAX] = {1, 2, 3};
+    typedef enum { FALSE, TRUE } Bool;
+    typedef struct KeyVal {
+      char* key;
+      int val;
+    } KeyValType;
+    KeyValType klist[ ] = { "NSW", 0,  "Vic", 5 };
+    void compute_ranking(int from);
+  \end{Verbatim}  
+  
+  \smallskip\Subsection{Exemples de litéraux} (= valeurs de variables)
+  \vspace{-.5\baselineskip}
+  \begin{tabbing}
+    ~~~\=\verb=123   -4   0xAf0C   057 = \= entiers (\verb=int=)\\
+    \>\verb=3.14159265   1.29e-23=   \> réels (\verb=double=)\\
+    \>\verb='x'   '\t'   '\033'=     \> caractères (\verb=char=)\\
+    \>\verb="hello"  "abc\"\n"  ""=  \> chaînes (\verb=char *=)
+  \end{tabbing}
+
+  \smallskip\Subsection{Séquences d'échappement} (dans les chaînes)
+  \vspace{-.5\baselineskip}
+  \begin{tabbing}
+    ~~~~\=\verb=\t  = \= tabulation~~~~~~~~~~~~~ \=\verb=\n  = \= nouvelle ligne\\
+    \>\verb=\'=  \> caractère \verb='=  \>
+      \verb=\"=  \> caractère \verb="=  \\
+    \>\verb=\\=  \> caractère \verb=\=  \>
+      \verb=\123=  \> code ascii en octal  \\
+    \>\verb=\0= \> caractère nul \>liste complète: \verb=man ascii= 
+  \end{tabbing}
+  
+  \Subsection{Taille des types} (en fonction de l'architecture)
+
+  ~~~\begin{minipage}{.65\linewidth}
+    \begin{tabular}{|l |c c c|}\cline{2-4}
+      \multicolumn{1}{c|}{}&x86&win64& amd64\\\hline
+      \verb=short=     & 2 &  2  & 2\\\hline
+      \verb=int=       & 4 &  4  & 4\\\hline
+      \verb=long=      & 4 &  4  & 8\\\hline
+      \verb=long long= & 8 &  8  & 8\\\hline
+      pointeurs        & 4 &  8  & 8\\\hline
+    \end{tabular}
+  \end{minipage}
+  \begin{minipage}{.3\linewidth}
+    
+    (en octets)
+
+    cf. \verb=sizeof()=\par
+    \verb=  char:= tjs 1\par
+    \verb= float:= tjs 4\par
+    \verb=double:= tjs 8
+  \end{minipage}
+
+  \medskip\Subsection{Portée et durée de vie des identificateurs}
+  \smallskip
+
+  ~~~\begin{tabular}{|l |c|c|}\cline{2-3}
+    \multicolumn{1}{c|}{} & Portée  & Durée de vie\\\hline
+    Globale               & partout & infinie \\\hline
+    Globale \verb=static= & fichier seulement & infinie \\\hline
+    Locale \verb=static=  & bloc seulement & infinie \\\hline
+    Locale                & bloc seulement & bloc \\\hline
+  \end{tabular}
+  
+  ~~~Les globales sont \verb=extern= par défaut.\\[-.5\baselineskip]
+
+  \textbf{Bibliothèque standard:} \verb=#include <stdlib.h>= \vspace{-.6\baselineskip}
+  \begin{tabbing}
+    ~~~\=\verb=atoi(s)  = \=\verb=atof(s)    =\=Chaîne vers \verb=int= ou \verb=double=\\
+    \>\verb=abs(n)  = val absolue\>\>\verb=rand()  =nb pseudo-aléatoire\\
+    \>\verb=malloc(n)= \>\verb=calloc(n,n)= \>~Alloue $n$ octets\\
+    \>\verb=realloc(p,n)=\>\>Redimensionne $p$\\
+    \>\verb=free(p) = Libère bloc 
+    \>\>\verb=exit(n)= Termine prog. (code $n$)
+  \end{tabbing}
+  \columnbreak %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \Subsection{Opérateurs} (priorité décroissante)
+  
+  \begin{tabular}{|c|c| p{53.5mm}|}\hline
+    \multicolumn{2}{|c|}{\tt ()  [ ]  .  -> }
+    & parenthèses, tableau, structure, \hfill$\rightarrow$\par
+      structure pointée\\\hline
+    \multicolumn{2}{|c|}{++ ~ -- ~~  - ~~ !}&Incr/décrément, moins unaire, non\\
+    \multicolumn{2}{|c|}{* ~~ \& ~~ \~}&déréférencemnt, adresse,
+                                         complem.1$\!\!$\\
+    \multicolumn{2}{|c|}{sizeof() ~~  (\textit{type})}&
+     taille d'objet, transtypage \hfill$\leftarrow$\\\hline
+    * / \% & + - & Opérateurs arithmétiques\hfill$\rightarrow$ \\\hline
+    \multicolumn{2}{|c|}{$<<$ ~~ $>>$} &Décalage binaire à gauche/droite\hfill$\rightarrow$\\\hline
+    \multicolumn{2}{|c|}{$<$ ~ $<=$ ~ $>=$ ~ $>$} &Opérateurs relationnels\hfill$\rightarrow$\\\hline
+    ==  != &  \& & Tests d'(in)égalité; ET binaire\hfill$\rightarrow$\\\hline
+    \verb=^= & \verb=|= & OU exclusif (XOR); OU inclusif\hfill$\rightarrow$\\\hline
+    \multicolumn{2}{|c|}{\textit{C} ? \textit{V} : \textit{F}}&
+        Condition ternaire\hfill$\leftarrow$\\\hline
+    \multicolumn{2}{|c|}{=  += -= *= \&= }&
+        Affectation (avec modification)\hfill$\leftarrow$\\\hline
+    \multicolumn{2}{|c|}{,}& Virgule (séquence d'expressions)\hfill$\rightarrow$\\\hline
+  \end{tabular}
+
+  \vspace{-\baselineskip}  
+  \begin{tabbing}
+    $c$~ \=\verb=char = \= $p$~ \=pointeur~ \=~$s$ \=chaîne \verb=char*=~~ \=$d$ \=\verb=double=\\
+    $n$ \> \verb=int= \>$l$\>\verb=long= \>$\!\!$$fh$ \>fichier \verb=FILE*= \>$b$\>buffer \verb=char[]=
+  \end{tabbing}
+  \vspace{-\baselineskip}
+
+  \textbf{I/O standard}: \verb=#include <stdio.h>=\vspace{-.7\baselineskip}
+  \begin{tabbing}
+    ~\=\verb=stdin= \=\verb=stdout= \=\verb=stderr   =   \=Flux de sortie (\verb=FILE*=)\\
+    \>\verb=EOF= \>\verb=NULL= \>\>Des constantes utiles\\
+    \>\verb=fopen(s, "rwab+")= \>\>\>Ouvre fichier, retourne un $fh$\\
+    \>\verb=fclose(fh)=\>\>\>Ferme le fichier\\
+    \pushtabs
+    ~\=\verb=fgetc(fh)   getchar() =\=Lit un cara (\verb=EOF= si fini)\\
+    \>\verb=fputc(fh,c) putchar(c)=\>Écrit un caractère\\
+    \>\verb=fread(b,1,n,fh)=\>Lit un bloc de taille au plus $n$\\
+    \>\verb=fwrite(b,1,n,fh)=\>Écrit un bloc de taille $n$\\
+    \>\verb=printf(fmt, list)=\>Affichage formaté sur $stdout$\\
+    \>\verb=fprintf(fh,fmt, list)=\>Affichage formaté sur $fh$\\
+    \>\verb=sprintf(b,fmt, list)=\>Affichage formaté dans buffer\\
+    \>\verb=scanf(fmt, list)=\>Lecture formaté depuis $stdin$\\
+    \>\verb=fscanf(fh, fmt, list)=\>Lecture formaté depuis $fh$\\
+    \>\verb=sscanf(s, fmt, list)=\>Lecture formaté depuis chaîne
+    \poptabs
+  \end{tabbing}
+  \vspace{-.8\baselineskip}
+  ~Format de printf: \%\textit{[largueur][}.\textit{precision]}\textit{type}
+  \vspace{-.8\baselineskip}
+  \begin{tabbing}
+    ~~~~~\=$d$~~ \=entier~~~~~\=$o$~~\=octal~~~~~~ \=$x$~~\=hexadécimal\\
+    \>$f$\>flotant\>$g$\>général\>$e$\>exponentiel (scientifique)\\
+    \>$c$\>caractère\>$s$\>chaîne\>$p$\>pointeur
+  \end{tabbing}
+  \vspace{-.8\baselineskip}
+  ~Pour \verb=scanf=, la liste contient des adresses
+
+  \medskip
+  \textbf{Utiliser des chaînes:} \verb=#include <string.h>= \vspace{-.6\baselineskip}
+  \begin{tabbing}
+    ~~\=\verb=strlen(s)   = \=longueur (sans le \verb=\0=)\\
+    \>\verb=strcmp(s1,s2)=\>~~compare. ~~1:$<_{lex}$  ~~~0:$==_{lex}$ ~~~-1:$>_{lex}$\\
+    \>\verb=strcpy(d,s)=\>copie d$\leftarrow$s \verb=  strcat(d,s)= ajoute d$\leftarrow$s\\
+    \>\verb=strchr(s,c)=\>cherche $c$ \verb=   strstr(s,sub)= cherche $sub$\\
+    \>\verb=strtok(s,delim) =Découpe $s$ en tokens
+  \end{tabbing}
+\end{multicols}  
+\end{minipage}%
+\begin{minipage}{.1\linewidth}  
+  \rotatebox{90}{
+    \scriptsize Licence: CC-BY-SA, by M. Quinson. Voir
+    \url{https://github.com/mquinson/C-2nd-language}
+
+     ~~~~~v20170213
+  }
+\end{minipage}
+\end{document}
+
+\vfill
+\hfill(this space is for rent)
+
+\end{document}
+%%% Local Variables:
+%%% coding: utf-8
