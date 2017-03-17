@@ -1,0 +1,413 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{../exercices}
+\usepackage{nicefrac}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{listings}
+
+\lstdefinestyle{customc}{
+  language=C,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{magenta},
+  commentstyle=\itshape\color{cyan},
+  identifierstyle=\color{blue},
+  stringstyle=\color{red},
+}
+
+\lstdefinestyle{customk}{
+  language=make,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{magenta},
+  commentstyle=\itshape\color{cyan},
+  identifierstyle=\color{blue},
+  stringstyle=\color{red},
+  frame=single,
+  showstringspaces=false,
+  alsoletter=^,
+}
+
+
+\lstset{escapechar=@,style=customk}
+
+\lstset{emph={%  
+    v, ^},emphstyle={\color{red}\bfseries}%
+}%
+
+
+
+\title{Les 7 merveilles du monde des 7 couleurs -- \textit{TP noté}}
+\TDnumber{4}
+\TDdate{Vendredi 17 mars}
+
+\begin{document}
+
+{
+\titlebody
+\noindent
+\bigskip
+}
+\begin{center}
+\textbf{\textcolor{red}{\large TP à rendre pour le 31 mars 2017 avant 23h59 (CEST)}}
+
+\textbf{\textcolor{red}{À faire en binôme (ou trinôme si nombre impair)}}
+\end{center}
+
+\section{Règles du jeu}
+\label{intro}
+%\vspace{-1.5\baselineskip}
+L'objectif de ce TP est d'implémenter un petit jeu de stratégie, dont
+voici le début d'une partie.
+%\smallskip
+
+\noindent
+  \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D C B ^ 
+C F G E G A D B C C 
+D A F C C F F G B F 
+F A D F D C B A C C 
+B E F A G D G C C B 
+D F A B B C E E B D 
+C G E F D F F E D A 
+F D C D D C E A C A 
+A D F A E E A C B B 
+v E F A A B E G E A 
+    \end{lstlisting}
+    \centerline{\'Etat initial}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D C B ^ 
+C F G E G A D B ^ ^ 
+D A F C C F F G B F 
+F A D F D C B A C C 
+B E F A G D G C C B 
+D F A B B C E E B D 
+C G E F D F F E D A 
+F D C D D C E A C A 
+A D F A E E A C B B 
+v E F A A B E G E A 
+    \end{lstlisting}
+    \centerline{Tour 1: \^{} a joué C}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D C B ^ 
+C F G E G A D B ^ ^ 
+D A F C C F F G B F 
+F A D F D C B A C C 
+B E F A G D G C C B 
+D F A B B C E E B D 
+C G E F D F F E D A 
+F D C D D C E A C A 
+A D F A E E A C B B 
+v E F A A B E G E A 
+\end{lstlisting}
+    \centerline{Tour 2: v a joué D}
+  \end{minipage}\hfill
+   \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D C ^ ^ 
+C F G E G A D ^ ^ ^ 
+D A F C C F F G ^ F 
+F A D F D C B A C C 
+B E F A G D G C C B 
+D F A B B C E E B D 
+C G E F D F F E D A 
+F D C D D C E A C A 
+A D F A E E A C B B 
+v E F A A B E G E A 
+\end{lstlisting}
+     \centerline{Tour 3: \^{} a joué B}
+   \end{minipage}
+
+\smallskip
+\noindent
+  \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D C ^ ^ 
+C F G E G A D ^ ^ ^ 
+D A F C C F F G ^ F 
+F A D F D C B A C C 
+B E F A G D G C C B 
+D F A B B C E E B D 
+C G E F D F F E D A 
+F D C D D C E A C A 
+A D F A E E A C B B 
+v v F A A B E G E A 
+\end{lstlisting}
+    \centerline{Tour 4: v a joué E}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D ^ ^ ^ 
+C F G E G A D ^ ^ ^ 
+D A F C C F F G ^ F 
+F A D F D C B A ^ ^ 
+B E F A G D G ^ ^ B 
+D F A B B C E E B D 
+C G E F D F F E D A 
+F D C D D C E A C A 
+A D F A E E A C B B 
+v v F A A B E G E A 
+    \end{lstlisting}
+    \centerline{Tour 5: \^{} a joué C}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D ^ ^ ^ 
+C F G E G A D ^ ^ ^ 
+D A F C C F F G ^ F 
+F A D F D C B A ^ ^ 
+B E F A G D G ^ ^ B 
+D F A B B C E E B D 
+C G E F D F F E D A 
+F D C D D C E A C A 
+A D v A E E A C B B 
+v v v A A B E G E A 
+    \end{lstlisting}
+    \centerline{Tour 6: v a joué F}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{.22\linewidth}
+    \begin{lstlisting}
+B E C F B D D ^ ^ ^ 
+C F G E G A D ^ ^ ^ 
+D A F C C F F G ^ F 
+F A D F D C B A ^ ^ 
+B E F A G D G ^ ^ B 
+D F A B B C ^ ^ B D 
+C G E F D F F ^ D A 
+F D C D D C E A C A 
+A D v A E E A C B B 
+v v v A A B E G E A 
+    \end{lstlisting}
+    \centerline{Tour 7: \^{} a joué E}
+  \end{minipage}
+
+\bigskip
+
+Dans ce TP, nous allons coder le merveilleux jeu des 7 couleurs. Ce
+jeu se passe dans un monde merveilleux qui, dans la suite, sera
+considéré comme étant carré avec des cases carrées. Ce monde fait très
+exactement 30 cases sur 30 (l'exemple ci-dessus est plus petit pour
+des raisons cosmétiques). Initialement, chacune des cases est
+aléatoirement d'une des 7 couleurs possibles (notées dans la suite A,
+B, C, D, E, F et G) sauf la case en haut à droite et la case en bas à
+gauche du monde. Ces deux cases appartiennent respectivement au joueur
+1 et au joueur 2 qui vont s'affronter tout au long du jeu pour
+conquérir le monde. Chaque joueur a sa propre couleur: la huitième
+couleur (notée v) et la neuvième couleur (notée \^{}). Pour chaque
+case, les cases qui lui sont adjacentes sont (si elles existent)~: la
+case au-dessus, la case au-dessous, la case directement à droite et la
+case directement à gauche.
+
+Initialement, le joueur 1 possède donc la case en bas à gauche et le
+joueur 2, la case en haut à droite~: ce sont leurs zones
+respectives. À tour de rôle, chaque joueur choisit une des 7 couleurs
+et sa zone s'étend à toutes les cases de cette couleur qui sont
+adjacentes à sa zone et récursivement jusqu'à ce qu'on ne puisse plus
+ajouter de cases à la zone. C'est-à-dire que tous les îlots de cases
+(groupes de cases adjacentes de même couleur) de la couleur choisie et
+qui touchent le territoire du joueur font alors partie de sa zone.  Le
+joueur qui gagne est celui qui a la plus grande zone (en nombre de
+cases) à la fin de la partie.
+
+Une démo du jeu
+original, datant de 1991, est disponible là~:
+\url{https://www.youtube.com/watch?v=o1Lz4EIzY9I}.
+Notez que dans le jeu original, la zone de chaque joueur
+est affichée de la couleur qu'il a choisit au tour d'avant.
+
+
+\bigskip %
+Avant de commencer, téléchargez le début du code ici~:\\
+\url{https://github.com/mquinson/C-2nd-language/tree/master/projets/2017-7colors/template}
+
+\clearpage
+
+\section{Voir le monde en 7 couleurs}
+\Question Remplir chaque case du monde avec une couleur tirée aléatoirement parmi les 7 couleurs. On ne remplira pas la 
+case en haut à droite et celle en bas à gauche.
+
+On va maintenant écrire une fonction qui met à jour le monde après un coup d'un joueur~: un joueur choisit une couleur et il faut mettre à jour sa zone dans le monde. Pour cela, on utilisera la méthode suivante~: parcourir linéairement le monde jusqu'à trouver une case à mettre à jour (qui est de la couleur indiquée et dont une case adjacente est déjà dans la zone du joueur) et la mettre dans la zone. Continuer à parcourir le monde jusqu'au bout. Si j'ai modifié au moins une case en parcourant le monde, le reparcourir. S'arrêter lorsqu'on fait un parcours complet sans changement.
+
+\Question \'Ecrire une fonction qui met à jour le monde après un coup comme expliqué ci-dessus. Comment peut-on 
+vérifier qu'elle fait ce qu'on veut? Quel est le pire cas pour cet algorithme en nombre de parcours du monde?
+
+
+\Question Bonus*\\
+Réécrire la fonction précédente de manière plus efficace (sans parcourir le monde autant de fois). Vous expliquerez votre algorithme et vous expliquerez comment vous avez testé en pratique que votre fonction renvoyait bien le résultat attendu.
+
+\section{\`A la conquête du monde}
+
+On va maintenant faire s'affronter deux joueurs humains dans le monde merveilleux, qui vont à tour de rôle entrer au clavier la couleur qu'ils choisissent, comme dans l'exemple illustratif de la section~\ref{intro}.
+
+\Question \'Ecrire les fonctions nécessaires pour faire jouer un humain contre un humain. Quelles sont les limites de 
+votre implémentation?
+
+\bigskip
+Jusqu'à maintenant, notre jeu merveilleux était sans fin. Mais, toutes
+les bonnes choses ont une fin.
+
+\Question Donner une condition suffisante d'arrêt de la partie (où on peut déclarer un joueur victorieux sans avoir à 
+terminer de colorier le monde entier en 2 zones). Implémenter cette condition d'arrêt et afficher à chaque tour le taux 
+d'occupation du monde pour chaque joueur (en pourcentage). 
+
+\begin{Reponse}
+bien initialiser le compteur de chaque joueur à 1.
+\end{Reponse}
+
+
+\section{La stratégie de l'aléa}
+Parce qu'on n'a pas toujours une deuxième joueur sous la main, nous allons faire appel à une intelligence artificielle rudimentaire bien connue~: l'aléatoire.
+
+\Question \'Ecrire une fonction qui joue pour un joueur artificiel en
+  choisissant à chaque tour une couleur aléatoirement parmi les 7
+  couleurs.
+
+\Question   \'Ecrire une fonction qui joue pour un joueur artificiel en
+  choisissant à chaque tour une couleur aléatoirement mais parmi les
+  couleurs qui peuvent ajouter des cases à sa zone.
+
+
+\begin{Reponse}
+Limite de ce qu'on attend qui soit fait au bout des 2h de TP, note ~ 12
+\end{Reponse}
+
+
+
+\section{La loi du plus fort}
+Nous allons essayer de faire un peu mieux que l'aléatoire en faisant un algorithme glouton.
+
+\Question \'Ecrire un joueur artificiel qui à chaque tour choisit une couleur qui lui permet d'ajouter le maximum de 
+cases possibles à sa zone.
+
+\bigskip
+Nous allons maintenant faire s'affronter dans notre monde merveilleux nos joueurs artificiels.
+
+\Question Faire s'affronter le joueur artificiel aléatoire et le joueur artificiel glouton. Comment faire pour que le 
+combat soit équitable (ie. qu'une configuration initiale donnée n'avantage pas trop un joueur)?
+
+\begin{Reponse}
+enregistrer tableau et faire rejouer le combat de deux autres stratégies sur le même tableau, faire 1 vs. 2 puis 2 vs. 1
+\end{Reponse}
+
+Nous allons maintenant faire combattre nos deux joueurs artificiels l'un contre l'autre plusieurs fois pour voir lequel gagne le plus souvent. 
+
+\Question Faire un championnat de 100 parties entre le joueur artificiel aléatoire et le joueur artificiel glouton. 
+Quel est celui qui a le plus de victoires?
+
+
+\section{Les nombreuses huitièmes merveilles du monde (bonus)}
+Nous allons maintenant faire un joueur artificiel un peu plus
+sophistiqué. Nous allons essayer une stratégie qui vise à augmenter le
+plus possible à chaque coup le périmètre de notre zone (c'est-à-dire
+le nombre de cases libres qui entourent notre zone). L'idée est
+d'étendre le plus rapidement possible notre hégémonie sur le monde.
+
+\Question Bonus*\\
+  Implémenter le joueur artificiel hégémonique. Faire un championnat
+  de 100 parties entre le joueur artificiel hégémoniques et le
+  meilleur autre joueur artificiel (entre le joueur aléatoire et le
+  joueur glouton).
+
+On va essayer une autre stratégie~: le glouton prévoyant, c'est-à-dire
+le glouton qui, à chaque coup, essaye toutes les combinaisons
+possibles de deux coups d'affilée pour voir laquelle lui ferait gagner
+le plus de cases. Il joue alors le premier coup de la combinaison
+gagnante et au prochain coup, il recalculera toutes les combinaisons
+possibles.
+
+\Question Bonus*\\
+Implémenter le joueur artificiel glouton prévoyant. Quelle est la complexité de votre algorithme? Comment ferait-on si au lieu de calculer pour les deux prochains coups, on calculait pour les n prochains coups?
+
+
+
+\section{Le pire du monde merveilleux des 7 couleurs (partie bonus)}
+
+\Question Bonus*\\
+Est-ce qu'on peut construire un pire monde (à son état initial) pour un joueur artificiel donné, c'est-à-dire un monde qui rend la stratégie du joueur inefficace?
+Expliquer la construction (ou donner un exemple construit à la main) d'un tel monde pour chacune des stratégies (aléatoire, glouton, hégémonique, glouton prévoyant).
+
+\Question Bonus*\\
+Implémenter un joueur artificiel hybride~: il prend le meilleur de chacune des stratégies implémentées jusqu'à maintenant pour construire une stratégie qui bat les stratégies implémentées jusqu'à maintenant sur 100 parties. Expliquer l'algorithme utilisé par votre joueur artificiel.
+
+
+\section{Pour procrastiner (cette partie n'est pas à faire)}
+
+Voici quelques unes des nombreuses variantes qu'on aurait pu implémenter dans le monde merveilleux des 7 couleurs, mais que finalement on ne fera jamais~:
+\begin{itemize}
+\item faire un monde à 9 couleurs, ou plus...
+\item faire un monde torique (où il n'y a pas de bords).
+\item déclarer qu'une case normale (qui n'est pas au bord du monde) a en fait 8 voisins (les 4 cases normales et les 4 en diagonale).
+\item faire un monde labyrinthe (avec des murs par endroits qu'on ne peut pas traverser) et voir si notre championnat de joueurs artificiels conserve son classement.
+\item mettre une case en or au milieu et le premier à l'avoir dans sa zone gagne.
+\item tous les 10 tours, une bombe tombe au hasard sur le plateau,
+  modifiant aléatoirement le contenu de toutes les cases dans un
+  périmètre de 6 cases.
+\item faire un championnat de 100 parties du joueur humain contre chacun des joueurs artificiels.
+\item faire un affichage graphique plus joli avec la bibliothèque
+  \texttt{ncurses}, comme dans le binaire suivant qui devrait être
+  jouable sur votre machine.
+  \url{https://github.com/mquinson/C-2nd-language/raw/master/projets/2017-7colors/template/7colors-static}
+\item faire un monde avec des cases hexagonales.
+\item implémenter la stratégie optimale.
+\end{itemize}
+
+Si vous avez d'autres idées d'extensions à ne surtout pas implémenter, n'hésitez pas à nous en faire part dans votre 
+rapport, tout en restant aussi concis que possible.
+
+\section*{Conseils pour la rédaction du rapport}
+
+Un rapport par binôme (ou trinôme si nombre impair) est attendu. Les
+rapports et le source des programmes doivent être envoyés dans une
+archive par mail à l'adresse suivante:
+\url{martin.quinson@ens-rennes.fr}. Pas de rapport manuscrit; Utilisez
+un format lisible par tous (ps ou pdf -- pas de docx).  \textbf{Tout
+  le code de votre programme sera écrit en C}.
+
+Les questions marquées \textit{Bonus*} sont plus ardues ou nécessitent
+plus de temps, elles seront comptées en plus (i.e. points
+supplémentaires, troncature à 20). Elles ne bloquent pas la
+progression du projet. Une réponse dans le rapport expliquant la
+méthode envisagée sera considérée même si le code n'est pas réalisé.
+
+Vous porterez un soin particulier à la rédaction du rapport ainsi qu'à
+l'écriture du code. \textit{Pensez à vous relire}. Le code doit être
+commenté et bien écrit pour être facilement lisible\footnote{La
+  lecture de l'article suivant est recommandée pour avoir quelques
+  notions basiques sur la lisibilité d'un code C~:
+  \url{http://fr.wikibooks.org/wiki/Conseils_de_codage_en_C/Lisibilit\%E9_des_sources}.}. Il
+est demandé de rendre un rapport apportant une réponse claire et
+détaillée à chaque question du sujet.  La note finale tiendra compte à
+la fois de votre rapport et de votre code.
+
+Votre travail est à rendre pour le \textbf{31 mars 2017 à 23h59
+  CEST}. \textbf{Tout retard sera sanctionné}. Ne commencez pas la
+veille!
+
+
+\bigskip
+
+Relisez votre rapport avant de l'envoyer! Il doit comporter (au moins) les parties suivantes~:
+\begin{description}
+\item[Introduction :] quelques mots pour présenter ce projet (ce qu'on
+  va faire et pourquoi c'est intéressant).
+\item[Une réponse construite pour chaque question :] expliquer vos
+  observations, pourquoi ça se passe comme ça, quel est le mécanisme
+  observé, à quoi il sert, pourquoi on se pose cette question... Soyez
+  pédagogiques!
+\item[Synthèse :] une conclusion sur vos observations,
+  expérimentations et résultats, etc. \'Eventuellement, si vous en
+  avez, des commentaires sur ce qui pourrait être amélioré pour
+  l'année prochaine ou des idées de bonus que vous auriez voulu
+  implémenter dans ce projet.
+\item[Bibliographie:] Donnez la liste de toutes les sources (sites,
+  livres ou individus) qui vous ont aidé, avec quelques mots de ce que
+  vous en avez retiré. Attention, la frontière est mince entre
+  \textit{l'oubli} de certaines sources et le plagiat. N'oubliez rien.
+\end{description}
+
+\end{document}
