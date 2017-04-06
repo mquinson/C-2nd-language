@@ -1,0 +1,389 @@
+#+Title: Inheritance, overriding and dynamic binding
+#+LANGUAGE: nil
+#+OPTIONS:  H:3 skip:nil num:t toc:nil 
+#+LaTeX_CLASS: article
+#+LaTeX_CLASS_OPTIONS: [11pt]
+#+LaTeX_HEADER: \usepackage{../tex/ensrennes}
+#+LATEX_HEADER: \usepackage{xcolor,float,array}
+#+LATEX_HEADER: \usepackage{tikz}\usetikzlibrary{arrows}
+#+LATEX_HEADER: \usepackage[american inductor]{circuitikz}
+#+LATEX_HEADER: \usepackage{../tex/pgf-umlcd}
+#+LATEX_HEADER: \usepackage{../tex/pgf-crccards}
+# non #+LATEX_HEADER: \usepackage{../tex/starsection}
+
+#+LATEX_HEADER: \hypersetup{urlcolor={blue},colorlinks}
+#+LATEX_HEADER: \usepackage{fullpage}
+#+LATEX_HEADER: \renewcommand{\maketitle}{
+#+LATEX_HEADER:   \noindent\null\hfill\begin{minipage}{.85\linewidth} 
+#+LATEX_HEADER:   \centering
+#+LATEX_HEADER:   \textbf{\Large Inheritance, Overriding and Dynamic Binding}\par\medskip%
+#+LATEX_HEADER:     OOP in C++\par
+#+LATEX_HEADER:    {\footnotesize 2017}
+#+LATEX_HEADER:   \end{minipage}\hfill\null
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \thispagestyle{empty}
+
+#+LATEX_HEADER: \usepackage{caption}
+#+LATEX_HEADER: \captionsetup{labelformat=empty,textfont=bf}
+  
+* Electric Dipoles
+
+Every electric circuit is composed of differing components such as
+resistors, capacitors, diodes and electromagnetic coils. They can be
+assembled in either series or parallel circuits. Depending on their
+component, each circuit present a specific resistance to the current
+when a voltage is applied. The *impedance* extends this notion of
+resistance to alternating currents.
+
+Given \omega the angular frequency of the current, the impedance $z$
+of the circuit can be computed as follows (with the constant
+$i=1\angle \frac{\pi}{2} = e^{j\frac{\pi}{2}}$).
+
+#+BEGIN_LaTeX
+\vspace{5mm}
+\noindent%
+\begin{tabular}[t]{m{26mm}m{100mm}c}
+%\hline
+\textit{Symbol}&\multicolumn{1}{c}{\textit{Description}} & \textit{Impedance} \\
+
+\tikz \draw (0,0) to[R=$r$ in $\Omega$] (2,0); 
+& A \textbf{resistor} of value  $r$ expressed in ohms (noted $\Omega$) 
+& $z = r$ \\
+&&\\
+
+\tikz \draw (0,0) to[L=$l$ in H] (2,0); 
+& An \textbf{inductor} of value  $l$ expressed in henries (noted $H$) 
+& $z = i (\omega * l)$ \\
+&&\\
+
+\tikz \tikz \draw (0,0) to[C=$c$ in F] (2,0); 
+& A \textbf{capacitor} of value  $c$ expressed in  farad (noted $F$)
+& $\displaystyle  z = i ( \frac{-1}{\omega*c}) $ \\[10pt]
+
+\setlength{\unitlength}{0.9mm}%
+\begin{picture}(40,13)(0,-3)
+  \put(0, 2.5){\line(1, 0){2.5}}
+  % 
+  \put(2.5, 0){\line(0, 0){5}}
+  \put(2.5, 0){\line(1, 0){10}}
+  \put(2.5, 5){\line(1, 0){10}}
+  \put(12.5, 0){\line(0, 0){5}}
+  % 
+  \put(12.5, 2.5){\line(1, 0){5}}
+  % 
+  \put(17.5, 0){\line(0, 0){5}}
+  \put(17.5, 0){\line(1, 0){10}}
+  \put(17.5, 5){\line(1, 0){10}}
+  \put(27.5, 0){\line(0, 0){5}}
+  % 
+  \put(27.5, 2.5){\line(1, 0){2.5}}
+\end{picture}
+&A \textbf{series circuit} with 2 dipoles of impedance $z_1$ and $z_2$
+& $z = z_1 + z_2$ \\ 
+
+
+\setlength{\unitlength}{0.9mm}%
+\begin{picture}(40,13)(0,-3)
+  \put(2.5, 2.5){\line(1, 0){2.5}}
+  % 
+  \put(5, 0){\line(0, 0){5}}
+  \put(5, 0){\line(1, 0){20}}
+  \put(5, 5){\line(1, 0){20}}
+  \put(25, 0){\line(0, 0){5}}
+  % 
+  \put(25, 2.5){\line(1, 0){2.5}}
+  % 
+  \put(2.5, 9){\line(1, 0){2.5}}
+  % 
+  \put(5, 6.5){\line(0, 0){5}}
+  \put(5, 6.5){\line(1, 0){20}}
+  \put(5, 11.5){\line(1, 0){20}}
+  \put(25, 6.5){\line(0, 0){5}}
+  % 
+  \put(25, 9){\line(1, 0){2.5}}
+  % 
+  \put(2.5, 2.5){\line(0, 0){6.5}}
+  \put(27.5, 2.5){\line(0, 0){6.5}}
+  \put(27.5, 6){\line(1, 0){2.5}}
+  
+  \put(0, 6){\line(1, 0){2.5}}
+  
+\end{picture}
+&A \textbf{parallel circuit} with 2 dipoles of impedance $z_1$ and $z_2$
+& $\displaystyle z  = \frac{1}{\frac{1}{z_1} +\frac{1}{z_2}} $ \\ 
+
+%\hline
+\end{tabular}
+
+#+END_LaTeX
+** Modeling Dipole
+We will use the following class hierarchy to model the electric
+dipoles.
+
+#+BEGIN_LaTeX
+\usetikzlibrary{arrows}
+\tikzstyle{class}=[rectangle,draw=black!50,thick]
+\tikzstyle{implements}=[dashed, -angle 45]
+\tikzstyle{extends}=[-open triangle 60]
+
+\begin{center}
+  \begin{tikzpicture}
+    \node [class] (dipole)     at (4,5.5)   {\textit{Dipole}}; 
+    \node [class] (resistance) at (0,4)   {Resistor};
+    \node [class] (capacite)   at (2,4)   {Capacitor};
+    \node [class] (self)       at (4,4) {Inductor};
+    \node [class] (binaire)    at (5.8,4)   {Binary$^*$};
+    \node [class] (naire)      at (7.4,4)   {Nary$^*$};
+    \draw [implements] (resistance.north) -- (dipole);
+    \draw [implements] (capacite.north) -- (dipole);
+    \draw [implements] (self.north) -- (dipole);
+    \draw [implements] (binaire.north) -- (dipole);
+    \draw [implements] (naire.north) -- (dipole);
+
+    \node [class] (series)      at (4.4,3) {Series};
+    \node [class] (parallele)  at (5.8,3) {Parallel};
+    \node [class] (nseries)     at (7.4,3) {NSeries};
+    \node [class] (nparallele) at (9.1,3) {NParallel};
+    \draw [extends] (series.north) -- (binaire);
+    \draw [extends] (parallele.north) -- (binaire);
+    \draw [extends] (nseries.north) -- (naire);
+    \draw [extends] (nparallele.north) -- (naire);
+  \end{tikzpicture}
+\end{center}
+#+END_LaTeX
+
+The /Dipole/ class provides a method
+\fbox{~virtual Complex impedance(double omega)~}
+ implemented below in the hierarchy. The parameter ~omega~
+represents the angular frequency of the current. The impedance is a
+complex number (only resistors have a real impedance).
+
+** Implementing Dipole
+ Download the provided code from \url{https://git.io/vS2Ri} and save
+each file your local disk and open them with your favorite editor (or
+~geany~ if you have no favorite editor yet).
+
+# https://github.com/mquinson/C-2nd-language/raw/master/TDP/11-OOP-dipoles/OOP-dipoles.tar.gz
+
+# The provided
+# code contains a ~build.sbt~ file for easy compilation, as well as a
+# set of unit tests checking the features that you should implement.
+# You should run the tests (with the command ~sbt test~) very often
+# during your work, to track your progress. Of course, the tests for a
+# given feature will fail until you implement that feature.
+
+\Question We will first implement the simple dipoles. Create some
+classes ~Resistor~, ~Capacitor~ and ~Inductor~. For each of them, you
+must create a cpp file and a hpp file, plus a test file. For example
+for Resistor, you will create the files ~Resistor.cpp~, ~Resistor.hpp~
+and ~ResistorTest.cpp~. In each class, you just need to implement a
+~impedance()~ method.
+
+#+BEGIN_LaTeX
+\begin{figure}[h]
+  \centering
+  \begin{minipage}[b]{.3\linewidth}
+    \centerline{\tikz \draw (0,0) to[L=$7\times 10^{-2}H$] (2,0);} \par
+
+    \bigskip
+    \centerline{($z\approx 22j~ \Omega$)}
+
+    \caption{Tested Inductor.}
+  \end{minipage}
+  \begin{minipage}[b]{.3\linewidth}
+    \centerline{\tikz \draw (0,0) to[C=$42F$] (2,0);} \par
+
+    \smallskip
+    \centerline{($z\approx -7.6\times 10^{-5} j~ \Omega$)}
+
+    \caption{Tested Capacitor.}\label{fig:capa}
+  \end{minipage}
+  \begin{minipage}[b]{.34\linewidth}
+    \centerline{\tikz \draw (0,0) to[R=$100\Omega$] (2,0);} \par
+
+    \bigskip
+    \centerline{($z = 100~ \Omega$)}
+
+    \caption{Tested Resistor.}\label{fig:capa}
+  \end{minipage}
+\end{figure}
+#+END_LaTeX
+
+\Question We will now implement the binary circuits (according to the
+previous class diagram), either built in parallel or in series. What
+is the point of adding a ~Binary~ class? What do  parallel and serie
+circuits have in common that you could factorize in this ~Binary~ class?
+
+Check your implementation with the following circuits.
+
+#+BEGIN_LaTeX
+\begin{figure}[h]
+  \centering
+  \begin{minipage}[b]{.4\linewidth}
+    \centerline{\tikz \draw (0,0) to [L=$5\times 10^{-2}H$] %
+                        (2,0) to [R=$10^2\Omega$] %
+                        (4,0) ;} \par
+    \vspace{3.4\baselineskip}
+                      
+    \caption{Serie ($z\approx 100.0 + 15.70j~ \Omega$).}\label{fig:series}                     
+  \end{minipage}~
+  \begin{minipage}[b]{.4\linewidth}
+    \begin{center}
+      \begin{circuitikz}
+        % Interne
+        \draw (0.5,1.7) to [L=$5\times 10^{-5}H$] (3.5,1.7);
+        \draw (0.5,3)   to [R=$10^2\Omega$]      (3.5,3);
+        \draw (3.5,3) -- (3.5,1.7);
+        \draw (0.5,3) -- (0.5,1.7);
+        % Englobant
+        \draw (0,0)     to [C=$9\times 10^{-4}F$] (4,0);
+        \draw (4,0) -- (4,2.4) -- (3.5,2.4);
+        \draw (0,0) -- (0,2.4) -- (0.5,2.4);
+        % externe
+        \draw (-0.5,1.2) to[short,o-] (0,1.2);
+        \draw  (4,1.2) to[short,-o] (4.5,1.2);
+      \end{circuitikz}
+    \end{center}
+    
+    \caption{Parallel ($z \approx 0.2079 + -4.55j~ \Omega$).}\label{fig:para}
+  \end{minipage}
+\end{figure}
+
+#+END_LaTeX
+
+\Question Now, we would like to implement N-ary circuits, that can
+connect more than 2 dipoles in either parallel or serie. 
+For  series
+circuit: $\displaystyle z=\sum_{i=1}^{n}\omega_i$. For parallel circuit:
+$\displaystyle z=\frac{1}{\displaystyle\sum_{i=1}^{n}\frac{1}{\omega_i}}$. 
+
+\noindent
+Use a ~std::vector~ to store the included dipoles. \\
+See  \url{http://en.cppreference.com/w/cpp/container/vector} for more info.
+
+# \Question You will now fill the file
+# ~src/main/scala/dipole/Instances.scala~ to define the instances of
+# dipoles depicted below.
+
+#+BEGIN_LaTeX
+\begin{figure}[h]
+  \centering
+
+  \begin{minipage}{.4\linewidth}
+    \begin{circuitikz}
+      % Interne
+      \draw (0.5,1.7) to [L=$5\times 10^{-5}H$] (2.5,1.7)
+                      to [R=$12\times 10^3\Omega$] (4.5,1.7);
+      \draw (0.5,3)   to [R=$10^2\Omega$]      (4.5,3);
+      \draw (4.5,3) -- (4.5,1.7);
+      \draw (0.5,3) -- (0.5,1.7);
+      % Englobant
+      \draw (0,0)     to [C=$9\times 10^{-4}F$] (5,0);
+      \draw (5,0) -- (5,2.4) -- (4.5,2.4);
+      \draw (0,0) -- (0,2.4) -- (0.5,2.4);
+      % externe
+      \draw (-0.5,1.2) to[short,o-] (0,1.2);
+      \draw  (5,1.2) to[short,-o] (5.5,1.2);
+    \end{circuitikz}
+ %   \caption{The  \texttt{dip1} dipole.}\label{fig:dip1}
+  \end{minipage}\hfill%
+  \begin{minipage}{.5\linewidth}
+    \begin{tikzpicture}[scale=.8]
+      \draw (0.5,3) to[R=$100\Omega$] (1.5,3); % Le premier à gauche
+      \draw (1.5,3) -- (2.5,3) -- (2.5,1.5) -- (2.5,4.5); % gauche-milieu
+      \draw (6,4.5) -- (6,1.5) -- (6,3) -- (6.5,3); % milieu-droite
+      \draw (1.9,3) -- (1.9,0) -- (2,0); %milieu-bas par la gauche
+      \draw (7.5,0) -- (8,0) -- (8,3); %milieu-bas par la droite
+      \draw (7.5,3) -- (8.5,3); % droite-extreme droite
+      % ligne du bas
+      \draw (2,0) to [R=$1000\Omega$] (5,0) to [L=$2\times 10^{-1}$H] (7.5,0);
+      % A l'intérieur
+        % ligne du haut
+        \draw (2.5,4.5) to [R=$10^3\Omega$]     (4.5,4.5)
+                        to [L=$5\times 10^{-2}$] (6,4.5);
+        % ligne du milieu
+        \draw (2.5,3) to [C=$9\times 10^{-3}$] (6,3);
+        % ligne du bas
+        \draw (2.5,1.5) to [C=$9\times 10^{-4}$] (4.5,1.5) 
+                        to [C=$10^{-5}$]         (6,1.5);
+      % à droite au centre
+      \draw (6.5,3) to [R=$330\Omega$] (7.5,3);
+
+      % à l'extrême droite 
+      \draw (8.5,3) to [C=$10^{-6}$] (9.5,3);
+                        
+      % Les connecteurs au monde extérieur
+      \draw (0,3) to[short,o-] (0.5,3);
+      \draw (9.5,3) to[short,-o] (10,3);
+    \end{tikzpicture}
+ %   \caption{The \texttt{dip2}  dipole.}\label{fig:dip2}
+  \end{minipage}
+\end{figure}
+#+END_LaTeX
+\newpage
+* Blogging 							   :noexport: 
+#+LaTeX: \setcounter{Question}{0}
+#+LaTeX: \newcommand{\meth}[1]{\fbox{\texttt{#1}}}
+We will now implement a blogging micro-system: a web site constituted
+of posts aggregated over time. These posts can be text messages,
+images or videos.  \emph{Tags} can be attached to images or videos, to
+select the ones that match a given set of keywords. The textual
+messages cannot be tagged, but the textual search should operate on
+their content directly.
+
+#+BEGIN_LaTeX
+\begin{figure}[htb]
+\noindent%
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}[]%[show background grid]
+  \begin{class}[text width=5cm]{case Publishable}{3.5,-4.5}
+    \attribute{date:Long}
+    \attribute{author:String}
+  \end{class}
+
+  \begin{interface}[text width=4.5cm]{Taggable}{-2.5,-2.5}
+         \attribute{tags: List[String]}
+	 \operation{addTag(tag:String)}
+	 \operation{removeTag(tag:String)}
+	 \operation{tagCount() :Integer)}
+	 \operation{getTags() :List[String]}
+  \end{interface}
+
+  \begin{class}[text width=3cm]{Message}{5.5,-7.5}
+	 \inherit{case Publishable}
+	 \attribute{content:String}
+  \end{class}
+
+  \begin{class}[text width=3cm]{Picture}{1.5,-7.5}
+	 \inherit{case Publishable}
+	 \implement{Taggable}
+	 \attribute{url: String}
+  \end{class}
+
+  \begin{class}[text width=3cm]{Video}{-2.5,-7.5}
+	 \inherit{case Publishable}
+	 \implement{Taggable}
+	 \attribute{url: String}
+  \end{class}
+
+  \begin{class}[text width=10cm]{BlogService}{13.5,-2.6}
+    \attribute{title :String}
+    \operation{post(item:Publishable)}
+    \operation{getItems() :List[Publishable]}
+    \operation{getPublishableItemsCount() :Integer}
+    \operation{getTaggableItemsCount() :Integer}
+    \operation{getLatestItem(): Publishable }
+    \operation{find(filter: Publishable => Boolean): List[Publishable]}
+    \operation{byTags(tags:List[String]) :List[Publishable]}
+    \operation{byContent(keywords:List[String]) :List[Publishable]}
+    \operation{byTagsOrContent(words:List[String]) :List[Publishable]}
+  \end{class}
+
+  \aggregation{BlogService}{items}{0..*}{case Publishable}
+\end{tikzpicture}
+}
+\end{figure}
+#+END_LaTeX
+
+\Question Implement this hierarchy of classes, and test your work with
+an appropriate specification.
