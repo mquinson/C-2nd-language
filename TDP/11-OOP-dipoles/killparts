@@ -1,0 +1,68 @@
+#! /usr/bin/perl
+
+use strict;
+
+# my $emptytemplate = "/*  YOUR CODE HERE  */";
+my $emptytemplate = "";
+
+my $debug = 0;
+
+my $killed=0;
+my $kill=0;
+my $replace=0;
+my $replaceStr = "";
+my $nline=0;
+
+open IN, "<$ARGV[0]" || die "Cannot open $ARGV[1]: $!\n";
+open OUT, ">$ARGV[1]" || die "Cannot open $ARGV[2]: $!\n";
+
+while (<IN>) {
+  $nline++;
+#  s/\t/    /g;
+  die "BEGINKILL in kill section ($ARGV[1]: l$nline)\n" 
+    if ($kill && /BEGINKILL/);
+  die "ENDKILL out of kill section ($ARGV[1]: l$nline)\n" 
+    if (!$kill && /ENDKILL/);
+  die "REPLACE out of kill section ($ARGV[1]: l$nline)\n"
+    if (!$kill && /REPLACE/);
+
+  if (/BEGINKILL/) {
+    print STDERR "  Enter kill (l$nline)\n" if ($debug); 
+    $kill = 1;
+    $killed++ unless $replace;
+    $replaceStr = "";
+  }
+  if (/REPLACE/) {
+    print STDERR "  Get template (l$nline)\n" if ($debug);
+    $killed++;
+    $replace = 1;
+    next;
+  } 
+  if (/ENDKILL/) {
+    print STDERR "  Leave kill (l$nline)\n" if ($debug);
+    $killed++;
+    $replace = 0;
+    $kill = 0;
+    print OUT $replaceStr||$emptytemplate;
+    next;
+  } 
+  last if /Local Variables:/;
+  next if /- coding: utf-8 -/;
+
+  if ($replace) {
+      $_ =~ s|^\s*//||;
+      $_ =~ s|^\s*#||;
+      $replaceStr .= $_;
+  } elsif ($_ =~ /KILLIT/) {
+      print STDERR "  Kill line $nline\n" if ($debug);
+      $killed++;
+  } else {
+      if ($kill) {
+	  $killed++;
+      } else {
+	  print OUT $_;
+      }
+  }
+}
+print STDERR "$killed lines killed out of $ARGV[0] to $ARGV[1]\n"; # if ($killed);
+die "End of file in kill section\n" if $kill;

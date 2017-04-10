@@ -17,7 +17,11 @@ OOP-dipoles.tex: OOP-dipoles.org
 OOP-dipoles.tar.gz: $(wildcard src/cpp/*) build.sbt killparts Makefile
 	rm -rf OOP-dipoles
 	mkdir OOP-dipoles
-	for n in src/cpp/*.cpp src/cpp/*.hpp ; do \
+	for n in `ls src/cpp/*.cpp src/cpp/*.hpp Makefile \
+	             | grep -v Inductor.[ch]pp \
+		     | grep -v Capacitor.[ch]pp \
+		     | grep -v CapacitorTest.cpp \
+		     `; do \
 	  m=`basename $$n`; \
 	  ./killparts  $$n OOP-dipoles/$$m ; \
 	done

@@ -159,29 +159,45 @@ represents the angular frequency of the current. The impedance is a
 complex number (only resistors have a real impedance).
 
 ** Implementing Dipole
- Download the provided code from \url{https://git.io/vS2Ri} and save
-each file your local disk and open them with your favorite editor (or
-~geany~ if you have no favorite editor yet).
+ Download the provided code from \url{https://git.io/vS2Ri}, save it
+to your local disk and open them with your favorite editor (or ~geany~
+if you have no favorite editor yet) to explore these files.
 
-# https://github.com/mquinson/C-2nd-language/raw/master/TDP/11-OOP-dipoles/OOP-dipoles.tar.gz
+The archive contains a ~Makefile~, so you can rebuild everything by
+just typing ~make~ in a terminal. Read ~ComplexTest.cpp~ as it will
+show you how to use complex numbers. Try to change this program (eg by
+adding ~c1~ and ~c2~ and displaying the result).
 
-# The provided
-# code contains a ~build.sbt~ file for easy compilation, as well as a
-# set of unit tests checking the features that you should implement.
-# You should run the tests (with the command ~sbt test~) very often
-# during your work, to track your progress. Of course, the tests for a
-# given feature will fail until you implement that feature.
+\Exercice **Simple Dipoles.**
 
-\Question We will first implement the simple dipoles. Create some
-classes ~Resistor~, ~Capacitor~ and ~Inductor~. For each of them, you
-must create a cpp file and a hpp file, plus a test file. For example
-for Resistor, you will create the files ~Resistor.cpp~, ~Resistor.hpp~
-and ~ResistorTest.cpp~. In each class, you just need to implement a
-~impedance()~ method.
+We will first implement the simple dipoles, ie the ~Resistor~,
+~Inductor~ and ~Capacitor~ classes. For each of them, we want a cpp
+file and a hpp file, plus a test file. The files for ~Resistor~ are
+already provided: ~Resistor.hpp~ (contains the declaration),
+~Resistor.cpp~ (contains the actual code) and ~ResistorTest.cpp~
+(contains some test of the class).
+
+\Question The provided code is not sufficient, as the execution of
+~./ResistorTest.cpp~ leads to an incorrect result. Change what should
+be in the three ~Resistor*~ files to fix the problem.
+
+\Question Copy all ~Resistor.cpp~ and ~Resistor.hpp~ files to
+~Inductor.*~ ones, and change what should be in each of them to pass
+the provided ~InductorTest~.
+
+\Question Implement similarly the ~Capacitor~ class.
 
 #+BEGIN_LaTeX
 \begin{figure}[h]
   \centering
+  \begin{minipage}[b]{.34\linewidth}
+    \centerline{\tikz \draw (0,0) to[R=$100\Omega$] (2,0);} \par
+
+    \bigskip
+    \centerline{($z = 100~ \Omega$)}
+
+    \caption{Tested Resistor.}\label{fig:capa}
+  \end{minipage}
   \begin{minipage}[b]{.3\linewidth}
     \centerline{\tikz \draw (0,0) to[L=$7\times 10^{-2}H$] (2,0);} \par
 
@@ -198,21 +214,24 @@ and ~ResistorTest.cpp~. In each class, you just need to implement a
 
     \caption{Tested Capacitor.}\label{fig:capa}
   \end{minipage}
-  \begin{minipage}[b]{.34\linewidth}
-    \centerline{\tikz \draw (0,0) to[R=$100\Omega$] (2,0);} \par
-
-    \bigskip
-    \centerline{($z = 100~ \Omega$)}
-
-    \caption{Tested Resistor.}\label{fig:capa}
-  \end{minipage}
 \end{figure}
 #+END_LaTeX
 
-\Question We will now implement the binary circuits (according to the
-previous class diagram), either built in parallel or in series. What
-is the point of adding a ~Binary~ class? What do  parallel and serie
-circuits have in common that you could factorize in this ~Binary~ class?
+\Exercice **Binary circuits.**
+
+We will now implement the binary circuits, starting with the ones
+built in serie. For that, the private part of the ~Serie~ class should
+naturally contain the two dipoles that are connected in
+parallel. Since we would like these two dipoles to be either
+resistors, inductors, capacitors, or even binary circuits, the only
+possibility in C++ is to use generic ~Dipole *~ pointers, as shown in
+the provided ~Serie.hpp~ code.
+
+\Question Complete the ~Serie~ class so that it passes the provided
+test.
+
+\Question Now implement the ~Parallel~ class similarly to the ~Serie~
+class.
 
 Check your implementation with the following circuits.
 
@@ -250,20 +269,29 @@ Check your implementation with the following circuits.
 \end{figure}
 
 #+END_LaTeX
+\Question Even if functional, the implementation you probably came up
+with is still improvable because there is some code in common between
+your ~Serie~ and ~Parallel~ classes. Implement a  ~Binary~ class that
+would factorize the private fields, and some of the implementation.
 
-\Question Now, we would like to implement N-ary circuits, that can
+\Exercice **Nary circuits.**
+
+Now, we would like to implement N-ary circuits, that can
 connect more than 2 dipoles in either parallel or serie. 
 For  series
 circuit: $\displaystyle z=\sum_{i=1}^{n}\omega_i$. For parallel circuit:
 $\displaystyle z=\frac{1}{\displaystyle\sum_{i=1}^{n}\frac{1}{\omega_i}}$. 
 
-\noindent
-Use a ~std::vector~ to store the included dipoles. \\
-See  \url{http://en.cppreference.com/w/cpp/container/vector} for more info.
+\Question Implement the ~NSerie~, ~NParallel~ and also the ~Nary~
+classes. To store the data in the ~Nary~ class, use  a ~std::vector~
+(as described in 
+\url{http://en.cppreference.com/w/cpp/container/vector}).
 
 # \Question You will now fill the file
 # ~src/main/scala/dipole/Instances.scala~ to define the instances of
 # dipoles depicted below.
+
+\Question Test your implementation against the following instances:
 
 #+BEGIN_LaTeX
 \begin{figure}[h]
