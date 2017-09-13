@@ -8,7 +8,7 @@ struct point {
   double x, y;
 };  
 point_t* point_create(double x, double y) {
-  point_t *res = malloc(sizeof(point_t));
+  point_t* res = malloc(sizeof(point_t));
   res->rank = maxRank++;
   res->x = x;
   res->y = y;

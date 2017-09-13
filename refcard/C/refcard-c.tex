@@ -239,7 +239,7 @@
     \scriptsize Licence: CC-BY-SA, by M. Quinson. Voir
     \url{https://github.com/mquinson/C-2nd-language}
 
-     ~~~~~v20170214
+     ~~~~~v20170913
   }
 \end{minipage}
 
@@ -250,17 +250,26 @@
   numbers=left,numbersep=2pt]{premier_programme.c}
 
   \smallskip
+  \begin{Verbatim}[label=Lire un entier ou une chaîne,
+    gobble=4,frame=single,numbers=left,numbersep=2pt]
+    int i;                   char str[512];
+    scanf("%d", &i);         scanf("%s", str);
+  \end{Verbatim}  
+  \begin{Verbatim}[label=Lire un caractère et vider le buffer,
+    gobble=4,frame=single,numbers=left,numbersep=2pt]
+    char data, c;
+    scanf("%c", &data);
+    while ((c = getchar()) != '\n' && c != EOF) { }
+  \end{Verbatim}  
   \begin{Verbatim}[label=Lecture d'un fichier ligne à ligne, gobble=4, frame=single,
     numbers=left,numbersep=2pt]
-    char* ligne = NULL;
-    size_t lgr = 0;
-    ssize_t read
-
-    while ((read = getline(&ligne, &lgr, fh) != -1){
+    char* line = NULL; size_t lgr = 0; ssize_t read;
+    while ((read = getline(&line, &lgr, fh) != -1){
       /* ce que vous voulez */
     }
     free(ligne);
   \end{Verbatim}  
+
 
   \centerline{\bf\large Pour savoir programmer en C,}
   \centerline{\bf\large il faut programmer en C.}
@@ -271,6 +280,7 @@
   \item Les logiciels libres comme terrain d'entraînement.
   \item Le C sous Windows, c'est encore plus dur.
   \end{itemize}
+  \vspace{-.2\baselineskip}
 
   \Subsection{Quelques bons livres sur le C:}
   \begin{itemize}[noitemsep,nolistsep]
@@ -286,9 +296,6 @@
     {{\it Apprenez à programmer en C} sur OpenClassRoom.}
   \end{itemize}
 
-  \bigskip %
-  Merci d'aider à améliorer les ressources libres, et de m'indiquer
-  comment améliorer cette feuille.  %
   \vfill
 
   ~
