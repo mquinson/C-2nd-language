@@ -1,8 +1,8 @@
 \documentclass[a4paper,10pt,landscape,twocolumn]{article}
 \RequirePackage{verbatim}
 \RequirePackage{ifthen}
-\RequirePackage{fancyhdr}
-\RequirePackage{fancyvrb}
+\RequirePackage{fancyhdr,fancyvrb}
+\RequirePackage{url}
 
 \RequirePackage{figlatex}
 \RequirePackage{graphics}
@@ -59,14 +59,8 @@
 
 \texttt{chmod} \textit{droits} \textit{fich}& Change les droits, les permissions
 du fichier \hfill(\textbf{ch}ange \textbf{mod}e)\\\hline
-
-\end{tabular}
-
-\medskip\Subsection{Interaction avec les fichiers}
-
-\begin{tabular}{|p{3cm}|p{10cm}|}\hline
 \texttt{less} \textit{fichier}& Lire un fichier à l'écran ('h' pour l'aide, 'q' pour quitter)\\\hline
-\texttt{emacs} \textit{fichier} & Éditeur de texte (voir colonne droite)\\\hline
+
 \end{tabular}
 
 \medskip\Subsection{Aide en ligne}
@@ -79,14 +73,6 @@ du fichier \hfill(\textbf{ch}ange \textbf{mod}e)\\\hline
 \texttt{man 3} \textit{fonction} & Affiche la documentation de la
  \textit{fonction}\\\hline
 \texttt{help test}& Aide interne de bash, sur les tests\\\hline
-\end{tabular}
-
-\medskip\Subsection{Gestion de votre compte}
-
-\begin{tabular}{|p{3cm}|p{10cm}|}\hline
-%firefox & Le célèbre navigateur web \\\hline
-\texttt{passwd} & Change de mot de passe\\\hline
-\texttt{quota -v} & Affiche le quota disque de l'utilisateur\\\hline
 \end{tabular}
 
 \medskip\Subsection{Contrôler les processus en cours d'exécution}
@@ -111,29 +97,43 @@ C-s/C-q & Stoppe/relance le défilement de l'affichage\hfill(\textbf{s}crolling)
 \begin{tabular}{|p{3cm}|p{10cm}|}\hline
 \texttt{find -name} \textit{``ab*''} & Cherche tous les fichiers dont le nom commence par ab \\\hline
 
-\texttt{cat} \textit{fichier}& Imprime le \textit{fichier} sur l'écran (pas interactif)\\ \hline
-
-\texttt{head -n 5} \textit{fichier}& Affiche les 5 première lignes de  \textit{fichier} sur l'écran\\\hline
-
-\texttt{tail} \textit{fichier}& Affiche la fin de \textit{fichier} sur l'écran (-f si \textit{fichier} grandit encore) \\\hline
-
-\texttt{grep} \textit{motif} \textit{fichier}& Imprime les lignes du \textit{fichier}
+\texttt{grep} \textit{motif} \textit{fichier}& Sélectionne les lignes du \textit{fichier}
 contenant \textit{motif}\\\hline
 
-\texttt{wc} \textit{fichier} & Compte les caractères, les mots et les lignes du
- \textit{fichier}\\\hline
+  \texttt{sed s/}\textit{cherch}\texttt{/}\textit{rpl}\texttt{/}&
+  Remplace le motif \textit{cherch} par \textit{rpl} dans le flux\\\hline 
+\texttt{cat} \textit{fichier}& Affiche le \textit{fichier} à l'écran (pas interactif)\\ \hline
 
-\texttt{file} \textit{fichier} & Affiche le type de fichier (exécutable, texte, image,
-etc)\\\hline
+  \texttt{head -n 5} \textit{fichier}&
+   Affiche les 5 première lignes de \textit{fichier} (\texttt{tail} pour la fin) \\\hline
 
+%\texttt{tail} \textit{fichier}& Affiche la fin de \textit{fichier} (-f si \textit{fichier} grandit encore) \\\hline
+%\texttt{wc} \textit{fichier} & Compte les caractères, les mots et les lignes du
+% \textit{fichier}\\\hline
+%\texttt{file} \textit{fichier} & Affiche le type de fichier (exécutable, texte, image,
+%etc)\\\hline
 \texttt{diff -u} \textit{fich1} \textit{fich2}& Affiche les différences entre les deux fichiers\\\hline
+%\texttt{touch} \textit{fichier} &Créer ou changer la date de modification de \textit{fichier}\\\hline
 
-\texttt{touch} \textit{fichier} &Créer ou changer la date de modification de \textit{fichier}\\\hline
+{\small \texttt{tar cvfz} \textit{ar.tgz} \textit{rep}} & Crée une archive \textit{ar.tgz}
+contenant le répertoire \textit{rep}\\
+\texttt{tar xvfz} \textit{arch.tgz} & Ouvre l'archive \textit{arch.tgz}\\\hline
+
+\texttt{gzip} \textit{f}; \texttt{gunzip} \textit{f.gz} & Compresse / Décompresse un fichier\\\hline
+\end{tabular}
+
+\medskip\Subsection{Convertions}\smallskip
+
+\begin{tabular}{|p{30mm}|p{100mm}|}\hline
+convert & Manipule et converti les fichiers d'image (paquet imagemagic)\\\hline
+sox & Manipule et converti les fichiers de son\\\hline
+mplayer & Manipule les fichiers vidéo\\\hline
 \end{tabular}
 
 \newpage
 
 \Subsection{Raccourcis clavier de Bash}
+\smallskip
 
 \begin{tabular}{|p{6mm}|p{35mm}|p{6mm}|p{32mm}|p{10mm}|p{27mm}|}\hline
 C-a& Aller en début de ligne& C-u& Coupe tout à gauche & C-l& Efface l'écran \\\hline
@@ -158,10 +158,44 @@ TAB& Complétion auto.       & C-r& Recherche historique& S-up&Remonte l'écran 
 
 \begin{tabular}{|p{32mm}|p{10cm}|}\hline
 \verb+\c+& Le caractère c, littéralement\\\hline
-\verb+`+\textit{commande}\verb+`+&Exécute \textit{commande} et place sa sortie sur la ligne\\\hline
-"blabla" & Garde le blabla après avoir interprété les \verb+$+, \verb+`...`+ et \verb+\+\\\hline
-'blabla' & Garde le blabla sans interpréter quoi que ce soit\\\hline
+  \verb+`+\textit{commande}\verb+`+&
+     Exécute \textit{commande} et place sa sortie sur la ligne\hfill(`: AltGr-7)\\\hline
+'blabla' & Garde le blabla sans interpréter quoi que ce soit\hfill(': sous le 4)\\\hline
+  "blabla" & Garde le blabla après avoir interprété les \verb+$+,
+           \verb+`...`+ et \verb+\+\\\hline
+\end{tabular}
 
+\medskip\Subsection{Flôt de contrôle en shell}
+
+\begin{tabular}{|p{25mm}|p{34mm}|p{25mm}|p{40mm}|}\hline
+  \verb+cmd1 && cmd2+& ET entre commandes&\verb+var=value+& Affectation\\\hline
+  \verb+cmd1 || cmd2+& OU entre commandes&\verb+$var+&Usage de la variable\\\hline
+
+  \texttt{if} \textit{cmd} \texttt{; then}  \par
+   ~~\textit{cmd;}\par
+  \texttt{elif} \textit{\small cmd}\texttt{;then}\par
+   ~~\textit{cmd;}\par
+  \texttt{else}\par
+   ~~\textit{cmd;}\par
+  \texttt{fi}
+  &
+  \texttt{for} \textit{var} \texttt{in} \textit{list} \texttt{; do} \par
+   ~~\textit{cmd;}\par
+  \texttt{done}\par~\par
+  \texttt{while} \textit{cmd} \texttt{; do}\par
+   ~~\textit{cmd;}\par
+    \texttt{done}
+   &
+   \verb+a{1,2,3}b+ \par~~\verb+= a1b a2b a3b+\par
+   ~\par                    
+   ~\par                    
+   \verb+{1..5}+\par~~\verb+=1 2 3 4 5+                       
+   & \textit{cmd} \verb+|+ \texttt{while read} \textit{line;} \texttt{do}\par
+  ~~echo \$line\par
+done
+
+  \\\hline
+  
 \end{tabular}
 
 \medskip\Subsection{Tests pour \texttt{if [ ... ]} (voir aussi help test})
@@ -192,45 +226,41 @@ A != B & Si \textit{A} et \textit{B} sont différentes \\
 \multicolumn{4}{|l|}{\texttt{if [ $\backslash($ -f \$fich1 -a -r \$fich1 $\backslash)$ -o  $\backslash($ -f \$fich2 -a -r \$fich2 $\backslash)$ ] }}\\\hline
 \end{tabular}
 
-\medskip\Subsection{Gestion d'archives}
-
-\begin{tabular}{|p{32mm}|p{10cm}|}\hline
-{\small \texttt{tar cvfz} \textit{ar.tgz} \textit{rep}} & Crée une archive \textit{ar.tgz}
-contenant le répertoire \textit{rep}\\
-\texttt{tar xvfz} \textit{arch.tgz} & Ouvre l'archive \textit{arch.tgz}\\\hline
-
-\texttt{gzip} \textit{f}; \texttt{gunzip} \textit{f.gz} & Compresse / Décompresse un fichier\\\hline
-\end{tabular}
-
-\vfill
-\hfill(this space is for rent)
-
-\end{document}
+\url{http://johnstowers.co.nz/pages/bash-cheat-sheet.html}\\
+\url{http://www.freeos.com/guides/lsst/}\\
+\url{https://openclassrooms.com/courses/reprenez-le-controle-a-l-aide-de-linux}
+%\end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\twocolumn[\null\bigskip\centerline{\Huge Mémento pour le shell}]
+\twocolumn[]
+\null\bigskip\centerline{\Huge Mémento pour emacs}
 \medskip
 
-\Subsection{Convention d'écriture}
+% \Subsection{Convention d'écriture}
 
-\begin{tabular}{|p{3cm}|p{10cm}|}\hline
-  C-\textit{x}& Appuyer simultanément sur les touches Ctrl et \textit{x}
-  \\\hline
+% \begin{tabular}{|p{3cm}|p{10cm}|}\hline
+%   C-\textit{x}& Appuyer simultanément sur les touches Ctrl et \textit{x}
+%   \\\hline
 
-  M-\textit{x}& Appuyer simultanément sur les touches Alt et \textit{x} (ou
-  Esc puis \textit{x})
-  \\\hline
+%   M-\textit{x}& Appuyer simultanément sur les touches Alt et \textit{x} (ou
+%   Esc puis \textit{x})
+%   \\\hline
 
-  S-\textit{x}& Appuyer simultanément sur les touches Shift et \textit{x}
-  \\\hline
+%   S-\textit{x}& Appuyer simultanément sur les touches Shift et \textit{x}
+%   \\\hline
 
-  C-M-\textit{x}& Appuyer simultanément sur les touches Ctrl, Alt et \textit{x}
-  \\\hline
+%   C-M-\textit{x}& Appuyer simultanément sur les touches Ctrl, Alt et \textit{x}
+%   \\\hline
 
-  M-x \textit{commande}& Faire M-x puis taper la \textit{commande}
-  \\\hline
+%   M-x \textit{commande}& Faire M-x puis taper la \textit{commande}
+%   \\\hline
 
-\end{tabular}
+% \end{tabular}
+
+Il faut installer \texttt{spacemacs} pour une bonne configuration par
+défaut.\\
+\url{http://sachachua.com/blog/2014/04/emacs-beginner-resources/}
+
 
 \medskip\Subsection{Ouvrir et fermer des fichiers}
 
@@ -300,7 +330,7 @@ C-x 2 & Coupe fenêtre horizontalement&C-x 3&Coupe la fenêtre verticalement\\
 C-x 5 2 & Lancer une autre fenêtre & C-x o & Changer partie dans la fenêtre\\
 \hline
 
-C-x 1 & Fermer toutes les autres fenêtres&C-x 0& Ferme la fenêtre 
+C-x 1 & Fermer les autres fenêtres&C-x 0& Ferme la fenêtre 
 courante \\\hline
 
 C-x $<$ & Défille vers la gauche & C-x $>$ & Défille vers la droite\\\hline
@@ -320,38 +350,22 @@ C-x $<$ & Défille vers la gauche & C-x $>$ & Défille vers la droite\\\hline
   C-h t & Affiche le tutoriel & C-h i & Entre en mode info\\\hline
 \end{tabular}
 
-\vfill
+\bigskip\Subsection{Modes utiles pour emacs}
 
-Il existe de nombreuses autres commandes et raccourcis, et on peut en écrire
-d'autres.
-
-Les \textit{modes} adaptent emacs (\texttt{M-x flyspell-mode} pour correction
-orthographique à la volée).
+\begin{tabular}{|p{27mm}|p{103.5mm}|}\hline
+  auctex& Environnement complet pour le \LaTeX\\\hline
+  org-mode& Environnement pour tout organiser\\\hline
+  flyspell-mode& Correction orthographique à la volée\\\hline
+\end{tabular}
 
 \newpage
 
-\medskip\Subsection{Naviguer dans du code source}
 
-\begin{tabular}{|p{13mm}|p{48mm}|p{14mm}|p{47mm}|}\hline
-C-M-f& Avance d'un bloc de code &
-C-M-b& Recule d'un bloc de code\\\hline
-C-M-k& Tue un bloc de code &
-{\small C-M-SPC}& Marque un bloc de code\\\hline
-C-M-a& Va au début de fonction &
-C-M-e& Va en fin de fonction \\\hline
-\end{tabular}
-
-\medskip\Subsection{Naviguer avec les tags}
-
-\begin{tabular}{|p{13mm}|p{48mm}|p{14mm}|p{47mm}|}\hline
-C-c g r&Find reference& C-c g s&Find symbol definition\\
-C-c g u&Update tags DB&
-\end{tabular}
+\null\bigskip\includegraphics[width=1.37\linewidth,angle=90]{How-to-Learn-Emacs-v2-Large.png}
 
 \end{document}
 
 Todo shell:
- - les structures de controle du shell
    http://www.johnstowers.co.nz/blog/pages/bash-cheat-sheet.html
  - ${bah}
  - pattern matching ?
