@@ -1,6 +1,6 @@
 LDFLAGS=-g
 CFLAGS= -Wall -Wextra -Wno-unused-parameter
-CFLAGS= $(CFLAGS) -Werror
+CFLAGS:= $(CFLAGS) -Werror
 prog: main.o point.o
 	gcc $(LDFLAGS) $^ -o $@
 main.o: main.c point.h
