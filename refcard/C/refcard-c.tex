@@ -66,7 +66,7 @@
     \textcopyright, \verb=#include=, \verb=#define=, prototypes fctions
     statiques, définition des fonctions
   \item Fichier principal: comme implem + fonction main\\
-    \verb=int main(int argc, char **argv)=    
+    \verb=int main(int argc, char** argv)=    
   \end{itemize}
 
   \medskip\Subsection{Identificateurs} (= noms de variables et fonctions)
@@ -88,12 +88,12 @@
     char* str = "hello";   char buf[BUFSIZ];
     double x = 3.14;       char* p = NULL;
     double values[MAX] = {1, 2, 3};
-    typedef enum { FALSE, TRUE } Bool;
-    typedef struct KeyVal {
+    typedef enum { FALSE, TRUE } bool_t;
+    typedef struct keyval {
       char* key;
       unsigned int val;
-    } KeyValType;
-    KeyValType klist[ ] = {{"NSW", 0}, {"Vic", 5}};
+    } keyval_t;
+    keyval_t klist[ ] = {{"NSW", 0}, {"Vic", 5}};
     void compute_ranking(int from);
   \end{Verbatim}  
   
@@ -103,7 +103,7 @@
     ~~~\=\verb=123  0xAf0C  057  5L  3ul = \= entiers (\verb=int=)\\
     \>\verb=3.1415   3f  1.29e-23=   \> réels (\verb=double=)\\
     \>\verb='x'   '\t'   '\033'=     \> caractères (\verb=char=)\\
-    \>\verb="hello"  "abc\"\n"  ""=  \> chaînes (\verb=char *=)
+    \>\verb="hello"  "abc\"\n"  ""=  \> chaînes (\verb=char*=)
   \end{tabbing}
 
   \smallskip\Subsection{Séquences d'échappement} (dans les chaînes)
@@ -239,7 +239,7 @@
     \scriptsize Licence: CC-BY-SA, by M. Quinson. Voir
     \url{https://github.com/mquinson/C-2nd-language}
 
-     ~~~~~v20171009
+     ~~~~~v20180226
   }
 \end{minipage}
 
