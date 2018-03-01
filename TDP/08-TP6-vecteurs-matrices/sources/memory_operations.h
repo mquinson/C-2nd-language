@@ -1,5 +1,7 @@
-#ifndef __MEMORY_OPERATIONS__
-#define __MEMORY_OPERATIONS__
+#ifndef MEMORY_OPERATIONS_H
+#define MEMORY_OPERATIONS_H
+
+#include <stddef.h>
 
 /*
    memcpy
@@ -33,7 +35,7 @@ void *my_memmove(void *dst, const void *src, size_t len);
                       0 sinon
    effets de bord : aucun
 */
-int is_little_endian();
+int is_little_endian(void);
 
 /*
    reverse_endianess

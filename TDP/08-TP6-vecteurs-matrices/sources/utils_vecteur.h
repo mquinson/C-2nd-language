@@ -1,8 +1,8 @@
-#ifndef __UTILS__
-#define __UTILS__
+#ifndef UTILS_H
+#define UTILS_H
 
-vecteur construit_vecteur(int n, double *donnees);
-void affiche_vecteur(vecteur v);
-vecteur lit_vecteur(char *fichier);
+vecteur *construit_vecteur(size_t n, double *donnees);
+void affiche_vecteur(vecteur *v);
+vecteur *lit_vecteur(char *fichier);
 
 #endif

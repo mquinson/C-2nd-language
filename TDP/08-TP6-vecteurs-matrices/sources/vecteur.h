@@ -1,8 +1,10 @@
-#ifndef __VECTEUR__
-#define __VECTEUR__
+#ifndef VECTEUR_H
+#define VECTEUR_H
+
+#include <stddef.h>
 
 typedef struct donnees_vecteur {
-  int taille;
+  size_t taille;
   double *donnees;
 } vecteur;
 
@@ -14,7 +16,7 @@ typedef struct donnees_vecteur {
                       bien passee et le vecteur invalide si une erreur est survenue
    effets de bord : alloue de la memoire
 */
-vecteur allouer_vecteur(int taille);
+vecteur *allouer_vecteur(size_t taille);
 
 /*
    liberer_vecteur
@@ -23,16 +25,7 @@ vecteur allouer_vecteur(int taille);
    valeur de retour : aucune
    effets de bord : libere de la memoire
 */
-void liberer_vecteur(vecteur v);
-
-/*
-   est_vecteur_invalide
-   description : retourne 1 si le vecteur est invalide
-   parametres : le vecteur
-   valeur de retour : 1 si le vecteur est invalide 0 sinon
-   effets de bord : libere de la memoire
-*/
-int est_vecteur_invalide(vecteur v);
+void liberer_vecteur(vecteur *v);
 
 /*
    acces_vecteur
@@ -41,7 +34,7 @@ int est_vecteur_invalide(vecteur v);
    valeur de retour : un pointeur vers double
    effets de bord : aucun
 */
-double *acces_vecteur(vecteur v, int i);
+double *acces_vecteur(vecteur *v, unsigned i);
 
 /*
    taille_vecteur
@@ -50,6 +43,6 @@ double *acces_vecteur(vecteur v, int i);
    valeur de retour : la taille du vecteur
    effets de bord : aucun
 */
-int taille_vecteur(vecteur v);
+size_t taille_vecteur(const vecteur *v);
 
 #endif

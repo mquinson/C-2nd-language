@@ -1,16 +1,21 @@
 #include <stdlib.h>
 
-int free_counter=0;
-int malloc_counter=0;
+unsigned free_counter = 0;
+unsigned malloc_counter = 0;
 
-void *my_malloc(size_t size)
-{
+void *my_calloc(size_t nmemb, size_t size) {
   malloc_counter++;
-  return malloc(size);
-};
 
-void my_free(void *ptr)
-{
+  return calloc(nmemb, size);
+}
+
+void *my_malloc(size_t size) {
+  malloc_counter++;
+
+  return malloc(size);
+}
+
+void my_free(void *ptr) {
   free_counter++;
   free(ptr);
 }

@@ -1,95 +1,75 @@
-#include "matrice_lineaire_dynamique.h"
 #include <stdlib.h>
 
-matrice allouer_matrice(int l, int c)
-{
-  matrice m;
+#include "matrice_lineaire_dynamique.h"
+
+struct matrice {
+  size_t l;
+  size_t c;
+  double *donnees;
+};
+
+matrice *allouer_matrice(size_t l, size_t c) {
+  matrice *m;
   /* SOLUTION */
-  m = (matrice) malloc(sizeof(struct donnees_matrice));
-  if (m != NULL)
-    {
-      m->donnees = (double *) malloc(sizeof(double)*l*c);
-      if (m->donnees == NULL)
-        {
-          free(m);
-          m = NULL;
-        }
-      else
-        {
-          m->l = l;
-          m->c = c;
-        }
-    }
-  else
-      m = NULL;
+  m = malloc(sizeof(*m));
+  if (!m)
+    abort();
+
+  m->donnees = malloc(sizeof(*m->donnees) * l * c);
+  if (!m->donnees)
+    abort();
+
+  m->l = l;
+  m->c = c;
   /* FIN */
   return m;
 }
 
-void liberer_matrice(matrice m)
-{
+void liberer_matrice(matrice *m) {
   /* SOLUTION */
   free(m->donnees);
   free(m);
   /* FIN */
 }
 
-int est_matrice_invalide(matrice m)
-{
-  int resultat;
-  /* SOLUTION */
-  resultat = (m->l==0) || (m->c == 0);
-  /* FIN */
-  return resultat;
-}
-
-double *acces_matrice(matrice m, int i, int j)
-{
+double *acces_matrice(matrice *m, unsigned i, unsigned j) {
   double *resultat;
   /* SOLUTION */
-  int nouveau_l, nouveau_c, k, l;
+  size_t nouveau_l, nouveau_c;
+  unsigned k, l;
   double *nouveau_bloc;
 
-  if ((i<0) || (j<0))
-      resultat = NULL;
-  else
-      if ((i >= m->l) || (j >= m->c))
-        {
-          nouveau_l = (i>=m->l)?i+1:m->l;
-          nouveau_c = (j>=m->c)?j+1:m->c;
-          nouveau_bloc = (double *) malloc(sizeof(double)*nouveau_l*nouveau_c);
-          if (nouveau_bloc != NULL)
-            {
-              for (k=0; k<m->l; k++)
-                  for (l=0; l<m->c; l++)
-                      nouveau_bloc[k*nouveau_c+l] = m->donnees[k*m->c+l];
-              free(m->donnees);
-              m->donnees = nouveau_bloc;
-              m->l = nouveau_l;
-              m->c = nouveau_c;
-              resultat = m->donnees+i*m->c+j;
-            }
-          else
-              resultat = NULL;
-        }
-      else
-          resultat = m->donnees+i*m->c+j;
+  if (i >= m->l || j >= m->c) {
+    nouveau_l = (i >= m->l) ? i + 1 : m->l;
+    nouveau_c = (j >= m->c) ? j + 1 : m->c;
+    nouveau_bloc = malloc(sizeof(*m->donnees) * nouveau_l * nouveau_c);
+    if (!nouveau_bloc) {
+      abort();
+    }
+    for (k = 0; k < m->l; k++)
+      for (l = 0; l < m->c; l++)
+        nouveau_bloc[k * nouveau_c + l] = m->donnees[k * m->c + l];
+    free(m->donnees);
+    m->donnees = nouveau_bloc;
+    m->l = nouveau_l;
+    m->c = nouveau_c;
+    resultat = m->donnees + i * m->c + j;
+  } else
+    resultat = m->donnees + i * m->c + j;
   /* FIN */
   return resultat;
 }
 
-int nb_lignes_matrice(matrice m)
-{
-  int resultat;
+size_t nb_lignes_matrice(const matrice *m) {
+  size_t resultat;
   /* SOLUTION */
   resultat = m->l;
   /* FIN */
   return resultat;
 }
 
-int nb_colonnes_matrice(matrice m)
-{
-  int resultat;
+size_t nb_colonnes_matrice(const matrice *m) {
+  size_t resultat;
   /* SOLUTION */
   resultat = m->c;
   /* FIN */

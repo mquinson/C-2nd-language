@@ -1,8 +1,12 @@
-#ifndef __UTILS_MATRICE__
-#define __UTILS_MATRICE__
+#ifndef UTILS_MATRICE_H
+#define UTILS_MATRICE_H
 
-matrice construit_matrice(int l, int c, double *donnees);
-void affiche_matrice(matrice m);
-matrice lit_matrice(char *fichier);
+#include <stddef.h>
+
+#include "matrice.h"
+
+matrice *construit_matrice(size_t l, size_t c, double *donnees);
+void affiche_matrice(matrice *m);
+matrice *lit_matrice(char *fichier);
 
 #endif

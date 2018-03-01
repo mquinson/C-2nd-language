@@ -71,7 +71,7 @@ dist: *.h *.c $(DIST_FILES)
 
 # dependences
 vecteur_testbase: vecteur.o utils_vecteur.o my_memory.o
-vecteur_testbornes: vecteur_verif.o utils_vecteur.o my_memory.o
+vecteur_testbornes: vecteur.o utils_vecteur.o my_memory.o
 vecteur_testdynamique: vecteur_dynamique.o utils_vecteur_dynamique.o my_memory.o
 
 vecteur_testbase.o: vecteur.h utils_vecteur.h
@@ -79,23 +79,20 @@ vecteur_testbornes.o: vecteur.h utils_vecteur.h
 vecteur_testdynamique.o: vecteur_dynamique.h utils_vecteur.h
 
 vecteur.o: vecteur.h
-vecteur_verif.o: vecteur.h
 vecteur_dynamique.o: vecteur_dynamique.h
 
 matrice_testbase: matrice.o utils_matrice.o my_memory.o
-matrice_testbornes: matrice_verif.o utils_matrice.o my_memory.o
+matrice_testbornes: matrice.o utils_matrice.o my_memory.o
 matrice_testdynamique: matrice_dynamique.o utils_matrice_dynamique.o my_memory.o
 
 matrice.o: matrice.h
-matrice_verif.o: matrice.h
 matrice_dynamique.o: matrice_dynamique.h
 
 matrice_lineaire_testbase: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
-matrice_lineaire_testbornes: matrice_lineaire_verif.o utils_matrice_lineaire.o my_memory.o
+matrice_lineaire_testbornes: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testdynamique: matrice_lineaire_dynamique.o utils_matrice_lineaire_dynamique.o my_memory.o
 
 matrice_lineaire.o: matrice_lineaire.h
-matrice_lineaire_verif.o: matrice_lineaire.h
 matrice_lineaire_dynamique.o: matrice_lineaire_dynamique.h
 
 memory_testcpy: memory_testcpy.o memory_operations.o vecteur.o utils_vecteur.o my_memory.o
@@ -111,8 +108,8 @@ memory_operations.o: memory_operations.h
 # Regenere les donnees et les fichiers resultats correspondants
 vecteur1.txt vecteur2.txt: generer_vecteur
 	./generer_vecteur 1000 > $@
-	
+
 matrice1.txt matrice2.txt: generer_matrice
 	./generer_matrice 50 100 > $@
-	
+
 

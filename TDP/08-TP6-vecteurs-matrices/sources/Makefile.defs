@@ -6,8 +6,8 @@ PROGRAMS=vecteur_testbase matrice_testbase matrice_lineaire_testbase \
          vecteur_testdynamique matrice_testdynamique matrice_lineaire_testdynamique \
          memory_testcpy memory_testmove memory_testendianess
 
-EXERCICES=matrice_lineaire.c matrice_lineaire_dynamique.c matrice.c matrice_lineaire_verif.c matrice_verif.c \
-          vecteur.c matrice_dynamique.c vecteur_dynamique.c vecteur_verif.c memory_operations.c
+EXERCICES=matrice_lineaire.c matrice_lineaire_dynamique.c matrice.c \
+          vecteur.c matrice_dynamique.c vecteur_dynamique.c memory_operations.c
 
 DATAFILES=vecteur1.txt vecteur2.txt matrice1.txt matrice2.txt
 
