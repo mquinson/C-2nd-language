@@ -1,20 +1,4 @@
-CC=gcc
-CFLAGS=-Wall -Werror -Wno-uninitialized -g -include my_memory.h
-
-PROGRAMS=t00-vector t10-matrix t20-matblock \
-         vecteur_testbornes matrice_testbornes matrice_lineaire_testbornes \
-         vecteur_testdynamique matrice_testdynamique matrice_lineaire_testdynamique \
-         memory_testcpy memory_testmove memory_testendianess
-
-EXERCICES=matrice_lineaire.c matrice_lineaire_dynamique.c matrice.c \
-          vecteur.c matrice_dynamique.c vecteur_dynamique.c memory_operations.c
-
-DATAFILES=vecteur1.txt vecteur2.txt matrice1.txt matrice2.txt
-
-TDP_FILES=teste_programme Makefile Makefile.defs *.result $(DATAFILES) generer_vecteur generer_matrice \
-          *test*.c *utils*.c *utils*.h vecteur*.h matrice*.h my_memory.h my_memory.c memory_operations.h
-
-DIST_FILES=$(TDP_FILES) filtre
+include Makefile.defs
 
 all: $(PROGRAMS) generer_vecteur generer_matrice
 
