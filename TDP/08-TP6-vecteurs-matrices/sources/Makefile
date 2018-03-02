@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Werror -Wno-uninitialized -g -include my_memory.h
 
-PROGRAMS=vecteur_testbase matrice_testbase matrice_lineaire_testbase \
+PROGRAMS=t00-vector t10-matrix t20-matblock \
          vecteur_testbornes matrice_testbornes matrice_lineaire_testbornes \
          vecteur_testdynamique matrice_testdynamique matrice_lineaire_testdynamique \
          memory_testcpy memory_testmove memory_testendianess
@@ -55,8 +55,8 @@ utils_matrice_lineaire.o: utils_matrice.c matrice_lineaire.h utils_matrice.h
 utils_matrice_lineaire_dynamique.o: utils_matrice.c matrice_lineaire_dynamique.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire_dynamique.h utils_matrice.c
 
-matrice_testbase.o: matrice_testbase.c matrice.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice.h matrice_testbase.c
+t10-matrix.o: t10-matrix.c matrice.h utils_matrice.h
+	$(CC) $(CFLAGS) -c -o $@ -include matrice.h t10-matrix.c
 
 matrice_testbornes.o: matrice_testbornes.c matrice.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice.h matrice_testbornes.c
@@ -64,8 +64,8 @@ matrice_testbornes.o: matrice_testbornes.c matrice.h utils_matrice.h
 matrice_testdynamique.o: matrice_testdynamique.c matrice_dynamique.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice_dynamique.h matrice_testdynamique.c
 
-matrice_lineaire_testbase.o: matrice_testbase.c matrice_lineaire.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h matrice_testbase.c
+t20-matblock.o: t20-matblock.c matrice_lineaire.h utils_matrice.h
+	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t20-matblock.c
 
 matrice_lineaire_testbornes.o: matrice_testbornes.c matrice_lineaire.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h matrice_testbornes.c
@@ -86,7 +86,7 @@ dist: *.h *.c $(DIST_FILES)
 	tar cvzf TDP4_Etudiants.tgz $?
 
 # dependences
-vecteur_testbase: vecteur.o utils_vecteur.o my_memory.o
+t00-vector: vecteur.o utils_vecteur.o my_memory.o
 vecteur_testbornes: vecteur.o utils_vecteur.o my_memory.o
 vecteur_testdynamique: vecteur_dynamique.o utils_vecteur_dynamique.o my_memory.o
 
@@ -97,14 +97,14 @@ vecteur_testdynamique.o: vecteur_dynamique.h utils_vecteur.h
 vecteur.o: vecteur.h
 vecteur_dynamique.o: vecteur_dynamique.h
 
-matrice_testbase: matrice.o utils_matrice.o my_memory.o
+t10-matrix: matrice.o utils_matrice.o my_memory.o
 matrice_testbornes: matrice.o utils_matrice.o my_memory.o
 matrice_testdynamique: matrice_dynamique.o utils_matrice_dynamique.o my_memory.o
 
 matrice.o: matrice.h
 matrice_dynamique.o: matrice_dynamique.h
 
-matrice_lineaire_testbase: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
+t20-matblock: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testbornes: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testdynamique: matrice_lineaire_dynamique.o utils_matrice_lineaire_dynamique.o my_memory.o
 
