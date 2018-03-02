@@ -71,7 +71,7 @@ dist: *.h *.c $(DIST_FILES)
 
 # dependences
 t00-vector: vecteur.o utils_vecteur.o my_memory.o
-vecteur_testbornes: vecteur.o utils_vecteur.o my_memory.o
+t01-vector-bounds: vecteur.o utils_vecteur.o my_memory.o
 vecteur_testdynamique: vecteur_dynamique.o utils_vecteur_dynamique.o my_memory.o
 
 vecteur_testbase.o: vecteur.h utils_vecteur.h

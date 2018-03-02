@@ -22,20 +22,67 @@
 \maketitle
 
 \noindent\framebox{\begin{minipage}{.95\linewidth}
-        \noindent\textbf{\large Objectifs pédagogiques:}
-        \begin{itemize}
-		\item[$\bullet$] Allouer/libérer de la mémoire avec \lstinline$malloc$/\lstinline$free$;
-		\item[$\bullet$] Manipuler des pointeurs/tableaux;
-		\item[$\bullet$] Créer de nouveaux types de données;
-		\item[$\bullet$] Utiliser en pratique les outils gdb et valgrind.
-        \end{itemize}
+    \noindent\textbf{\large Objectifs pédagogiques:}
+    \begin{itemize}
+    \item[$\bullet$] Allouer/libérer de la mémoire avec \lstinline$malloc$/\lstinline$free$;
+    \item[$\bullet$] Manipuler des pointeurs/tableaux;
+    \item[$\bullet$] Créer de nouveaux types de données;
+    \item[$\bullet$] Utiliser en pratique les outils gdb et valgrind.
+    \end{itemize}
 \end{minipage}}\medskip
 
-%L'objectif de ce TP est d'appliquer les méthodes de debug vues au TP~5
-%pour mettre au point des programmes manipulant la mémoire. L'excuse du jour
-%sera la création d'une bibliothèque permettant de créer et manipuler des
-%vecteurs et des matrices.
-%\bigskip
+L'objectif de ce TP est de manipuler les fonctions \lstinline$malloc$
+et \lstinline$free$, et de vous entrainer à debugger un programme
+s'arrêtant sur SEGFAULT. L'excuse du jour sera la création d'une
+bibliothèque permettant de créer et manipuler des vecteurs et des
+matrices.  \bigskip
+
+\PseudoExo{Principe du TP.} 
+Veuillez télécharger l'archive :\\
+\url{http://people.irisa.fr/Martin.Quinson/Teaching/ArcSys/99-allocation-tableaux.tar.gz}
+
+Vous trouverez dans cette archive plusieurs programmes à compléter. Vous pouvez
+compiler et tester tous les exercices de la séance avec la commande \run{make
+  test}
+
+Chaque test correspond à un programme (le nom du programme s'affiche avant
+ECHEC ou SUCCES) que vous pouvez exécuter indépendemment pour déterminer vos
+erreurs. Le test \texttt{$<$toto$>$} est passé si votre programme \texttt{toto}
+affiche exactement la même chose que ce qui se trouve dans le fichier
+\texttt{toto.result}. N'hésitez pas à consulter le contenu des fichiers fournis
+pour comprendre le fonctionnement de l'ensemble. Si votre programme vous semble
+fonctionner, mais que la suite de tests vous indique le contraire, comparez le
+contenu du fichier \texttt{toto.output} produit par votre programme au fichier
+\texttt{toto.result}, qui est la sortie attendue par la suite de tests. Pour
+cela, vous pouvez utiliser la commande
+
+\noindent\run{diff -u toto.result toto.output}
+qui affiche les différences ligne par ligne. Il est bien entendu possible de
+modifier \texttt{toto.result} pour faire en sorte que les tests ne détectent
+plus le problème, mais ce n'est pas l'objectif ;)
+
+Pour comprendre votre segfault, utilisez valgrind en exécutant:
+\run{valgrind --leak-check=full ./toto}
+
+\begin{Exercice} \textbf{Vecteurs}
+
+  Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
+  vecteur.
+
+  \Question Complétez \file{vecteur.c} qui contient toutes les
+  fonctions de gestion de vecteur que nous voulons implémenter. Le
+  fichier \file{vecteur.h} contient toutes les informations
+  nécessaires : description des fonctions et déclaration du type
+  vecteur. Une fois toutes les fonctions complétées, tapez \run{make
+    t00-vector} pour compiler, \run{./t00-vector} pour exécuter le
+  programme de test et make test pour tester si le résultat du
+  programme de test est correct (s'il affiche la même chose que ce qui
+  se trouve dans \file{t00-vector.result}).
+
+  \Question Ajoutez un test dans la fonction d'accès, et renvoyez NULL
+  si les indices demandés sont en dehors des bornes de l'objet
+  concerné. Testez votre modification avec le test \run{./t01-vector-bound}
+\end{Exercice}
 
 \PseudoExo{Introduction.} En C, l'allocation dynamique d'un tableau
 multidimensionnel se fait
@@ -61,23 +108,23 @@ en deux étapes :\\
 
 
 \begin{Verbatim}[label=Exemple: allocation d'un tableau de 10*10 doubles (sans aucune vérification)]
-double **tableau;
+double** tableau;
 
-tableau = malloc(sizeof(double *) * 10);
-for (i = 0; i < 10; i++) {
+tableau = malloc(sizeof(double*) * 10);
+for (int i = 0; i < 10; i++) {
     tableau[i] = malloc(sizeof(double) * 10);
 }
 \end{Verbatim}
 
 \noindent\begin{minipage}{.64\linewidth}
 \begin{Verbatim}[label=Idem avec gestion des erreurs]
-double **tableau;
+double** tableau;
 
 tableau = malloc(sizeof(double *) * 10);
-if (!tableau) {
+if (tableau == NULL) {
     abort();
 }
-for (i = 0; i < 10; i++) {
+for (int i = 0; i < 10; i++) {
     tableau[i] = malloc(sizeof(double) * 10);
     if (!tableau[i]) {
         abort();
@@ -88,8 +135,8 @@ for (i = 0; i < 10; i++) {
 \hfill
 \begin{minipage}{.35\linewidth}
 \begin{Verbatim}[label=Initialisation des éléments,numbers=right]    
-for (i = 0; i < 10; i++)
-    for (j = 0; j < 10; j++)
+for (int i = 0; i < 10; i++)
+    for (int j = 0; j < 10; j++)
         tableau[i][j] = 0;
 \end{Verbatim}
 
@@ -98,47 +145,8 @@ for (i = 0; i < 10; i++)
 
 \medskip
 
-Veuillez télécharger l'archive :\\
-\url{http://people.irisa.fr/Martin.Quinson/Teaching/ArcSys/99-allocation-tableaux.tar.gz}
-
-Vous trouverez dans cette archive plusieurs programmes à compléter. Vous pouvez
-compiler et tester tous les exercices de la séance avec la commande \run{make
-  test}
-
-Chaque test correspond à un programme (le nom du programme s'affiche avant
-ECHEC ou SUCCES) que vous pouvez exécuter indépendemment pour déterminer vos
-erreurs. Le test \texttt{$<$toto$>$} est passé si votre programme \texttt{toto}
-affiche exactement la même chose que ce qui se trouve dans le fichier
-\texttt{toto.result}. N'hésitez pas à consulter le contenu des fichiers fournis
-pour comprendre le fonctionnement de l'ensemble. Si votre programme vous semble
-fonctionner, mais que la suite de tests vous indique le contraire, comparez le
-contenu du fichier \texttt{toto.output} produit par votre programme au fichier
-\texttt{toto.result}, qui est la sortie attendue par la suite de tests. Pour
-cela, vous pouvez utiliser la commande
-
-\noindent\run{diff -u toto.result toto.output}
-qui affiche les différences ligne par ligne. Il est bien entendu possible de
-modifier \texttt{toto.result} pour faire en sorte que les tests ne détectent
-plus le problème, mais ce n'est pas l'objectif ;)
-
-Si vous souhaitez utiliser valgrind (et c'est conseillé), vous pouvez exécuter :
-\begin{verbatim}
-valgrind --leak-check=full ./mon_programme
-\end{verbatim}
 \clearpage
 
-\begin{Exercice} \textbf{Vecteurs}
-
-  Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
-  vecteur. Complétez \file{vecteur.c} qui contient toutes les fonctions de
-  gestion de vecteur que nous voulons implémenter. Le fichier \file{vecteur.h}
-  contient toutes les informations nécessaires : description des fonctions et
-  déclaration du type vecteur. Une fois les fonctions complétées, tapez
-  \run{make vecteur\_testbase} pour compiler, \run{./vecteur\_testbase} pour
-  exécuter le programme de test et make test pour tester si le résultat du
-  programme de test est correct (s'il affiche la même chose que ce qui se
-  trouve dans \file{vecteur\_testbase.result}).
-\end{Exercice}
 
 \begin{Exercice} \textbf{Matrices}
 

@@ -3,9 +3,9 @@
 
 #include <stddef.h>
 
-typedef struct donnees_vecteur {
+typedef struct vector {
   size_t taille;
-  double *donnees;
+  double* donnees;
 } vecteur_t;
 
 /*
