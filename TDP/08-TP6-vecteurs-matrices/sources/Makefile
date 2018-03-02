@@ -24,9 +24,6 @@ testsuite: $(PROGRAMS) $(DATAFILES)
 utils_vecteur.o: utils_vecteur.c vecteur.h utils_vecteur.h
 	$(CC) $(CFLAGS) -c -include vecteur.h utils_vecteur.c
 
-utils_vecteur_dynamique.o: utils_vecteur.c vecteur_dynamique.h utils_vecteur.h
-	$(CC) $(CFLAGS) -c -o $@ -include vecteur_dynamique.h utils_vecteur.c
-
 utils_matrice.o: utils_matrice.c matrice.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -include matrice.h utils_matrice.c
 
@@ -72,14 +69,13 @@ dist: *.h *.c $(DIST_FILES)
 # dependences
 t00-vector: vecteur.o utils_vecteur.o my_memory.o
 t01-vector-bounds: vecteur.o utils_vecteur.o my_memory.o
-vecteur_testdynamique: vecteur_dynamique.o utils_vecteur_dynamique.o my_memory.o
+vecteur_testdynamique: vecteur.o utils_vecteur.o my_memory.o
 
 vecteur_testbase.o: vecteur.h utils_vecteur.h
 vecteur_testbornes.o: vecteur.h utils_vecteur.h
-vecteur_testdynamique.o: vecteur_dynamique.h utils_vecteur.h
+vecteur_testdynamique.o: vecteur.h utils_vecteur.h
 
 vecteur.o: vecteur.h
-vecteur_dynamique.o: vecteur_dynamique.h
 
 t10-matrix: matrice.o utils_matrice.o my_memory.o
 matrice_testbornes: matrice.o utils_matrice.o my_memory.o

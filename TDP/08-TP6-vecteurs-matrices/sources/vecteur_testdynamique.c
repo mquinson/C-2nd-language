@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "vecteur_dynamique.h"
+#include "vecteur.h"
 #include "utils_vecteur.h"
 
 int main(void) {
