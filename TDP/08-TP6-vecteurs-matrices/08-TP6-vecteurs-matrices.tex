@@ -64,8 +64,7 @@ plus le problème, mais ce n'est pas l'objectif ;)
 Pour comprendre votre segfault, utilisez valgrind en exécutant:
 \run{valgrind --leak-check=full ./toto}
 
-\begin{Exercice} \textbf{Vecteurs}
-
+\begin{Exercice} \textbf{Vecteurs.}
   Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
   vecteur.
 
@@ -80,8 +79,23 @@ Pour comprendre votre segfault, utilisez valgrind en exécutant:
   se trouve dans \file{t00-vector.result}).
 
   \Question Ajoutez un test dans la fonction d'accès, et renvoyez NULL
-  si les indices demandés sont en dehors des bornes de l'objet
-  concerné. Testez votre modification avec le test \run{./t01-vector-bound}
+  si l'indice demandé est en dehors des bornes de l'objet
+  concerné. Testez votre modification avec le programme
+  \run{./t01-vector-bound}
+
+  \Question On a supposé à la question précédente qu'accéder à une
+  case inexistante est une erreur. Parfois, on préfère faire en sorte
+  que le vecteur grandisse automatiquement pour créer à la demande les
+  cases inexistantes. Comme il est difficile de prédire le
+  comportement souhaité par l'utilisateur de la bibliothèque, on va
+  configurer le comportement avec le champ \texttt{dynamique} de la
+  structure vecteur. S'il vaut FAUX (\texttt{dynamique == 0}), on
+  utilisera le comportement de la question précédente: un accès à une
+  case inexistante renvoi NULL. Si le champ vaut VRAI
+  (\texttt{dynamique != 0}), il faut agrandir le tableau (avec
+  \texttt{realloc}) quand l'indice dépasse la borne.
+
+  Testez votre modification avec le programme \run{./t02-vector-realloc}.
 \end{Exercice}
 
 \PseudoExo{Introduction.} En C, l'allocation dynamique d'un tableau

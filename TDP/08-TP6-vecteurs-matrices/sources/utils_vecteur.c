@@ -36,6 +36,7 @@ vecteur_t *lit_vecteur(char *fichier) {
   }
   fscanf(f, " %d", &n);
   v = allouer_vecteur(n);
+  v->dynamique = 0;
   for (i = 0; i < n; i++) {
     fscanf(f, " %lg", acces_vecteur(v, i));
   }

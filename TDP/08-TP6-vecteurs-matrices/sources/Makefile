@@ -69,11 +69,7 @@ dist: *.h *.c $(DIST_FILES)
 # dependences
 t00-vector: vecteur.o utils_vecteur.o my_memory.o
 t01-vector-bounds: vecteur.o utils_vecteur.o my_memory.o
-vecteur_testdynamique: vecteur.o utils_vecteur.o my_memory.o
-
-vecteur_testbase.o: vecteur.h utils_vecteur.h
-vecteur_testbornes.o: vecteur.h utils_vecteur.h
-vecteur_testdynamique.o: vecteur.h utils_vecteur.h
+t02-vector-realloc: vecteur.o utils_vecteur.o my_memory.o
 
 vecteur.o: vecteur.h
 
@@ -81,15 +77,9 @@ t10-matrix: matrice.o utils_matrice.o my_memory.o
 matrice_testbornes: matrice.o utils_matrice.o my_memory.o
 matrice_testdynamique: matrice_dynamique.o utils_matrice_dynamique.o my_memory.o
 
-matrice.o: matrice.h
-matrice_dynamique.o: matrice_dynamique.h
-
 t20-matblock: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testbornes: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testdynamique: matrice_lineaire_dynamique.o utils_matrice_lineaire_dynamique.o my_memory.o
-
-matrice_lineaire.o: matrice_lineaire.h
-matrice_lineaire_dynamique.o: matrice_lineaire_dynamique.h
 
 memory_testcpy: memory_testcpy.o memory_operations.o vecteur.o utils_vecteur.o my_memory.o
 memory_testmove: memory_testmove.o memory_operations.o vecteur.o utils_vecteur.o my_memory.o
