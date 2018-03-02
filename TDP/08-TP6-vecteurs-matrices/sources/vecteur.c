@@ -2,8 +2,8 @@
 
 #include "vecteur.h"
 
-vecteur *allouer_vecteur(size_t taille) {
-  vecteur *v;
+vecteur_t* allouer_vecteur(size_t taille) {
+  vecteur_t* v;
   /* SOLUTION */
   v = malloc(sizeof(*v));
   if (!v)
@@ -18,15 +18,15 @@ vecteur *allouer_vecteur(size_t taille) {
   return v;
 }
 
-void liberer_vecteur(vecteur *v) {
+void liberer_vecteur(vecteur_t* v) {
   /* SOLUTION */
   free(v->donnees);
   free(v);
   /* FIN */
 }
 
-double *acces_vecteur(vecteur *v, unsigned i) {
-  double *resultat;
+double* acces_vecteur(vecteur_t* v, unsigned i) {
+  double* resultat;
   /* SOLUTION */
   if (i < v->taille)
     resultat = v->donnees + i;
@@ -36,7 +36,7 @@ double *acces_vecteur(vecteur *v, unsigned i) {
   return resultat;
 }
 
-size_t taille_vecteur(const vecteur *v) {
+size_t taille_vecteur(const vecteur_t* v) {
   size_t resultat;
   /* SOLUTION */
   resultat = v->taille;

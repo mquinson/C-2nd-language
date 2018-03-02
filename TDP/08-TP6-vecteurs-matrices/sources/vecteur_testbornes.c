@@ -4,7 +4,7 @@
 #include "utils_vecteur.h"
 
 int main(void) {
-  vecteur *v1, *v2;
+  vecteur_t *v1, *v2;
   unsigned i;
 
   v1 = lit_vecteur("vecteur1.txt");

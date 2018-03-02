@@ -6,7 +6,7 @@
 typedef struct vecteur {
   size_t taille;
   double *donnees;
-} vecteur;
+} vecteur_t;
 
 /*
    allouer_vecteur
@@ -16,7 +16,7 @@ typedef struct vecteur {
                       bien passee et le vecteur invalide si une erreur est survenue
    effets de bord : alloue de la memoire
 */
-vecteur *allouer_vecteur(size_t taille);
+vecteur_t *allouer_vecteur(size_t taille);
 
 /*
    liberer_vecteur
@@ -25,7 +25,7 @@ vecteur *allouer_vecteur(size_t taille);
    valeur de retour : aucune
    effets de bord : libere de la memoire
 */
-void liberer_vecteur(vecteur *v);
+void liberer_vecteur(vecteur_t *v);
 
 /*
    acces_vecteur
@@ -34,7 +34,7 @@ void liberer_vecteur(vecteur *v);
    valeur de retour : un pointeur vers double
    effets de bord : aucun
 */
-double *acces_vecteur(vecteur *v, unsigned i);
+double *acces_vecteur(vecteur_t *v, unsigned i);
 
 /*
    taille_vecteur
@@ -43,6 +43,6 @@ double *acces_vecteur(vecteur *v, unsigned i);
    valeur de retour : la taille du vecteur
    effets de bord : aucun
 */
-size_t taille_vecteur(const vecteur *v);
+size_t taille_vecteur(const vecteur_t *v);
 
 #endif

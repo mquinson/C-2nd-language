@@ -3,8 +3,8 @@
 
 #include "utils_vecteur.h"
 
-vecteur *construit_vecteur(size_t n, double *donnees) {
-  vecteur *v;
+vecteur_t *construit_vecteur(size_t n, double *donnees) {
+  vecteur_t *v;
   unsigned i;
 
   v = allouer_vecteur(n);
@@ -14,7 +14,7 @@ vecteur *construit_vecteur(size_t n, double *donnees) {
   return v;
 }
 
-void affiche_vecteur(vecteur *v) {
+void affiche_vecteur(vecteur_t *v) {
   unsigned i;
   unsigned taille = taille_vecteur(v);
 
@@ -24,8 +24,8 @@ void affiche_vecteur(vecteur *v) {
   printf("]\n");
 }
 
-vecteur *lit_vecteur(char *fichier) {
-  vecteur *v;
+vecteur_t *lit_vecteur(char *fichier) {
+  vecteur_t *v;
   unsigned i, n;
   FILE *f;
 

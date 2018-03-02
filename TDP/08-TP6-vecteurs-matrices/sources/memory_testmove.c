@@ -5,7 +5,7 @@
 #include "memory_operations.h"
 
 int main(void) {
-  vecteur *v1, *v2;
+  vecteur_t *v1, *v2;
   size_t taille;
 
   v1 = lit_vecteur("vecteur1.txt");
