@@ -98,30 +98,42 @@ Pour comprendre votre segfault, utilisez valgrind en exécutant:
   Testez votre modification avec le programme \run{./t02-vector-realloc}.
 \end{Exercice}
 
-\PseudoExo{Introduction.} En C, l'allocation dynamique d'un tableau
-multidimensionnel se fait
-en deux étapes :\\
-\begin{minipage}{.5\linewidth}
-  \begin{itemize}
-  \item allocation d'un tableau de pointeurs dont la taille correspond au
-    nombre de lignes souhaité
-  \item allocation de chacune des lignes en utilisant le tableau de pointeurs
-    précédent pour stocker leur adresse
-  \end{itemize}
+\begin{Exercice} \textbf{Matrices.}  Complétez le fichier
+  \file{matrice.c} pour la gestion d'un type \texttt{matrice\_t},
+  représenté ainsi:
+  
+  \smallskip\noindent
+  \begin{minipage}{.5\linewidth}%
 
-  Ensuite, l'accès au tableau se fait comme d'habitude en C, en utilisant
-  l'opérateur \verb~[]~ pour préciser l'indice dans chacune des dimensions. La seule
-  différence avec un tableau alloué de manière statique est le type des objets
-  manipulés : dans le cas dynamique ce sera un tableau de pointeurs, dans le
-  cas statique ce sera un tableau de tableaux (les tableaux sont réellement
-  stockés les uns après les autres en mémoire).
+    ~~Pour allouer une telle structure, on alloue d'abord un tableau de
+    pointeurs, dont la taille correspond au nombre de lignes
+    souhaité. Ensuite, chacune des cases de ce premier tableau est un
+    pointeur vers un autre tableau alloué séparément pour représenter
+    l'une des lignes. Le code correspondant est donné page suivante.
 
+    \smallskip
+    ~~On accède ensuite aux cases du tableaux comme on le ferait pour un
+    tableau alloué statiquement: avec l'opérateur \verb~[ ]~ pour
+    chacune des dimensions:
+
+\begin{Verbatim}[label=Initialisation des éléments,numbers=right]    
+for (int i = 0; i < 10; i++)
+    for (int j = 0; j < 10; j++)
+        tableau[i][j] = 0;
+\end{Verbatim}
+
+
+  % La seule
+%   différence avec un tableau alloué de manière statique est le type des objets
+%   manipulés : dans le cas dynamique ce sera un tableau de pointeurs, dans le
+%   cas statique ce sera un tableau de tableaux (les tableaux sont réellement
+%   stockés les uns après les autres en mémoire).
+% ;
 \end{minipage}\hfill\begin{minipage}{.48\linewidth}
   \includegraphics[width=\linewidth]{tableau.pdf}
 \end{minipage}
-
-
-\begin{Verbatim}[label=Exemple: allocation d'un tableau de 10*10 doubles (sans aucune vérification)]
+  
+\begin{Verbatim}[label=Allocation d'un tableau de 10*10 doubles]
 double** tableau;
 
 tableau = malloc(sizeof(double*) * 10);
@@ -130,50 +142,37 @@ for (int i = 0; i < 10; i++) {
 }
 \end{Verbatim}
 
-\noindent\begin{minipage}{.64\linewidth}
 \begin{Verbatim}[label=Idem avec gestion des erreurs]
 double** tableau;
 
 tableau = malloc(sizeof(double *) * 10);
-if (tableau == NULL) {
-    abort();
+if (tableau == NULL) { // malloc signale une erreur
+    abort(); // tue le programme en signalant un bug interne
 }
 for (int i = 0; i < 10; i++) {
     tableau[i] = malloc(sizeof(double) * 10);
-    if (!tableau[i]) {
+    if (tableau[i] == NULL) {
         abort();
     }
 }
 \end{Verbatim}
-\end{minipage}
-\hfill
-\begin{minipage}{.35\linewidth}
-\begin{Verbatim}[label=Initialisation des éléments,numbers=right]    
-for (int i = 0; i < 10; i++)
-    for (int j = 0; j < 10; j++)
-        tableau[i][j] = 0;
-\end{Verbatim}
-
-(vous pouvez aussi utiliser la fonction \verb~calloc~ pour allouer et initialiser à zéro les lignes)
-\end{minipage}
-
-\medskip
-
-\clearpage
 
 
-\begin{Exercice} \textbf{Matrices}
-
-  Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
-  matrice, où les matrices sont représentées par un tableau bidimensionel
-  dynamique. Complétez le fichier \file{matrice.c} qui contient toutes les
+  \Question Complétez le fichier \file{matrice.c} qui contient toutes les
   fonctions de gestion de matrice que nous voulons implémenter. Le fichier
   \file{matrice.h} contient toutes les informations nécessaires : description
   des fonctions et déclaration du type matrice. Une fois les fonctions
-  complétées, tapez \run{make matrice\_testbase} pour compiler,
-  \run{./matrice\_testbase} pour exécuter le programme de test et \run{make
+  complétées, tapez \run{make t10-matrix} pour compiler,
+  \run{./make t10-matrix} pour exécuter le programme de test et \run{make
     test} pour tester si le résultat du programme de test est correct.
 \end{Exercice}
+
+
+\medskip
+
+
+
+
 
 \begin{Exercice} \textbf{Matrices linéaires (optionnel)} 
 
