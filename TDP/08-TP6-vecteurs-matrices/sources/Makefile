@@ -63,9 +63,6 @@ clean:
 distclean: clean
 	rm -f $(DATAFILES)
 
-dist: *.h *.c $(DIST_FILES)
-	tar cvzf TDP4_Etudiants.tgz $?
-
 # dependences
 t00-vector: vecteur.o utils_vecteur.o my_memory.o
 t01-vector-bounds: vecteur.o utils_vecteur.o my_memory.o
@@ -77,7 +74,7 @@ t10-matrix: matrice.o utils_matrice.o my_memory.o
 t11-matrix-bounds: matrice.o utils_matrice.o my_memory.o
 matrice_testdynamique: matrice_dynamique.o utils_matrice_dynamique.o my_memory.o
 
-t20-matblock: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
+t20-matlin: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testbornes: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testdynamique: matrice_lineaire_dynamique.o utils_matrice_lineaire_dynamique.o my_memory.o
 

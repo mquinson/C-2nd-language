@@ -7,7 +7,7 @@ then
 fi
 if [ -n "`diff $1.output $1.result`" ]
 then
-  echo -n "ECHEC : "
+  echo -n "échec : "
   echo "Verifiez votre programme ou utilisez le debugger"
 else
   echo -n "SUCCES : "
