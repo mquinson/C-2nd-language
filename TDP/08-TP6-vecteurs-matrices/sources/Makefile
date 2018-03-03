@@ -42,7 +42,7 @@ matrice_testdynamique.o: matrice_testdynamique.c matrice.h utils_matrice.h
 t20-matlin.o: t20-matlin.c matrice_lineaire.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t20-matlin.c
 
-matrice_lineaire_testbornes.o: t21-matlin-bounds.c matrice_lineaire.h utils_matrice.h
+t21-matlin-bounds.o: t21-matlin-bounds.c matrice_lineaire.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t21-matlin-bounds.c
 
 matrice_lineaire_testdynamique.o: matrice_testdynamique.c matrice_lineaire.h utils_matrice.h
@@ -69,7 +69,7 @@ t11-matrix-bounds: matrice.o utils_matrice.o my_memory.o
 matrice_testdynamique: matrice.o utils_matrice.o my_memory.o
 
 t20-matlin: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
-matrice_lineaire_testbornes: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
+t21-matlin-bounds: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 matrice_lineaire_testdynamique: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
 
 memory_testcpy: memory_testcpy.o memory_operations.o vecteur.o utils_vecteur.o my_memory.o
