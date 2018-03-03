@@ -1,16 +1,16 @@
 CC=gcc
-CFLAGS=-Wall -Werror -Wno-uninitialized -g -include my_memory.h
+CFLAGS=-Wall -Werror -Wno-uninitialized -g -include utils_memory.h
 
 PROGRAMS=t00-vector t01-vector-bounds t02-vector-realloc \
          t10-matrix t11-matrix-bounds t12-matrix-realloc \
 	 t20-matlin t21-matlin-bounds t22-matlin-realloc \
-         memory_testcpy memory_testmove memory_testendianess
+         t30-memory-cpy t31-memory-move t32-memory-endianess
 
-EXERCICES=vector.c matrix.c matlin.c memory_operations.c
+EXERCICES=vector.c matrix.c matlin.c memory.c
 
 DATAFILES=data_vector1.txt data_vector2.txt data_matrix1.txt data_matrix2.txt
 
-TDP_FILES=teste_programme Makefile Makefile.defs *.result $(DATAFILES) generer_vecteur generer_matrice \
-          t*.c *utils*.c *utils*.h vector*.h matrix*.h my_memory.h my_memory.c memory_operations.h
+TDP_FILES=teste_programme Makefile Makefile.defs *.result $(DATAFILES) generer_vector generer_matrix \
+          vector.h matrix.h matlin.h memory.h utils*.c utils*.h t*.c 
 
 DIST_FILES=$(TDP_FILES) filtre

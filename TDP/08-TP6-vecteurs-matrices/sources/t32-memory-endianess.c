@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "memory_operations.h"
+#include "memory.h"
 
 int main(void) {
   char tableau[sizeof(int)];

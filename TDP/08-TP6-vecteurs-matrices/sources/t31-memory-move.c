@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "utils_vector.h"
-#include "memory_operations.h"
+#include "memory.h"
 
 int main(void) {
   vector_t* v1 = lit_vecteur("data_vector1.txt");
