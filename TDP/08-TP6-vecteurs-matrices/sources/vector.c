@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "vecteur.h"
+#include "vector.h"
 
 vector_t* vector_new(size_t size) {
   vector_t* v = NULL;

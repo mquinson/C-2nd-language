@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#include "matrice.h"
+#include "matrix.h"
 
 matrix_t* matrix_build(size_t l, size_t c, double* donnees);
 void matrix_print(matrix_t* m);

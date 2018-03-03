@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "matlin.h"
 #include "utils_matlin.h"
 
 matlin_t* matlin_build(size_t l, size_t c, double* donnees) {

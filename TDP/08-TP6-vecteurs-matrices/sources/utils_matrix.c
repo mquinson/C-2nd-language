@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "matrice.h"
-#include "utils_matrice.h"
+#include "utils_matrix.h"
 
 matrix_t* matrix_build(size_t l, size_t c, double* donnees) {
   matrix_t* m;

@@ -5,7 +5,7 @@
 int main(void) {
 
   unsigned int limite_basse = 0;
-  matlin_t* m1 = matlin_read("matrice1.txt");
+  matlin_t* m1 = matlin_read("data_matrix1.txt");
   matlin_set_dynamic(m1);
   unsigned int limite_lignes = matlin_get_linesamount(m1)+10;
   unsigned int limite_colonnes = matlin_get_rowsamount(m1)+10;
@@ -23,7 +23,7 @@ int main(void) {
   }
   matlin_delete(m1);
 
-  matlin_t* m2 = matlin_read("matrice2.txt");
+  matlin_t* m2 = matlin_read("data_matrix2.txt");
   matlin_set_dynamic(m2);
   limite_lignes = matlin_get_linesamount(m2) + 10;
   limite_colonnes = matlin_get_rowsamount(m2) + 10;

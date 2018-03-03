@@ -1,13 +1,13 @@
 #include <stdio.h>
 
-#include "matrice.h"
-#include "utils_matrice.h"
+#include "utils_matrix.h"
 
 int main(void) {
-  matrix_t* m1 = matrix_read("matrice1.txt");
+  matrix_t* m1 = matrix_read("data_matrix1.txt");
   matrix_print(m1);
   matrix_delete(m1);
-  matrix_t* m2 = matrix_read("matrice2.txt");
+
+  matrix_t* m2 = matrix_read("data_matrix2.txt");
   matrix_print(m2);
   matrix_delete(m2);
 

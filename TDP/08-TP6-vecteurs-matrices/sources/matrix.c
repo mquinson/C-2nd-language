@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "matrice.h"
+#include "matrix.h"
 
 /* Private implementation of the matrix datatype */
 struct matrix {

@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "vecteur.h"
-#include "utils_vecteur.h"
+#include "utils_vector.h"
 
 int main(void) {
 

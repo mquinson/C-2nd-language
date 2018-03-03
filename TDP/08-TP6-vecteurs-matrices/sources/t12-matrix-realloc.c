@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-#include "utils_matrice.h"
+#include "utils_matrix.h"
 
 int main(void) {
 
   unsigned int limite_basse = 0;
-  matrix_t* m1 = matrix_read("matrice1.txt");
+  matrix_t* m1 = matrix_read("data_matrix1.txt");
   matrix_set_dynamic(m1);
   unsigned int limite_lignes = matrix_get_linesamount(m1)+10;
   unsigned int limite_colonnes = matrix_get_rowsamount(m1)+10;
@@ -23,7 +23,7 @@ int main(void) {
   }
   matrix_delete(m1);
 
-  matrix_t* m2 = matrix_read("matrice2.txt");
+  matrix_t* m2 = matrix_read("data_matrix2.txt");
   matrix_set_dynamic(m2);
   limite_lignes = matrix_get_linesamount(m2) + 10;
   limite_colonnes = matrix_get_rowsamount(m2) + 10;
