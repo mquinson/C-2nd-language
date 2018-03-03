@@ -3,27 +3,27 @@
 #include "utils_matlin.h"
 
 int main(void) {
-  matlin_t* m1 = lit_matrice("matrice1.txt");
-  for (unsigned int i = 0; i < nb_lignes_matrice(m1) + 100; i++) {
-    for (unsigned int j = 0; j < nb_colonnes_matrice(m1) + 100; j++)
-      if (acces_matrice(m1, i, j) == NULL)
+  matlin_t* m1 = matlin_read("matrice1.txt");
+  for (unsigned int i = 0; i < matlin_get_linesamount(m1) + 100; i++) {
+    for (unsigned int j = 0; j < matlin_get_rowsamount(m1) + 100; j++)
+      if (matlin_celladdr(m1, i, j) == NULL)
         printf("0 ");
       else
         printf("1 ");
     printf("\n");
   }
-  liberer_matrice(m1);
+  matlin_delete(m1);
 
-  matlin_t* m2 = lit_matrice("matrice2.txt");
-  for (unsigned int i = 0; i < nb_lignes_matrice(m2) + 100; i++) {
-    for (unsigned int j = 0; j < nb_colonnes_matrice(m2) + 100; j++)
-      if (acces_matrice(m2, i, j) == NULL)
+  matlin_t* m2 = matlin_read("matrice2.txt");
+  for (unsigned int i = 0; i < matlin_get_linesamount(m2) + 100; i++) {
+    for (unsigned int j = 0; j < matlin_get_rowsamount(m2) + 100; j++)
+      if (matlin_celladdr(m2, i, j) == NULL)
         printf("0 ");
       else
         printf("1 ");
     printf("\n");
   }
-  liberer_matrice(m2);
+  matlin_delete(m2);
 
   printf("Difference malloc/free : %d\n", malloc_counter - free_counter);
 

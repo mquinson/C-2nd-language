@@ -4,41 +4,38 @@
 #include "matrice.h"
 #include "utils_matrice.h"
 
-matrix_t* construit_matrice(size_t l, size_t c, double* donnees) {
+matrix_t* matrix_build(size_t l, size_t c, double* donnees) {
   matrix_t* m;
 
-  m = allouer_matrice(l, c);
+  m = matrix_new(l, c);
   for (unsigned int i = 0; i < l; i++)
       for (unsigned int j = 0; j < c; j++)
-          *acces_matrice(m, i, j) = donnees[i * c + j];
+          *matrix_celladdr(m, i, j) = donnees[i * c + j];
   return m;
 }
 
-void affiche_matrice(matrix_t* m) {
-  for (unsigned int i = 0; i < nb_lignes_matrice(m); i++) {
+void matrix_print(matrix_t* m) {
+  for (unsigned int i = 0; i < matrix_get_linesamount(m); i++) {
     printf("[ ");
-    for (unsigned int j = 0; j < nb_colonnes_matrice(m); j++)
-      printf("%g ",*acces_matrice(m, i, j));
+    for (unsigned int j = 0; j < matrix_get_rowsamount(m); j++)
+      printf("%g ",*matrix_celladdr(m, i, j));
     printf("]\n");
   }
 }
 
-matrix_t* lit_matrice(char* fichier) {
-  matrix_t* m;
-  size_t l, c;
-  FILE* f;
-
-  f = fopen(fichier,"r");
+matrix_t* matrix_read(char* fichier) {
+  FILE* f = fopen(fichier,"r");
   if (!f) {
     fprintf(stderr,"Erreur d'ouverture du fichier de matrice %s\n", fichier);
     exit(1);
   }
+  size_t l, c;
   fscanf(f," %zd %zd", &l, &c);
 
-  m = allouer_matrice(l,c);
+  matrix_t* m = matrix_new(l,c);
   for (unsigned int i = 0; i < l; i++) {
     for (unsigned int j = 0; j < c; j++)
-      fscanf(f," %lg", acces_matrice(m, i, j));
+      fscanf(f," %lg", matrix_celladdr(m, i, j));
   }
   fclose(f);
   return m;

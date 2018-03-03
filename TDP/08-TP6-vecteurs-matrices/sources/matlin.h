@@ -12,7 +12,7 @@ typedef struct matlin matlin_t;
                       bien passee et la matrice invalide si une erreur est survenue
    effets de bord : alloue de la memoire
 */
-matlin_t* allouer_matrice(size_t l, size_t c);
+matlin_t* matlin_new(size_t l, size_t c);
 
 /*
    liberer_matrice
@@ -21,7 +21,7 @@ matlin_t* allouer_matrice(size_t l, size_t c);
    valeur de retour : aucune
    effets de bord : libere de la memoire
 */
-void liberer_matrice(matlin_t* m);
+void matlin_delete(matlin_t* m);
 
 /*
    acces_matrice
@@ -30,7 +30,7 @@ void liberer_matrice(matlin_t* m);
    valeur de retour : un pointeur vers double
    effets de bord : aucun
 */
-double* acces_matrice(matlin_t* m, unsigned int i, unsigned int j);
+double* matlin_celladdr(matlin_t* m, unsigned int i, unsigned int j);
 
 /*
    nb_lignes_matrice
@@ -39,7 +39,7 @@ double* acces_matrice(matlin_t* m, unsigned int i, unsigned int j);
    valeur de retour : le nombre de lignes
    effets de bord : aucun
 */
-size_t nb_lignes_matrice(const matlin_t* m);
+size_t matlin_get_linesamount(const matlin_t* m);
 
 /*
    nb_colonnes_matrice
@@ -48,11 +48,11 @@ size_t nb_lignes_matrice(const matlin_t* m);
    valeur de retour : le nombre de colonnes
    effets de bord : aucun
 */
-size_t nb_colonnes_matrice(const matlin_t* m);
+size_t matlin_get_rowsamount(const matlin_t* m);
 
 /* description: fait en sorte que la matrice devienne dynamique
    (voir la question 3)
  */
-void matlin_rend_dynamique(matlin_t* m);
+void matlin_set_dynamic(matlin_t* m);
 
 #endif

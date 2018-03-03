@@ -5,15 +5,15 @@
 #include "memory_operations.h"
 
 int main(void) {
-  vecteur_t* v1 = lit_vecteur("vecteur1.txt");
-  vecteur_t* v2 = allouer_vecteur(taille_vecteur(v1));
+  vector_t* v1 = lit_vecteur("vecteur1.txt");
+  vector_t* v2 = vector_new(vector_size(v1));
 
-  my_memcpy(acces_vecteur(v2, 0), acces_vecteur(v1, 0),taille_vecteur(v1) * sizeof(double));
+  my_memcpy(vector_celladdr(v2, 0), vector_celladdr(v1, 0),vector_size(v1) * sizeof(double));
 
-  affiche_vecteur(v1);
-  affiche_vecteur(v2);
-  liberer_vecteur(v1);
-  liberer_vecteur(v2);
+  vector_print(v1);
+  vector_print(v2);
+  vector_delete(v1);
+  vector_delete(v2);
 
   printf("Difference malloc/free : %d\n", malloc_counter - free_counter);
   

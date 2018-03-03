@@ -4,10 +4,10 @@
 #include <stddef.h>
 
 typedef struct vector {
-  size_t taille;
-  double* donnees;
-  int dynamique; /* Ignoré jusqu'à la question 3 */
-} vecteur_t;
+  size_t size;
+  double* data;
+  int dynamic; /* Ignoré jusqu'à la question 3 */
+} vector_t;
 
 /* description : alloue un vecteur en memoire
    parametres : la taille du vecteur
@@ -15,32 +15,32 @@ typedef struct vector {
                       bien passee et le vecteur invalide si une erreur est survenue
    effets de bord : alloue de la memoire
 */
-vecteur_t* allouer_vecteur(size_t taille);
+vector_t* vector_new(size_t size);
 
 /* description : libere un vecteur precedemment alloue par alloue_vecteur
    parametres : le vecteur
    valeur de retour : aucune
    effets de bord : libere de la memoire
 */
-void liberer_vecteur(vecteur_t* v);
+void vector_delete(vector_t* v);
 
 /* description : retourne un pointeur vers l'element d'indice i du vecteur
    parametres : le vecteur, l'indice de l'element souhaite
    valeur de retour : un pointeur vers double
    effets de bord : aucun
 */
-double* acces_vecteur(vecteur_t* v, unsigned int i);
+double* vector_celladdr(vector_t* v, unsigned int i);
 
 /* description : retourne le nombre de cases d'un vecteur
    parametres : le vecteur
    valeur de retour : la taille du vecteur
    effets de bord : aucun
 */
-size_t taille_vecteur(const vecteur_t* v);
+size_t vector_size(const vector_t* v);
 
 /* description: fait en sorte que le vecteur devienne dynamique
    (voir la question 3)
  */
-void vecteur_rend_dynamique(vecteur_t* v);
+void vector_set_dynamic(vector_t* v);
 
 #endif

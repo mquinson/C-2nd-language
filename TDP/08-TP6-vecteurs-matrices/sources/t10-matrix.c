@@ -4,12 +4,12 @@
 #include "utils_matrice.h"
 
 int main(void) {
-  matrix_t* m1 = lit_matrice("matrice1.txt");
-  affiche_matrice(m1);
-  liberer_matrice(m1);
-  matrix_t* m2 = lit_matrice("matrice2.txt");
-  affiche_matrice(m2);
-  liberer_matrice(m2);
+  matrix_t* m1 = matrix_read("matrice1.txt");
+  matrix_print(m1);
+  matrix_delete(m1);
+  matrix_t* m2 = matrix_read("matrice2.txt");
+  matrix_print(m2);
+  matrix_delete(m2);
 
   printf("Difference malloc/free : %d\n", malloc_counter - free_counter);
 

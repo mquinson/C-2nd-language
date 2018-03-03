@@ -5,12 +5,13 @@
 
 int main(void) {
 
-  matlin_t* m1 = lit_matrice("matrice1.txt");
-  affiche_matrice(m1);
-  liberer_matrice(m1);
-  matlin_t* m2 = lit_matrice("matrice2.txt");
-  affiche_matrice(m2);
-  liberer_matrice(m2);
+  matlin_t* m1 = matlin_read("matrice1.txt");
+  matlin_print(m1);
+  matlin_delete(m1);
+
+  matlin_t* m2 = matlin_read("matrice2.txt");
+  matlin_print(m2);
+  matlin_delete(m2);
 
   printf("Difference malloc/free : %d\n", malloc_counter - free_counter);
 

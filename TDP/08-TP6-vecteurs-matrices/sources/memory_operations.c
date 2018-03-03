@@ -1,17 +1,17 @@
 #include "memory_operations.h"
 
 void* my_memcpy(void* dst, const void* src, size_t len) {
-  void* resultat;
+  void* result;
   /* SOLUTION */
   char* destination, *source;
 
-  resultat = dst;
+  result = dst;
   destination = (char*) dst;
   source = (char*) src;
   while (len--)
       *(destination++) = *(source++);
   /* FIN */
-  return resultat;
+  return result;
 }
 
 void* my_memmove(void* dst, const void* src, size_t len) {
@@ -35,27 +35,27 @@ void* my_memmove(void* dst, const void* src, size_t len) {
 }
 
 int is_little_endian(void) {
-  int resultat;
+  int result;
   /* SOLUTION */
   char* caractere;
   int entier = 1;
 
   caractere = (char*) &entier;
-  resultat = *caractere;
+  result = *caractere;
   /* FIN */
-  return resultat;
+  return result;
 }
 
 int reverse_endianess(int value) {
-  int resultat;
+  int result;
   /* SOLUTION */
   char* source, *destination;
   int i;
 
   source = (char*) &value;
-  destination = ((char*) &resultat) + sizeof(int);
+  destination = ((char*) &result) + sizeof(int);
   for (i = 0; i < sizeof(int); i++)
       *(--destination) = *(source++);
   /* FIN */
-  return resultat;
+  return result;
 }

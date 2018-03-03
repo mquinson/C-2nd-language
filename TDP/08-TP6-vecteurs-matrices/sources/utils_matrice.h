@@ -5,8 +5,8 @@
 
 #include "matrice.h"
 
-matrix_t* construit_matrice(size_t l, size_t c, double* donnees);
-void affiche_matrice(matrix_t* m);
-matrix_t* lit_matrice(char* fichier);
+matrix_t* matrix_build(size_t l, size_t c, double* donnees);
+void matrix_print(matrix_t* m);
+matrix_t* matrix_read(char* fichier);
 
 #endif

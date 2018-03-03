@@ -3,27 +3,27 @@
 
 #include "utils_vecteur.h"
 
-vecteur_t* construit_vecteur(size_t n, double* donnees) {
-  vecteur_t* v;
+vector_t* construit_vecteur(size_t n, double* donnees) {
+  vector_t* v;
 
-  v = allouer_vecteur(n);
+  v = vector_new(n);
   for (unsigned int i = 0; i < n; i++)
-      *acces_vecteur(v, i) = donnees[i];
+      *vector_celladdr(v, i) = donnees[i];
 
   return v;
 }
 
-void affiche_vecteur(vecteur_t* v) {
-  unsigned int taille = taille_vecteur(v);
+void vector_print(vector_t* v) {
+  unsigned int taille = vector_size(v);
 
   printf("[ ");
   for (unsigned int i = 0; i < taille; i++)
-      printf("%g ", *acces_vecteur(v, i));
+      printf("%g ", *vector_celladdr(v, i));
   printf("]\n");
 }
 
-vecteur_t* lit_vecteur(char* fichier) {
-  vecteur_t* v;
+vector_t* lit_vecteur(char* fichier) {
+  vector_t* v;
   unsigned int n;
   FILE* f;
 
@@ -33,10 +33,10 @@ vecteur_t* lit_vecteur(char* fichier) {
     exit(1);
   }
   fscanf(f, " %d", &n);
-  v = allouer_vecteur(n);
-  v->dynamique = 0;
+  v = vector_new(n);
+  v->dynamic = 0;
   for (unsigned int i = 0; i < n; i++) {
-    fscanf(f, " %lg", acces_vecteur(v, i));
+    fscanf(f, " %lg", vector_celladdr(v, i));
   }
   fclose(f);
 

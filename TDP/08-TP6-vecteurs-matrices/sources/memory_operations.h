@@ -4,7 +4,6 @@
 #include <stddef.h>
 
 /*
-   memcpy
    description : copie une zone memoire vers un autre emplacement
                  les zones ne doivent pas se recouvrir (cf. man)
    parametres : deux pointeurs respectivement vers la zone destination et source
@@ -15,7 +14,6 @@
 void* my_memcpy(void* dst, const void* src, size_t len);
 
 /*
-   memmove
    description : copie une zone memoire vers un autre emplacement
                  les zones peuvent se recouvrir (cf. man)
    parametres : deux pointeurs respectivement vers la zone destination et source
@@ -26,7 +24,6 @@ void* my_memcpy(void* dst, const void* src, size_t len);
 void* my_memmove(void* dst, const void* src, size_t len);
 
 /*
-   is_little_endian
    description : retourne 1 si la machine sur laquelle s'execute la fonction
                  utilise la convention de stockage little endian (poids faible
                  en premier), 0 sinon
@@ -38,7 +35,6 @@ void* my_memmove(void* dst, const void* src, size_t len);
 int is_little_endian(void);
 
 /*
-   reverse_endianess
    description : transforme une donnee representee en little endian en donnee
                  representee en big endian et inversement
    parametres : un entier a convertir

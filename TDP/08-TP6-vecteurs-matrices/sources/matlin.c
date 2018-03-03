@@ -2,81 +2,82 @@
 
 #include "matlin.h"
 
+/* Implementation of the matlin datatype */
 struct matlin {
-  size_t l;
-  size_t c;
-  double* donnees;
-  int dynamique;
+  size_t lines_amount;
+  size_t rows_amount;
+  double* data;
+  int dynamic;
 };
 
-matlin_t* allouer_matrice(size_t l, size_t c) {
+matlin_t* matlin_new(size_t lines_amount, size_t rows_amount) {
   matlin_t* m;
   /* SOLUTION */
   m = malloc(sizeof(*m));
-  if (!m)
+  if (m == NULL)
     abort();
 
-  m->donnees = malloc(sizeof(*m->donnees) * l * c);
-  if (!m->donnees)
+  m->data = malloc(sizeof(*m->data) * lines_amount * rows_amount);
+  if (m->data == NULL)
     abort();
 
-  m->l = l;
-  m->c = c;
+  m->lines_amount = lines_amount;
+  m->rows_amount = rows_amount;
   /* FIN */
   return m;
 }
 
-void liberer_matrice(matlin_t* m) {
+void matlin_delete(matlin_t* m) {
   /* SOLUTION */
-  free(m->donnees);
+  free(m->data);
   free(m);
   /* FIN */
 }
 
-double* acces_matrice(matlin_t* m, unsigned int i, unsigned int j) {
-  double* resultat = NULL;
+double* matlin_celladdr(matlin_t* m, unsigned int i, unsigned int j) {
+  double* result = NULL;
   /* SOLUTION */
-  if (i < m->l && j < m->c)
-    resultat = m->donnees + i * m->c + j;
-  else if (m->dynamique) {
-    size_t nouveau_l = (i >= m->l) ? i + 1 : m->l;
-    size_t nouveau_c = (j >= m->c) ? j + 1 : m->c;
-    double* nouveau_bloc = malloc(sizeof(*m->donnees) * nouveau_l * nouveau_c);
-    if (!nouveau_bloc) {
+  if (i < m->lines_amount && j < m->rows_amount)
+    result = m->data + i * m->rows_amount + j;
+  else if (m->dynamic) {
+    size_t new_lines = (i >= m->lines_amount) ? i + 1 : m->lines_amount;
+    size_t new_rows = (j >= m->rows_amount) ? j + 1 : m->rows_amount;
+    double* new_block = malloc(sizeof(*m->data) * new_lines * new_rows);
+    if (!new_block) {
       abort();
     }
-    for (unsigned int k = 0; k < m->l; k++)
-      for (unsigned int l = 0; l < m->c; l++)
-        nouveau_bloc[k * nouveau_c + l] = m->donnees[k * m->c + l];
-    free(m->donnees);
-    m->donnees = nouveau_bloc;
-    m->l = nouveau_l;
-    m->c = nouveau_c;
-    resultat = m->donnees + i * m->c + j;
+    for (unsigned int k = 0; k < m->lines_amount; k++)
+      for (unsigned int l = 0; l < m->rows_amount; l++)
+        new_block[k * new_rows + l] = m->data[k * m->rows_amount + l];
+    free(m->data);
+    m->data = new_block;
+    m->lines_amount = new_lines;
+    m->rows_amount = new_rows;
+    result = m->data + i * m->rows_amount + j;
 
   } else {
-    resultat = NULL;
+    result = NULL;
   }
   /* FIN */
-  return resultat;
+  return result;
 }
 
-size_t nb_lignes_matrice(const matlin_t* m) {
-  size_t resultat = 0;
+size_t matlin_get_linesamount(const matlin_t* m) {
+  size_t result = 0;
   /* SOLUTION */
-  resultat = m->l;
+  result = m->lines_amount;
   /* FIN */
-  return resultat;
+  return result;
 }
 
-size_t nb_colonnes_matrice(const matlin_t* m) {
-  size_t resultat = 0;
+size_t matlin_get_rowsamount(const matlin_t* m) {
+  size_t result = 0;
   /* SOLUTION */
-  resultat = m->c;
+  result = m->rows_amount;
   /* FIN */
-  return resultat;
+  return result;
 }
 
-void matlin_rend_dynamique(matlin_t* m) {
-  m->dynamique = 1;
+void matlin_set_dynamic(matlin_t* m) {
+  m->dynamic = 1;
 }

@@ -2,60 +2,60 @@
 
 #include "vecteur.h"
 
-vecteur_t* allouer_vecteur(size_t taille) {
-  vecteur_t* v = NULL;
+vector_t* vector_new(size_t size) {
+  vector_t* v = NULL;
   /* SOLUTION */
   v = malloc(sizeof(*v));
-  if (!v)
+  if (v == NULL)
     abort();
 
-  v->donnees = malloc(sizeof(*v->donnees) * taille);
-  if (!v->donnees)
+  v->data = malloc(sizeof(*v->data) * size);
+  if (v->data == NULL)
     abort();
 
-  v->taille = taille;
+  v->size = size;
   /* FIN */
   return v;
 }
 
-void liberer_vecteur(vecteur_t* v) {
+void vector_delete(vector_t* v) {
   /* SOLUTION */
-  free(v->donnees);
+  free(v->data);
   free(v);
   /* FIN */
 }
 
-double* acces_vecteur(vecteur_t* v, unsigned int i) {
-  double* resultat = NULL;
+double* vector_celladdr(vector_t* v, unsigned int i) {
+  double* result = NULL;
   /* SOLUTION */
-  if (i >= v->taille && v->dynamique) {
-    resultat = v->donnees + i;
-    size_t nouvelle_taille = v->taille * 2;
-    while (i >= nouvelle_taille)
-    	nouvelle_taille *= 2;
-    double* nouveau_bloc = realloc(v->donnees, nouvelle_taille * sizeof(*v->donnees));
-    if (nouveau_bloc == NULL) {
+  if (i >= v->size && v->dynamic) {
+    result = v->data + i;
+    size_t new_size = v->size * 2;
+    while (i >= new_size)
+    	new_size *= 2;
+    double* new_block = realloc(v->data, new_size * sizeof(*v->data));
+    if (new_block == NULL) {
     	abort();
     }
-    v->donnees = nouveau_bloc;
-    v->taille = nouvelle_taille;
+    v->data = new_block;
+    v->size = new_size;
   }
-  if (i < v->taille)
-	  resultat = v->donnees + i;
+  if (i < v->size)
+	  result = v->data + i;
   else
-	  resultat = NULL;
+	  result = NULL;
   /* FIN */
-  return resultat;
+  return result;
 }
 
-size_t taille_vecteur(const vecteur_t* v) {
+size_t vector_size(const vector_t* v) {
   size_t resultat = 0;
   /* SOLUTION */
-  resultat = v->taille;
+  resultat = v->size;
   /* FIN */
   return resultat;
 }
 
-void vecteur_rend_dynamique(vecteur_t* v) {
-  v->dynamique = 1;
+void vector_set_dynamic(vector_t* v) {
+  v->dynamic = 1;
 }
