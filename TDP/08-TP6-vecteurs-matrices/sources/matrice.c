@@ -2,15 +2,16 @@
 
 #include "matrice.h"
 
-struct matrice {
+/* implementation de la structure matrice */
+struct matrix {
   size_t l;
   size_t c;
   double** donnees;
   int dynamique;
 };
 
-matrice_t* allouer_matrice(size_t l, size_t c) {
-  matrice_t* m;
+matrix_t* allouer_matrice(size_t l, size_t c) {
+  matrix_t* m = NULL;
   /* SOLUTION */
   m = malloc(sizeof(*m));
   if (!m)
@@ -32,7 +33,7 @@ matrice_t* allouer_matrice(size_t l, size_t c) {
   return m;
 }
 
-void liberer_matrice(matrice_t* m) {
+void liberer_matrice(matrix_t* m) {
   /* SOLUTION */
   for (unsigned int i = 0; i < m->l; i++) {
     free(m->donnees[i]);
@@ -42,8 +43,8 @@ void liberer_matrice(matrice_t* m) {
   /* FIN */
 }
 
-double* acces_matrice(matrice_t* m, unsigned int i, unsigned int j) {
-  double* resultat;
+double* acces_matrice(matrix_t* m, unsigned int i, unsigned int j) {
+  double* resultat = NULL;
   /* SOLUTION */
   if (i < m->l && j < m->c)
     resultat = & m->donnees[i][j];
@@ -81,7 +82,7 @@ double* acces_matrice(matrice_t* m, unsigned int i, unsigned int j) {
   return resultat;
 }
 
-size_t nb_lignes_matrice(const matrice_t* m) {
+size_t nb_lignes_matrice(const matrix_t* m) {
   size_t resultat;
   /* SOLUTION */
   resultat = m->l;
@@ -89,7 +90,7 @@ size_t nb_lignes_matrice(const matrice_t* m) {
   return resultat;
 }
 
-size_t nb_colonnes_matrice(const matrice_t* m) {
+size_t nb_colonnes_matrice(const matrix_t* m) {
   size_t resultat;
   /* SOLUTION */
   resultat = m->c;
@@ -97,6 +98,6 @@ size_t nb_colonnes_matrice(const matrice_t* m) {
   return resultat;
 }
 
-void matrice_rend_dynamique(matrice_t* m) {
+void matrice_rend_dynamique(matrix_t* m) {
   m->dynamique = 1;
 }

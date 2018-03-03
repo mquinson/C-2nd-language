@@ -1,7 +1,8 @@
 #ifndef MATRICE_H
 #define MATRICE_H
 
-typedef struct matrice matrice_t;
+/* La structure matrix_t est opaque: son implémentation est privée, cachée dans matrice.c */
+typedef struct matrix matrix_t;
 
 /*
    allouer_matrice
@@ -11,7 +12,7 @@ typedef struct matrice matrice_t;
                       bien passee et la matrice invalide si une erreur est survenue
    effets de bord : alloue de la memoire
 */
-matrice_t* allouer_matrice(size_t l, size_t c);
+matrix_t* allouer_matrice(size_t l, size_t c);
 
 /*
    liberer_matrice
@@ -20,7 +21,7 @@ matrice_t* allouer_matrice(size_t l, size_t c);
    valeur de retour : aucune
    effets de bord : libere de la memoire
 */
-void liberer_matrice(matrice_t* m);
+void liberer_matrice(matrix_t* m);
 
 /*
    acces_matrice
@@ -29,7 +30,7 @@ void liberer_matrice(matrice_t* m);
    valeur de retour : un pointeur vers double
    effets de bord : aucun
 */
-double* acces_matrice(matrice_t* m, unsigned int i, unsigned int j);
+double* acces_matrice(matrix_t* m, unsigned int i, unsigned int j);
 
 /*
    nb_lignes_matrice
@@ -38,7 +39,7 @@ double* acces_matrice(matrice_t* m, unsigned int i, unsigned int j);
    valeur de retour : le nombre de lignes
    effets de bord : aucun
 */
-size_t nb_lignes_matrice(const matrice_t* m);
+size_t nb_lignes_matrice(const matrix_t* m);
 
 /*
    nb_colonnes_matrice
@@ -47,11 +48,11 @@ size_t nb_lignes_matrice(const matrice_t* m);
    valeur de retour : le nombre de colonnes
    effets de bord : aucun
 */
-size_t nb_colonnes_matrice(const matrice_t* m);
+size_t nb_colonnes_matrice(const matrix_t* m);
 
 /* description: fait en sorte que la matrice devienne dynamique
    (voir la question 3)
 */
-void matrice_rend_dynamique(matrice_t* m);
+void matrice_rend_dynamique(matrix_t* m);
 
 #endif

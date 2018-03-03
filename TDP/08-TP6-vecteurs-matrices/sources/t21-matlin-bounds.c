@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "utils_matrice.h"
+#include "utils_matlin.h"
 
 int main(void) {
-  matrice_t* m1 = lit_matrice("matrice1.txt");
+  matlin_t* m1 = lit_matrice("matrice1.txt");
   for (unsigned int i = 0; i < nb_lignes_matrice(m1) + 100; i++) {
     for (unsigned int j = 0; j < nb_colonnes_matrice(m1) + 100; j++)
       if (acces_matrice(m1, i, j) == NULL)
@@ -14,7 +14,7 @@ int main(void) {
   }
   liberer_matrice(m1);
 
-  matrice_t* m2 = lit_matrice("matrice2.txt");
+  matlin_t* m2 = lit_matrice("matrice2.txt");
   for (unsigned int i = 0; i < nb_lignes_matrice(m2) + 100; i++) {
     for (unsigned int j = 0; j < nb_colonnes_matrice(m2) + 100; j++)
       if (acces_matrice(m2, i, j) == NULL)

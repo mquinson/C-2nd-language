@@ -27,8 +27,8 @@ utils_vecteur.o: utils_vecteur.c vecteur.h utils_vecteur.h
 utils_matrice.o: utils_matrice.c matrice.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -include matrice.h utils_matrice.c
 
-utils_matrice_lineaire.o: utils_matrice.c matrice_lineaire.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h utils_matrice.c
+utils_matlin.o: utils_matrice.c matlin.h utils_matlin.h
+	$(CC) $(CFLAGS) -c -o $@ -include matlin.h utils_matlin.c
 
 t10-matrix.o: t10-matrix.c matrice.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice.h t10-matrix.c
@@ -36,17 +36,17 @@ t10-matrix.o: t10-matrix.c matrice.h utils_matrice.h
 t11-matrix-bounds.o: t11-matrix-bounds.c matrice.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice.h t11-matrix-bounds.c
 
-matrice_testdynamique.o: matrice_testdynamique.c matrice.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice.h matrice_testdynamique.c
+t12-matrix-realloc.o: t12-matrix-realloc.c matrice.h utils_matrice.h
+	$(CC) $(CFLAGS) -c -o $@ -include matrice.h t12-matrix-realloc.c
 
-t20-matlin.o: t20-matlin.c matrice_lineaire.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t20-matlin.c
+t20-matlin.o: t20-matlin.c matlin.h utils_matlin.h
+	$(CC) $(CFLAGS) -c -o $@ -include matlin.h t20-matlin.c
 
-t21-matlin-bounds.o: t21-matlin-bounds.c matrice_lineaire.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t21-matlin-bounds.c
+t21-matlin-bounds.o: t21-matlin-bounds.c matlin.h utils_matlin.h
+	$(CC) $(CFLAGS) -c -o $@ -include matlin.h t21-matlin-bounds.c
 
-matrice_lineaire_testdynamique.o: matrice_testdynamique.c matrice_lineaire.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h matrice_testdynamique.c
+t22-matlin-realloc.o: t22-matlin-realloc.c matlin.h utils_matlin.h
+	$(CC) $(CFLAGS) -c -o $@ -include matlin.h t22-matlin-realloc.c
 
 my_memory.o: my_memory.c
 	$(CC) -Wall -Werror -c $<
@@ -66,11 +66,11 @@ vecteur.o: vecteur.h
 
 t10-matrix: matrice.o utils_matrice.o my_memory.o
 t11-matrix-bounds: matrice.o utils_matrice.o my_memory.o
-matrice_testdynamique: matrice.o utils_matrice.o my_memory.o
+t12-matrix-realloc: matrice.o utils_matrice.o my_memory.o
 
-t20-matlin: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
-t21-matlin-bounds: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
-matrice_lineaire_testdynamique: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
+t20-matlin: matlin.o utils_matlin.o my_memory.o
+t21-matlin-bounds: matlin.o utils_matlin.o my_memory.o
+t22-matlin-realloc: matlin.o utils_matlin.o my_memory.o
 
 memory_testcpy: memory_testcpy.o memory_operations.o vecteur.o utils_vecteur.o my_memory.o
 memory_testmove: memory_testmove.o memory_operations.o vecteur.o utils_vecteur.o my_memory.o

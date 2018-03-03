@@ -2,9 +2,8 @@ CC=gcc
 CFLAGS=-Wall -Werror -Wno-uninitialized -g -include my_memory.h
 
 PROGRAMS=t00-vector t01-vector-bounds t02-vector-realloc \
-         t10-matrix t11-matrix-bounds \
-	 t20-matlin t21-matlin-bounds \
-         matrice_testdynamique matrice_lineaire_testdynamique \
+         t10-matrix t11-matrix-bounds t12-matrix-realloc \
+	 t20-matlin t21-matlin-bounds t22-matlin-realloc \
          memory_testcpy memory_testmove memory_testendianess
 
 EXERCICES=matrice_lineaire.c matrice_lineaire_dynamique.c matrice.c \

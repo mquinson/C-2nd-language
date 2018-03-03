@@ -1,14 +1,14 @@
 #include <stdio.h>
 
-#include "matrice.h"
-#include "utils_matrice.h"
+#include "matlin.h"
+#include "utils_matlin.h"
 
 int main(void) {
 
-  matrice_t* m1 = lit_matrice("matrice1.txt");
+  matlin_t* m1 = lit_matrice("matrice1.txt");
   affiche_matrice(m1);
   liberer_matrice(m1);
-  matrice_t* m2 = lit_matrice("matrice2.txt");
+  matlin_t* m2 = lit_matrice("matrice2.txt");
   affiche_matrice(m2);
   liberer_matrice(m2);
 

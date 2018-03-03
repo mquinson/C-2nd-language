@@ -1,16 +1,16 @@
 #include <stdlib.h>
 
-#include "matrice_lineaire.h"
+#include "matlin.h"
 
-struct matrice {
+struct matlin {
   size_t l;
   size_t c;
   double* donnees;
   int dynamique;
 };
 
-matrice_t* allouer_matrice(size_t l, size_t c) {
-  matrice_t* m;
+matlin_t* allouer_matrice(size_t l, size_t c) {
+  matlin_t* m;
   /* SOLUTION */
   m = malloc(sizeof(*m));
   if (!m)
@@ -26,14 +26,14 @@ matrice_t* allouer_matrice(size_t l, size_t c) {
   return m;
 }
 
-void liberer_matrice(matrice_t* m) {
+void liberer_matrice(matlin_t* m) {
   /* SOLUTION */
   free(m->donnees);
   free(m);
   /* FIN */
 }
 
-double* acces_matrice(matrice_t* m, unsigned int i, unsigned int j) {
+double* acces_matrice(matlin_t* m, unsigned int i, unsigned int j) {
   double* resultat = NULL;
   /* SOLUTION */
   if (i < m->l && j < m->c)
@@ -61,7 +61,7 @@ double* acces_matrice(matrice_t* m, unsigned int i, unsigned int j) {
   return resultat;
 }
 
-size_t nb_lignes_matrice(const matrice_t* m) {
+size_t nb_lignes_matrice(const matlin_t* m) {
   size_t resultat = 0;
   /* SOLUTION */
   resultat = m->l;
@@ -69,7 +69,7 @@ size_t nb_lignes_matrice(const matrice_t* m) {
   return resultat;
 }
 
-size_t nb_colonnes_matrice(const matrice_t* m) {
+size_t nb_colonnes_matrice(const matlin_t* m) {
   size_t resultat = 0;
   /* SOLUTION */
   resultat = m->c;
@@ -77,6 +77,6 @@ size_t nb_colonnes_matrice(const matrice_t* m) {
   return resultat;
 }
 
-void matrice_rend_dynamique(matrice_t* m) {
+void matlin_rend_dynamique(matlin_t* m) {
   m->dynamique = 1;
 }

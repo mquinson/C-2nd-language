@@ -1,12 +1,12 @@
 #include <stdio.h>
 
-#include "utils_matrice.h"
+#include "utils_matlin.h"
 
 int main(void) {
 
   unsigned int limite_basse = 0;
-  matrice_t* m1 = lit_matrice("matrice1.txt");
-  matrice_rend_dynamique(m1);
+  matlin_t* m1 = lit_matrice("matrice1.txt");
+  matlin_rend_dynamique(m1);
   unsigned int limite_lignes = nb_lignes_matrice(m1)+10;
   unsigned int limite_colonnes = nb_colonnes_matrice(m1)+10;
   for (unsigned int i = limite_lignes; i > limite_basse; i--)
@@ -23,8 +23,8 @@ int main(void) {
   }
   liberer_matrice(m1);
 
-  matrice_t* m2 = lit_matrice("matrice2.txt");
-  matrice_rend_dynamique(m2);
+  matlin_t* m2 = lit_matrice("matrice2.txt");
+  matlin_rend_dynamique(m2);
   limite_lignes = nb_lignes_matrice(m2) + 10;
   limite_colonnes = nb_colonnes_matrice(m2) + 10;
   for (unsigned int i = limite_basse; i < limite_lignes; i++)
