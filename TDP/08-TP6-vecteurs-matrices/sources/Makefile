@@ -39,17 +39,17 @@ utils_matrice_lineaire_dynamique.o: utils_matrice.c matrice_lineaire_dynamique.h
 t10-matrix.o: t10-matrix.c matrice.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice.h t10-matrix.c
 
-matrice_testbornes.o: matrice_testbornes.c matrice.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice.h matrice_testbornes.c
+t11-matrix-bounds.o: t11-matrix-bounds.c matrice.h utils_matrice.h
+	$(CC) $(CFLAGS) -c -o $@ -include matrice.h t11-matrix-bounds.c
 
 matrice_testdynamique.o: matrice_testdynamique.c matrice_dynamique.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice_dynamique.h matrice_testdynamique.c
 
-t20-matblock.o: t20-matblock.c matrice_lineaire.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t20-matblock.c
+t20-matlin.o: t20-matlin.c matrice_lineaire.h utils_matrice.h
+	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t20-matlin.c
 
-matrice_lineaire_testbornes.o: matrice_testbornes.c matrice_lineaire.h utils_matrice.h
-	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h matrice_testbornes.c
+matrice_lineaire_testbornes.o: t21-matlin-bounds.c matrice_lineaire.h utils_matrice.h
+	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire.h t21-matlin-bounds.c
 
 matrice_lineaire_testdynamique.o: matrice_testdynamique.c matrice_lineaire_dynamique.h utils_matrice.h
 	$(CC) $(CFLAGS) -c -o $@ -include matrice_lineaire_dynamique.h matrice_testdynamique.c
@@ -74,7 +74,7 @@ t02-vector-realloc: vecteur.o utils_vecteur.o my_memory.o
 vecteur.o: vecteur.h
 
 t10-matrix: matrice.o utils_matrice.o my_memory.o
-matrice_testbornes: matrice.o utils_matrice.o my_memory.o
+t11-matrix-bounds: matrice.o utils_matrice.o my_memory.o
 matrice_testdynamique: matrice_dynamique.o utils_matrice_dynamique.o my_memory.o
 
 t20-matblock: matrice_lineaire.o utils_matrice_lineaire.o my_memory.o
