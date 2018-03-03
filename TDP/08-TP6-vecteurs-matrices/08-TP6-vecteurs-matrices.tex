@@ -61,27 +61,27 @@ qui affiche les différences ligne par ligne. Il est bien entendu possible de
 modifier \texttt{toto.result} pour faire en sorte que les tests ne détectent
 plus le problème, mais ce n'est pas l'objectif ;)
 
-Pour comprendre votre segfault, utilisez valgrind en exécutant:
+Pour comprendre vos segfaults, utilisez valgrind en exécutant:
 \run{valgrind --leak-check=full ./toto}
 
 \begin{Exercice} \textbf{Vecteurs.}
   Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
   vecteur.
 
-  \Question Complétez \file{vecteur.c} qui contient toutes les
+  \Question Complétez \file{vector.c} qui contient toutes les
   fonctions de gestion de vecteur que nous voulons implémenter. Le
-  fichier \file{vecteur.h} contient toutes les informations
+  fichier \file{vector.h} contient toutes les informations
   nécessaires : description des fonctions et déclaration du type
   vecteur. Une fois toutes les fonctions complétées, tapez \run{make
-    t00-vector} pour compiler, \run{./t00-vector} pour exécuter le
+    t11-vector} pour compiler, \run{./t11-vector} pour exécuter le
   programme de test et make test pour tester si le résultat du
   programme de test est correct (s'il affiche la même chose que ce qui
-  se trouve dans \file{t00-vector.result}).
+  se trouve dans \file{t11-vector.result}).
 
   \Question Ajoutez un test dans la fonction d'accès, et renvoyez NULL
   si l'indice demandé est en dehors des bornes de l'objet
   concerné. Testez votre modification avec le programme
-  \run{./t01-vector-bound}
+  \run{./t12-vector-bound}
 
   \Question On a supposé à la question précédente qu'accéder à une
   case inexistante est une erreur. Parfois, on préfère faire en sorte
@@ -93,14 +93,13 @@ Pour comprendre votre segfault, utilisez valgrind en exécutant:
   utilisera le comportement de la question précédente: un accès à une
   case inexistante renvoi NULL. Si le champ vaut VRAI
   (\texttt{dynamique != 0}), il faut agrandir le tableau (avec
-  \texttt{realloc}) quand l'indice dépasse la borne.
+  \texttt{realloc()}) quand l'indice dépasse la borne.
 
-  Testez votre modification avec le programme \run{./t02-vector-realloc}.
+  Testez votre modification avec le programme \run{./t13-vector-realloc}.
 \end{Exercice}
 
-\begin{Exercice} \textbf{Matrices.}  Complétez le fichier
-  \file{matrice.c} pour la gestion d'un type \texttt{matrice\_t},
-  représenté ainsi:
+\begin{Exercice} \textbf{Matrices.}  On veut implémenter un type
+  \texttt{matrix\_t}, représentant les matrices ainsi:
   
   \smallskip\noindent
   \begin{minipage}{.5\linewidth}%
@@ -122,13 +121,6 @@ for (int i = 0; i < 10; i++)
         tableau[i][j] = 0;
 \end{Verbatim}
 
-
-  % La seule
-%   différence avec un tableau alloué de manière statique est le type des objets
-%   manipulés : dans le cas dynamique ce sera un tableau de pointeurs, dans le
-%   cas statique ce sera un tableau de tableaux (les tableaux sont réellement
-%   stockés les uns après les autres en mémoire).
-% ;
 \end{minipage}\hfill\begin{minipage}{.48\linewidth}
   \includegraphics[width=\linewidth]{tableau.pdf}
 \end{minipage}
@@ -158,94 +150,75 @@ for (int i = 0; i < 10; i++) {
 \end{Verbatim}
 
 
-  \Question Complétez le fichier \file{matrice.c} qui contient toutes les
+  \Question Complétez le fichier \file{matrix.c} qui contient toutes les
   fonctions de gestion de matrice que nous voulons implémenter. Le fichier
-  \file{matrice.h} contient toutes les informations nécessaires : description
-  des fonctions et déclaration du type matrice. Une fois les fonctions
-  complétées, tapez \run{make t10-matrix} pour compiler,
-  \run{./make t10-matrix} pour exécuter le programme de test et \run{make
+  \file{matrix.h} contient toutes les informations nécessaires : description
+  des fonctions et déclaration du type \texttt{matrix\_t}. Une fois les fonctions
+  complétées, tapez \run{make t21-matrix} pour compiler,
+  \run{./make t21-matrix} pour exécuter le programme de test et \run{make
     test} pour tester si le résultat du programme de test est correct.
 
   \Question Modifiez votre fonction d'accès pour renvoyer NULL si
   l'on accède à une case qui n'existe pas, et testez votre travail
-  avec le test \run{./t11-matrix-bounds}.
+  avec \run{./t22-matrix-bounds}.
 
+  \Question Modifiez maintenant votre fonction d'accès pour qu'elle
+  augmente la taille de la matrice lorsqu'on accède à une case qui
+  n'existe pas encore, à condition que la matrice soit
+  dynamique. Testez votre travail avec \run{./t23-matrix-realloc}
   
 \end{Exercice}
 
 
 \medskip
-
-
-
-
-
 \begin{Exercice} \textbf{Matrices linéaires (optionnel)} 
 
-  Nous souhaitons réaliser les fonctions nécessaires à la gestion d'un type
-  matrice, où les matrices sont représentées par un seul tableau
-  unidimensionel. Dans ce cas, les lignes de la matrice sont stockées les unes
-  après les autres et la fonction d'accès va devoir faire la traduction d'un
-  couple d'indices vers un unique indice dans le tableau (l'avantage est que
-  l'on économise une indirection ainsi que le coût des structures de gestion
-  mémoire associées à chaque \texttt{malloc} par le système). La figure
-  suivante décrit l'organisation de nos matrices en mémoire :
+  En pratique, les matrices sont très rarement représentées en mémoire
+  comme nous avons fait à l'exercice précédent. Au lieu de cela, on
+  utilise un seul gros tableau unidimensionel. Les lignes de la
+  matrice sont alors stockées les unes après les autres, de façon
+  contiguë. La fonction d'accès traduit un couple d'indices de la
+  matrice en un unique indice dans le tableau.
+%
+  On économise ainsi une indirection, ainsi que le coût des structures
+  de gestion mémoire associées à chaque \texttt{malloc} par le
+  système.  Les tableaux multidimensionels statiques sont
+  automatiquement stockés sous cette forme en mémoire.
 
   \centerline{\includegraphics[width=\linewidth]{tableau-lineaire.pdf}}
 
-  Complétez le fichier \file{matrice\_lineaire.c} qui contient toutes les
-  fonctions de gestion de matrice que nous voulons implémenter. Le fichier
-  \file{matrice\_lineaire.h} contient toutes les informations nécessaires :
-  description des fonctions et déclaration du type matrice. Une fois les
-  fonctions complétées, tapez
-  
-  \noindent\run{make matrice\_lineaire\_testbase} pour
-  compiler, \run{./matrice\_lineaire\_testbase} pour exécuter le programme de
-  test et \run{make test} pour tester si le résultat du programme de test est
-  correct.
+  \Question Implémentez le type \texttt{matlin\_t} (pour
+  \textit{mat}rice \textit{lin}éaire) dans le fichier
+  \file{matlin.c}. Comme d'habitude, la documentation se trouve dans
+  \file{matlin.h} et vous pouvez tester votre travail avec
+  \run{./t31-matlin}.
+
+  \Question Étendez votre fonction d'accès afin de retourner NULL
+  quand on accède à une case inexistante, et testez votre travail avec
+  \run{./t32-matlin-bounds}.
+
+  \Question Étendez à nouveau votre fonction d'accès afin d'agrandir
+  la matrice lorsqu'on accède à une case inexistante d'une matrice
+  dynamique, puis testez votre travail avec \run{./t33-matlin-realloc}.
 \end{Exercice}
 
-\begin{Exercice} \textbf{Vérifier les bornes (optionnel)}
-
-  Reprenez les trois exercices précédents en ajoutant un test dans la fonction
-  d'accès permettant de renvoyer NULL si les indices demandés sont en dehors
-  des bornes de l'objet concerné.
-\end{Exercice}
-
-\begin{Exercice} \textbf{Réallocation dynamique (optionnel)}
-
-  Reprenez les trois premiers exercices en ajoutant une réallocation dynamique
-  des objets dans la fonction d'accès. Le comportement de cette fonction doit
-  alors être le suivant :
-  \begin{itemize}
-  \item si les indices sont dans les bornes de l'objet retourner le pointeur
-    d'accès au bon élément;
-  \item si un des indices dépasse les bornes de l'objet tenter de réallouer
-    plus de mémoire et renvoyer le pointeur d'accès au bon élément si la
-    réallocation réussit et \verb~abort()~ sinon.
-  \end{itemize}
-  
-  Pour la réallocation, on pourra utiliser au choix un \texttt{malloc} d'un
-  bloc plus gros suivi d'une copie ou bien l'appel système \texttt{realloc}
-  dont on obtient la description avec la commande \run{man 3 realloc}.
-
-  Complétez \file{vecteur\_dynamique.c}, \file{matrice\_dynamique.c} et
-  \file{matrice\_lineaire\_dynamique.c}.
-\end{Exercice}
 
 \begin{Exercice}\textbf{Opérations mémoire (optionnel)}
-Implémentez les fonctions de manipulation mémoire suivantes :
+Complétez le fichier \file{memory.c} afin d'implémenter les fonctions de manipulation mémoire suivantes:
 \begin{itemize}
-\item \texttt{my\_memcpy} : copie d'une zone en mémoire de la même manière que
+\item \texttt{my\_memcpy}: copie d'une zone en mémoire de la même manière que
   \texttt{memcpy} (cf. man);
-\item \texttt{my\_memmove} : copie d'une zone en mémoire avec recouvrement
-  possible.  (cf. \texttt{man memmove});
-\item \texttt{is\_little\_endian} : renvoie vrai si l'architecture cible
-  utilise la convention \textit{little endian} pour la représentation des entiers en
-  mémoire;
-\item \texttt{reverse\_endianess} : renvoie la valeur passée en argument avec
-  ses octets inversé.
+\item \texttt{my\_memmove}: copie d'une zone en mémoire avec
+  recouvrement possible, c'est-à-dire que la zone à écrire peut
+  chevaucher partiellement la zone à lire (cf. \texttt{man
+    memmove}). Il est parfois nécessaire de commencer par recopier les
+  octets de la fin;
+\item \texttt{is\_little\_endian}: renvoie vrai si l'architecture
+  cible utilise la convention \textit{little endian};
+\item \texttt{reverse\_endianess}: renvoie la valeur passée en
+  argument avec ses octets inversé.
 \end{itemize}
-  Le fichier à compléter est \file{memory\_operations.c}. 
+Vérifiez votre travail avec \run{./t41-memory-cpy} \run{./t42-memory-move} et
+\run{./t43-memory-endianess}.
 \end{Exercice}
 \end{document}

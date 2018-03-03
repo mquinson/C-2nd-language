@@ -38,31 +38,31 @@ utils_matrix.o: utils_matrix.c matrix.h utils_matrix.h
 utils_matlin.o: utils_matlin.c matlin.h utils_matlin.h
 
 vector.o: vector.h
-t00-vector:         vector.o utils_vector.o utils_memory.o
-t01-vector-bounds:  vector.o utils_vector.o utils_memory.o
-t02-vector-realloc: vector.o utils_vector.o utils_memory.o
+t11-vector:         vector.o utils_vector.o utils_memory.o
+t12-vector-bounds:  vector.o utils_vector.o utils_memory.o
+t13-vector-realloc: vector.o utils_vector.o utils_memory.o
 
-t10-matrix.o:         t10-matrix.c         matrix.h utils_matrix.h
-t11-matrix-bounds.o:  t11-matrix-bounds.c  matrix.h utils_matrix.h
-t12-matrix-realloc.o: t12-matrix-realloc.c matrix.h utils_matrix.h
-t10-matrix:          matrix.o utils_matrix.o utils_memory.o
-t11-matrix-bounds:   matrix.o utils_matrix.o utils_memory.o
-t12-matrix-realloc:  matrix.o utils_matrix.o utils_memory.o
+t21-matrix.o:        matrix.h utils_matrix.h
+t22-matrix-bounds.o: matrix.h utils_matrix.h
+t23-matrix-realloc.o:matrix.h utils_matrix.h
+t21-matrix:          matrix.o utils_matrix.o utils_memory.o
+t22-matrix-bounds:   matrix.o utils_matrix.o utils_memory.o
+t23-matrix-realloc:  matrix.o utils_matrix.o utils_memory.o
 
-t20-matlin.o:         t20-matlin.c         matlin.h utils_matlin.h
-t21-matlin-bounds.o:  t21-matlin-bounds.c  matlin.h utils_matlin.h
-t22-matlin-realloc.o: t22-matlin-realloc.c matlin.h utils_matlin.h
-t20-matlin:          matlin.o utils_matlin.o utils_memory.o
-t21-matlin-bounds:   matlin.o utils_matlin.o utils_memory.o
-t22-matlin-realloc:  matlin.o utils_matlin.o utils_memory.o
+t31-matlin.o:        matlin.h utils_matlin.h
+t32-matlin-bounds.o: matlin.h utils_matlin.h
+t22-matlin-realloc.o:matlin.h utils_matlin.h
+t31-matlin:          matlin.o utils_matlin.o utils_memory.o
+t32-matlin-bounds:   matlin.o utils_matlin.o utils_memory.o
+t33-matlin-realloc:  matlin.o utils_matlin.o utils_memory.o
 
 memory.o: memory.h
-t30-memory-cpy.o:       memory.h vector.h utils_vector.h
-t31-memory-move.o:      memory.h vector.h utils_vector.h
-t32-memory-endianess.o: memory.h
-t30-memory-cpy:      memory.o utils_memory.o vector.o utils_vector.o
-t31-memory-move:     memory.o utils_memory.o vector.o utils_vector.o
-t32-memory-endianess:memory.o utils_memory.o
+t41-memory-cpy.o:       memory.h vector.h utils_vector.h
+t42-memory-move.o:      memory.h vector.h utils_vector.h
+t43-memory-endianess.o: memory.h
+t41-memory-cpy:         memory.o utils_memory.o vector.o utils_vector.o
+t42-memory-move:        memory.o utils_memory.o vector.o utils_vector.o
+t43-memory-endianess:   memory.o utils_memory.o
 
 # Regenere les donnees et les fichiers resultats correspondants
 data_vector1.txt data_vector2.txt: generer_vector
