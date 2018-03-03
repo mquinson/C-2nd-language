@@ -1,0 +1,8 @@
+t11-vector t12-vector-bounds t13-vector-realloc
+t21-matrix t22-matrix-bounds t23-matrix-realloc
+t31-matlin t32-matlin-bounds t33-matlin-realloc
+t41-memory-cpy t42-memory-move t43-memory-endianess
+generer_matrix generer_vector
+
+*.output *.o
+

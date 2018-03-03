@@ -5,8 +5,7 @@ all: $(PROGRAMS) generer_vector generer_matrix
 test: $(PROGRAMS)
 	@echo;echo "*** TESTS ***";echo;\
 	chmod +x teste_programme; \
-	for file in $^;\
-	do echo -n "$$file : ";\
+	for file in $^; do\
 	   ./teste_programme $$file 2>/dev/null;\
 	done
 
@@ -28,7 +27,7 @@ utils_memory.o: utils_memory.c
 
 clean:
 	rm -f *.o $(PROGRAMS) *.output generer_matrix generer_vector
-
+	
 distclean: clean
 	rm -f $(DATAFILES)
 

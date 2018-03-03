@@ -45,21 +45,21 @@ Vous trouverez dans cette archive plusieurs programmes à compléter. Vous pouve
 compiler et tester tous les exercices de la séance avec la commande \run{make
   test}
 
-Chaque test correspond à un programme (le nom du programme s'affiche avant
-ECHEC ou SUCCES) que vous pouvez exécuter indépendemment pour déterminer vos
-erreurs. Le test \texttt{$<$toto$>$} est passé si votre programme \texttt{toto}
-affiche exactement la même chose que ce qui se trouve dans le fichier
-\texttt{toto.result}. N'hésitez pas à consulter le contenu des fichiers fournis
-pour comprendre le fonctionnement de l'ensemble. Si votre programme vous semble
-fonctionner, mais que la suite de tests vous indique le contraire, comparez le
-contenu du fichier \texttt{toto.output} produit par votre programme au fichier
-\texttt{toto.result}, qui est la sortie attendue par la suite de tests. Pour
-cela, vous pouvez utiliser la commande
-
-\noindent\run{diff -u toto.result toto.output}
-qui affiche les différences ligne par ligne. Il est bien entendu possible de
-modifier \texttt{toto.result} pour faire en sorte que les tests ne détectent
-plus le problème, mais ce n'est pas l'objectif ;)
+Chaque test correspond à un programme (le nom du programme s'affiche
+après ECHEC ou SUCCES) que vous pouvez exécuter indépendemment pour
+déterminer vos erreurs. Le test \texttt{$<$toto$>$} est passé si votre
+programme \texttt{toto} affiche exactement la même chose que ce qui se
+trouve dans le fichier \texttt{toto.result}. N'hésitez pas à consulter
+le contenu des fichiers fournis pour comprendre le fonctionnement de
+l'ensemble. Si votre programme vous semble fonctionner, mais que la
+suite de tests vous indique le contraire, comparez le contenu du
+fichier \texttt{toto.output} produit par votre programme au fichier
+\texttt{toto.result}, qui est la sortie attendue par la suite de
+tests. Utilisez pour cela la commande \run{diff -u toto.result
+  toto.output} qui affiche les différences ligne par ligne. Il est
+bien entendu possible de modifier \texttt{toto.result} pour faire en
+sorte que les tests ne détectent plus le problème, mais ce n'est pas
+l'objectif ;)
 
 Pour comprendre vos segfaults, utilisez valgrind en exécutant:
 \run{valgrind --leak-check=full ./toto}
@@ -88,11 +88,11 @@ Pour comprendre vos segfaults, utilisez valgrind en exécutant:
   que le vecteur grandisse automatiquement pour créer à la demande les
   cases inexistantes. Comme il est difficile de prédire le
   comportement souhaité par l'utilisateur de la bibliothèque, on va
-  configurer le comportement avec le champ \texttt{dynamique} de la
-  structure vecteur. S'il vaut FAUX (\texttt{dynamique == 0}), on
+  configurer le comportement avec le champ \texttt{dynamic} de la
+  structure vecteur. S'il vaut FAUX (\texttt{dynamic == 0}), on
   utilisera le comportement de la question précédente: un accès à une
   case inexistante renvoi NULL. Si le champ vaut VRAI
-  (\texttt{dynamique != 0}), il faut agrandir le tableau (avec
+  (\texttt{dynamic != 0}), il faut agrandir le tableau (avec
   \texttt{realloc()}) quand l'indice dépasse la borne.
 
   Testez votre modification avec le programme \run{./t13-vector-realloc}.

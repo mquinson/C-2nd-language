@@ -10,7 +10,7 @@ EXERCICES=vector.c matrix.c matlin.c memory.c
 
 DATAFILES=data_vector1.txt data_vector2.txt data_matrix1.txt data_matrix2.txt
 
-TDP_FILES=teste_programme Makefile Makefile.defs *.result $(DATAFILES) generer_vector generer_matrix \
-          vector.h matrix.h matlin.h memory.h utils*.c utils*.h t*.c 
+TDP_FILES=teste_programme Makefile Makefile.defs *.result $(DATAFILES)  \
+          vector.h matrix.h matlin.h memory.h utils*.c utils*.h t*.c generer_matrix.c generer_vector.c
 
 DIST_FILES=$(TDP_FILES) filtre
