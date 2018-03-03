@@ -12,7 +12,7 @@
    valeur de retour : la valeur initiale du pointeur vers la zone destination
    effets de bord : modifie le contenu de la memoire
 */
-void *my_memcpy(void *dst, const void *src, size_t len); 
+void* my_memcpy(void* dst, const void* src, size_t len);
 
 /*
    memmove
@@ -23,7 +23,7 @@ void *my_memcpy(void *dst, const void *src, size_t len);
    valeur de retour : la valeur initiale du pointeur vers la zone destination
    effets de bord : modifie le contenu de la memoire
 */
-void *my_memmove(void *dst, const void *src, size_t len); 
+void* my_memmove(void* dst, const void* src, size_t len);
 
 /*
    is_little_endian

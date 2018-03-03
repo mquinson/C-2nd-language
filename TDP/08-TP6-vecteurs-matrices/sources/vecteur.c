@@ -49,7 +49,7 @@ double* acces_vecteur(vecteur_t* v, unsigned int i) {
 }
 
 size_t taille_vecteur(const vecteur_t* v) {
-  size_t resultat;
+  size_t resultat = 0;
   /* SOLUTION */
   resultat = v->taille;
   /* FIN */

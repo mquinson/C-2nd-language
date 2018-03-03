@@ -29,7 +29,7 @@ void liberer_vecteur(vecteur_t* v);
    valeur de retour : un pointeur vers double
    effets de bord : aucun
 */
-double* acces_vecteur(vecteur_t* v, unsigned i);
+double* acces_vecteur(vecteur_t* v, unsigned int i);
 
 /* description : retourne le nombre de cases d'un vecteur
    parametres : le vecteur

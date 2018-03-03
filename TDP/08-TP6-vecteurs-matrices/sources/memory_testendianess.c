@@ -4,10 +4,9 @@
 
 int main(void) {
   char tableau[sizeof(int)];
-  int *entier = (int *) tableau;
-  int i;
+  int* entier = (int*) tableau;
 
-  for (i = 0; i < sizeof(int); i++)
+  for (int i = 0; i < sizeof(int); i++)
       tableau[i] = 0;
 
   if (is_little_endian())

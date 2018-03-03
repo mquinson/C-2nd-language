@@ -5,15 +5,13 @@
 struct matrice {
   size_t l;
   size_t c;
-  double **donnees;
+  double** donnees;
   int dynamique;
 };
 
-matrice_t *allouer_matrice(size_t l, size_t c) {
-  matrice_t *m;
+matrice_t* allouer_matrice(size_t l, size_t c) {
+  matrice_t* m;
   /* SOLUTION */
-  unsigned i;
-
   m = malloc(sizeof(*m));
   if (!m)
     abort();
@@ -21,7 +19,7 @@ matrice_t *allouer_matrice(size_t l, size_t c) {
   m->donnees = malloc(sizeof(*m->donnees) * l);
   if (m->donnees == NULL)
 	  abort();
-  for (i = 0; i < l; i++) {
+  for (unsigned int i = 0; i < l; i++) {
     m->donnees[i] = malloc(sizeof(*m->donnees[i]) * c);
     if (m->donnees[i] == NULL)
       abort();
@@ -34,11 +32,9 @@ matrice_t *allouer_matrice(size_t l, size_t c) {
   return m;
 }
 
-void liberer_matrice(matrice_t *m) {
+void liberer_matrice(matrice_t* m) {
   /* SOLUTION */
-  unsigned i;
-
-  for (i = 0; i < m->l; i++) {
+  for (unsigned int i = 0; i < m->l; i++) {
     free(m->donnees[i]);
   }
   free(m->donnees);
@@ -46,8 +42,8 @@ void liberer_matrice(matrice_t *m) {
   /* FIN */
 }
 
-double *acces_matrice(matrice_t *m, unsigned i, unsigned j) {
-  double *resultat;
+double* acces_matrice(matrice_t* m, unsigned int i, unsigned int j) {
+  double* resultat;
   /* SOLUTION */
   if (i < m->l && j < m->c)
     resultat = & m->donnees[i][j];
@@ -85,7 +81,7 @@ double *acces_matrice(matrice_t *m, unsigned i, unsigned j) {
   return resultat;
 }
 
-size_t nb_lignes_matrice(const matrice_t *m) {
+size_t nb_lignes_matrice(const matrice_t* m) {
   size_t resultat;
   /* SOLUTION */
   resultat = m->l;
@@ -93,7 +89,7 @@ size_t nb_lignes_matrice(const matrice_t *m) {
   return resultat;
 }
 
-size_t nb_colonnes_matrice(const matrice_t *m) {
+size_t nb_colonnes_matrice(const matrice_t* m) {
   size_t resultat;
   /* SOLUTION */
   resultat = m->c;
