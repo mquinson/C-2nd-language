@@ -9,6 +9,7 @@ int main(void) {
 
   limite_basse = 0;
   m1 = lit_matrice("matrice1.txt");
+  matrice_rend_dynamique(m1);
   limite_lignes = nb_lignes_matrice(m1)+10;
   limite_colonnes = nb_colonnes_matrice(m1)+10;
   for (i = limite_lignes; i > limite_basse; i--)
@@ -25,6 +26,7 @@ int main(void) {
   }
   liberer_matrice(m1);
   m2 = lit_matrice("matrice2.txt");
+  matrice_rend_dynamique(m2);
   limite_lignes = nb_lignes_matrice(m2) + 10;
   limite_colonnes = nb_colonnes_matrice(m2) + 10;
   for (i = limite_basse; i < limite_lignes; i++)

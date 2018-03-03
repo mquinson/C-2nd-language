@@ -49,4 +49,9 @@ size_t nb_lignes_matrice(const matrice_t *m);
 */
 size_t nb_colonnes_matrice(const matrice_t *m);
 
+/* description: fait en sorte que la matrice devienne dynamique
+   (voir la question 3)
+ */
+void matrice_rend_dynamique(matrice_t* m);
+
 #endif

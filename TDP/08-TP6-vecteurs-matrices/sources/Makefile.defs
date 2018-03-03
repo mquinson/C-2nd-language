@@ -9,7 +9,7 @@ PROGRAMS=t00-vector t01-vector-bounds t02-vector-realloc \
          memory_testcpy memory_testmove memory_testendianess
 
 EXERCICES=matrice_lineaire.c matrice_lineaire_dynamique.c matrice.c \
-          vecteur.c matrice_dynamique.c memory_operations.c
+          vecteur.c memory_operations.c
 
 DATAFILES=vecteur1.txt vecteur2.txt matrice1.txt matrice2.txt
 
