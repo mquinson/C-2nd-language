@@ -5,8 +5,8 @@
 
 #include "matrice.h"
 
-matrice *construit_matrice(size_t l, size_t c, double *donnees);
-void affiche_matrice(matrice *m);
-matrice *lit_matrice(char *fichier);
+matrice_t *construit_matrice(size_t l, size_t c, double *donnees);
+void affiche_matrice(matrice_t *m);
+matrice_t *lit_matrice(char *fichier);
 
 #endif

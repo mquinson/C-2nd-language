@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-typedef struct matrice matrice;
+typedef struct matrice matrice_t;
 
 /*
    allouer_matrice
@@ -13,7 +13,7 @@ typedef struct matrice matrice;
                       bien passee et la matrice invalide si une erreur est survenue
    effets de bord : alloue de la memoire
 */
-matrice *allouer_matrice(size_t l, size_t c);
+matrice_t *allouer_matrice(size_t l, size_t c);
 
 /*
    liberer_matrice
@@ -22,7 +22,7 @@ matrice *allouer_matrice(size_t l, size_t c);
    valeur de retour : aucune
    effets de bord : libere de la memoire
 */
-void liberer_matrice(matrice *m);
+void liberer_matrice(matrice_t *m);
 
 /*
    acces_matrice
@@ -31,7 +31,7 @@ void liberer_matrice(matrice *m);
    valeur de retour : un pointeur vers double
    effets de bord : aucun
 */
-double *acces_matrice(matrice *m, unsigned i, unsigned j);
+double *acces_matrice(matrice_t *m, unsigned i, unsigned j);
 
 /*
    nb_lignes_matrice
@@ -40,7 +40,7 @@ double *acces_matrice(matrice *m, unsigned i, unsigned j);
    valeur de retour : le nombre de lignes
    effets de bord : aucun
 */
-size_t nb_lignes_matrice(const matrice *m);
+size_t nb_lignes_matrice(const matrice_t *m);
 
 /*
    nb_colonnes_matrice
@@ -49,6 +49,6 @@ size_t nb_lignes_matrice(const matrice *m);
    valeur de retour : le nombre de colonnes
    effets de bord : aucun
 */
-size_t nb_colonnes_matrice(const matrice *m);
+size_t nb_colonnes_matrice(const matrice_t *m);
 
 #endif

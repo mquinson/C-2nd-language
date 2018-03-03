@@ -4,8 +4,8 @@
 #include "matrice.h"
 #include "utils_matrice.h"
 
-matrice *construit_matrice(size_t l, size_t c, double *donnees) {
-  matrice *m;
+matrice_t *construit_matrice(size_t l, size_t c, double *donnees) {
+  matrice_t *m;
   unsigned i, j;
 
   m = allouer_matrice(l, c);
@@ -15,7 +15,7 @@ matrice *construit_matrice(size_t l, size_t c, double *donnees) {
   return m;
 }
 
-void affiche_matrice(matrice *m) {
+void affiche_matrice(matrice_t *m) {
   unsigned i,j;
 
   for (i = 0; i < nb_lignes_matrice(m); i++) {
@@ -26,8 +26,8 @@ void affiche_matrice(matrice *m) {
   }
 }
 
-matrice *lit_matrice(char *fichier) {
-  matrice *m;
+matrice_t *lit_matrice(char *fichier) {
+  matrice_t *m;
   unsigned i, j;
   size_t l, c;
   FILE *f;

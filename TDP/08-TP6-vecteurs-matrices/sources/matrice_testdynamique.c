@@ -3,7 +3,7 @@
 #include "utils_matrice.h"
 
 int main(void) {
-  matrice *m1, *m2;
+  matrice_t *m1, *m2;
   unsigned i, j;
   unsigned limite_lignes, limite_colonnes, limite_basse;
 

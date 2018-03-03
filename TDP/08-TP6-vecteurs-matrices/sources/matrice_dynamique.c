@@ -8,8 +8,8 @@ struct matrice {
   double **donnees;
 };
 
-matrice *allouer_matrice(size_t l, size_t c) {
-  matrice *m;
+matrice_t *allouer_matrice(size_t l, size_t c) {
+  matrice_t *m;
   /* SOLUTION */
   unsigned i;
 
@@ -32,7 +32,7 @@ matrice *allouer_matrice(size_t l, size_t c) {
   return m;
 }
 
-void liberer_matrice(matrice *m) {
+void liberer_matrice(matrice_t *m) {
   /* SOLUTION */
   unsigned i;
 
@@ -43,7 +43,7 @@ void liberer_matrice(matrice *m) {
   /* FIN */
 }
 
-double *acces_matrice(matrice *m, unsigned i, unsigned j) {
+double *acces_matrice(matrice_t *m, unsigned i, unsigned j) {
   double *resultat;
   /* SOLUTION */
   size_t nouveau_l, nouveau_c;
@@ -86,7 +86,7 @@ double *acces_matrice(matrice *m, unsigned i, unsigned j) {
   return resultat;
 }
 
-size_t nb_lignes_matrice(const matrice *m) {
+size_t nb_lignes_matrice(const matrice_t *m) {
   size_t resultat;
   /* SOLUTION */
   resultat = m->l;
@@ -94,7 +94,7 @@ size_t nb_lignes_matrice(const matrice *m) {
   return resultat;
 }
 
-size_t nb_colonnes_matrice(const matrice *m) {
+size_t nb_colonnes_matrice(const matrice_t *m) {
   size_t resultat;
   /* SOLUTION */
   resultat = m->c;
